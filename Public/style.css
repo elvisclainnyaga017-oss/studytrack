@@ -1,0 +1,369 @@
+/* ========================================
+    STUDYTRACK SHARED STYLESHEET
+    ======================================== */
+
+
+/* ========================================
+   1. GENERAL PAGE SETTINGS
+   ======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7fb;
+    color: #1f2937;
+    line-height: 1.6;
+}
+
+
+/* ========================================
+   2. MAIN PAGE CONTAINER
+   ======================================== */
+
+body {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px;
+}
+
+
+/* ========================================
+   3. HEADINGS
+   ======================================== */
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 32px;
+    color: #111827;
+}
+
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #111827;
+}
+
+
+h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #1f2937;
+}
+
+
+p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+
+/* ========================================
+   4. HEADER
+   ======================================== */
+
+header {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e5e7eb;
+}
+
+
+    header h2 {
+        margin-bottom: 5px;
+    }
+
+
+    header p {
+        color: #6b7280;
+        margin-bottom: 0;
+    }
+
+
+/* ========================================
+   5. NAVIGATION
+   ======================================== */
+
+nav {
+    background-color: #111827;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+
+    nav a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        margin: 0 8px;
+    }
+
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+
+/* ========================================
+   6. HORIZONTAL LINES
+   ======================================== */
+
+hr {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 25px 0;
+}
+
+
+/* ========================================
+   7. SECTIONS
+   ======================================== */
+
+section {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border: 1px solid #e5e7eb;
+}
+
+
+    /* ========================================
+   8. DASHBOARD SUMMARY
+   ======================================== */
+
+    section > div {
+        margin-bottom: 20px;
+    }
+
+
+/* ========================================
+   9. FORMS
+   ======================================== */
+
+form {
+    width: 100%;
+}
+
+
+label {
+    display: inline-block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #374151;
+}
+
+
+input,
+textarea,
+select {
+    width: 100%;
+    max-width: 600px;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    background-color: #ffffff;
+}
+
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+
+/* ========================================
+   10. BUTTONS
+   ======================================== */
+
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2563eb;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+
+    button:hover {
+        background-color: #1d4ed8;
+    }
+
+
+    button:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+    }
+
+
+/* ========================================
+   11. MESSAGES
+   ======================================== */
+
+#goalMessage,
+#taskMessage,
+#habitMessage,
+#reminderMessage,
+#focusMessage,
+#message {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+
+/* ========================================
+   12. LIST ITEMS / CARDS
+   ======================================== */
+
+#goalsContainer > div,
+#tasksContainer > div,
+#habitsContainer > div,
+#remindersContainer > div,
+#upcomingReminders > div {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 15px;
+}
+
+
+#goalsContainer hr,
+#tasksContainer hr,
+#habitsContainer hr,
+#remindersContainer hr,
+#upcomingReminders hr {
+    display: none;
+}
+
+
+/* ========================================
+   13. LINKS
+   ======================================== */
+
+a {
+    color: #2563eb;
+}
+
+
+    a:hover {
+        color: #1d4ed8;
+    }
+
+
+/* ========================================
+   14. LOGIN AND REGISTER PAGES
+   ======================================== */
+
+body > form {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+
+    body > form input {
+        margin-bottom: 10px;
+    }
+
+
+/* ========================================
+   15. FOCUS TIMER
+   ======================================== */
+
+#timer {
+    font-size: 64px;
+    font-weight: bold;
+    text-align: center;
+    margin: 30px 0;
+    color: #111827;
+}
+
+
+/* ========================================
+   16. LOGOUT BUTTON
+   ======================================== */
+
+#logoutButton {
+    background-color: #dc2626;
+    margin-top: 10px;
+}
+
+
+    #logoutButton:hover {
+        background-color: #b91c1c;
+    }
+
+
+/* ========================================
+   17. RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 15px;
+    }
+
+
+    h1 {
+        font-size: 26px;
+    }
+
+
+    h2 {
+        font-size: 21px;
+    }
+
+
+    nav {
+        line-height: 2;
+    }
+
+
+        nav a {
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+
+    section {
+        padding: 18px;
+    }
+
+
+    #timer {
+        font-size: 48px;
+    }
+}

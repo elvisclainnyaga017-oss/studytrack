@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>StudyTrack - Habits</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+    <!-- ========================================
+         PAGE HEADER
+         ======================================== -->
+
+    <header>
+
+        <h1>StudyTrack</h1>
+
+        <h2>
+            Habits
+        </h2>
+
+        <p>
+            Build consistent habits and
+            track your daily progress.
+        </p>
+
+        <p>
+            Welcome,
+            <span id="userName">
+                User
+            </span>!
+        </p>
+
+        <p id="userEmail"></p>
+
+    </header>
+
+
+    <!-- ========================================
+         NAVIGATION
+         ======================================== -->
+
+    <nav>
+
+        <a href="/dashboard.html">
+            Dashboard
+        </a>
+
+        |
+
+        <a href="/habits.html">
+            Habits
+        </a>
+
+        |
+
+        <a href="/tasks.html">
+            Tasks
+        </a>
+
+        |
+
+        <a href="/reminders.html">
+            Reminders
+        </a>
+
+        |
+
+        <a href="/focus.html">
+            Focus
+        </a>
+
+    </nav>
+
+
+    <!-- ========================================
+         CREATE HABIT
+         ======================================== -->
+
+    <section>
+
+        <h2>
+            Create a Habit
+        </h2>
+
+
+        <form id="habitForm">
+
+
+            <label for="habitName">
+                Habit Name
+            </label>
+
+            <br>
+
+            <input type="text"
+                   id="habitName"
+                   placeholder="e.g. Read for 30 minutes"
+                   required>
+
+            <br><br>
+
+
+            <label for="habitDescription">
+                Description
+            </label>
+
+            <br>
+
+            <textarea id="habitDescription"
+                      placeholder="Describe the habit"></textarea>
+
+            <br><br>
+
+
+            <button type="submit"
+                    id="habitButton">
+                Create Habit
+            </button>
+
+
+        </form>
+
+
+        <p id="habitMessage"></p>
+
+    </section>
+
+
+    <!-- ========================================
+         HABITS
+         ======================================== -->
+
+    <section>
+
+        <h2>
+            My Habits
+        </h2>
+
+
+        <div id="habitsContainer">
+
+            <p>
+                Loading habits...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================
+         LOGOUT
+         ======================================== -->
+
+    <button id="logoutButton">
+        Logout
+    </button>
+
+
+    <!-- ========================================
+         JAVASCRIPT
+         ======================================== -->
+
+    <script src="habits.js"></script>
+
+</body>
+
+</html>

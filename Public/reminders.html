@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>StudyTrack - Reminders</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+    <!-- ========================================
+         PAGE HEADER
+         ======================================== -->
+
+    <header>
+
+        <h1>StudyTrack</h1>
+
+        <h2>
+            Reminders
+        </h2>
+
+        <p>
+            Keep track of important dates,
+            activities, and deadlines.
+        </p>
+
+        <p>
+            Welcome,
+            <span id="userName">
+                User
+            </span>!
+        </p>
+
+        <p id="userEmail"></p>
+
+    </header>
+
+
+    <!-- ========================================
+         NAVIGATION
+         ======================================== -->
+
+    <nav>
+
+        <a href="/dashboard.html">
+            Dashboard
+        </a>
+
+        |
+
+        <a href="/habits.html">
+            Habits
+        </a>
+
+        |
+
+        <a href="/tasks.html">
+            Tasks
+        </a>
+
+        |
+
+        <a href="/reminders.html">
+            Reminders
+        </a>
+
+        |
+
+        <a href="/focus.html">
+            Focus
+        </a>
+
+    </nav>
+
+
+    <!-- ========================================
+         CREATE REMINDER
+         ======================================== -->
+
+    <section>
+
+        <h2>
+            Create a Reminder
+        </h2>
+
+
+        <form id="reminderForm">
+
+
+            <label for="reminderTitle">
+                Reminder Title
+            </label>
+
+            <br>
+
+            <input type="text"
+                   id="reminderTitle"
+                   placeholder="e.g. Submit project proposal"
+                   required>
+
+            <br><br>
+
+
+            <label for="reminderDescription">
+                Description
+            </label>
+
+            <br>
+
+            <textarea id="reminderDescription"
+                      placeholder="Describe the reminder"></textarea>
+
+            <br><br>
+
+
+            <label for="reminderDate">
+                Date
+            </label>
+
+            <br>
+
+            <input type="date"
+                   id="reminderDate"
+                   required>
+
+            <br><br>
+
+
+            <label for="reminderTime">
+                Time
+            </label>
+
+            <br>
+
+            <input type="time"
+                   id="reminderTime"
+                   required>
+
+            <br><br>
+
+
+            <button type="submit"
+                    id="createReminderButton">
+                Create Reminder
+            </button>
+
+
+        </form>
+
+
+        <p id="reminderMessage"></p>
+
+    </section>
+
+
+    <!-- ========================================
+         REMINDERS
+         ======================================== -->
+
+    <section>
+
+        <h2>
+            My Reminders
+        </h2>
+
+
+        <div id="remindersContainer">
+
+            <p>
+                Loading reminders...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================
+         LOGOUT
+         ======================================== -->
+
+    <button id="logoutButton">
+        Logout
+    </button>
+
+
+    <!-- ========================================
+         JAVASCRIPT
+         ======================================== -->
+
+    <script src="reminders.js"></script>
+
+</body>
+
+</html>

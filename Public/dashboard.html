@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>StudyTrack Dashboard</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+    <!-- ========================================
+         PAGE HEADER
+         ======================================== -->
+
+    <header>
+
+        <h1>StudyTrack Dashboard</h1>
+
+        <h2>
+            Welcome,
+            <span id="userName">
+                User
+            </span>!
+        </h2>
+
+        <p id="userEmail"></p>
+
+    </header>
+
+
+    <hr>
+
+
+    <!-- ========================================
+         NAVIGATION
+         ======================================== -->
+
+    <nav>
+
+        <a href="/dashboard.html">
+            Dashboard
+        </a>
+
+        |
+
+        <a href="/habits.html">
+            Habits
+        </a>
+
+        |
+
+        <a href="/tasks.html">
+            Tasks
+        </a>
+
+        |
+
+        <a href="/reminders.html">
+            Reminders
+        </a>
+
+        |
+
+        <a href="/focus.html">
+            Focus
+        </a>
+
+    </nav>
+
+
+    <hr>
+
+
+    <!-- ========================================
+         PRODUCTIVITY SUMMARY
+         ======================================== -->
+
+    <section>
+
+        <h2>Productivity Summary</h2>
+
+
+        <!-- GOALS SUMMARY -->
+
+        <div>
+
+            <h3>Goals</h3>
+
+            <p>
+                Total Goals:
+                <span id="totalGoals">
+                    0
+                </span>
+            </p>
+
+            <p>
+                Completed:
+                <span id="completedGoals">
+                    0
+                </span>
+            </p>
+
+            <p>
+                In Progress:
+                <span id="inProgressGoals">
+                    0
+                </span>
+            </p>
+
+        </div>
+
+
+        <!-- TASKS SUMMARY -->
+
+        <div>
+
+            <h3>Tasks</h3>
+
+            <p>
+                Total Tasks:
+                <span id="totalTasks">
+                    0
+                </span>
+            </p>
+
+            <p>
+                Pending:
+                <span id="pendingTasks">
+                    0
+                </span>
+            </p>
+
+            <p>
+                Completed:
+                <span id="completedTasks">
+                    0
+                </span>
+            </p>
+
+        </div>
+
+
+        <!-- HABITS SUMMARY -->
+
+        <div>
+
+            <h3>Habits</h3>
+
+            <p>
+                Total Habits:
+                <span id="totalHabits">
+                    0
+                </span>
+            </p>
+
+            <p>
+                Active:
+                <span id="activeHabits">
+                    0
+                </span>
+            </p>
+
+        </div>
+
+
+        <!-- FOCUS SUMMARY -->
+
+        <div>
+
+            <h3>Focus</h3>
+
+            <p>
+                Completed Sessions:
+                <span id="completedFocusSessions">
+                    0
+                </span>
+            </p>
+
+            <p>
+                Focus Minutes:
+                <span id="focusMinutes">
+                    0
+                </span>
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <hr>
+
+
+    <!-- ========================================
+         UPCOMING REMINDERS
+         ======================================== -->
+
+    <section>
+
+        <h2>Upcoming Reminders</h2>
+
+        <div id="upcomingReminders">
+
+            <p>
+                No upcoming reminders.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <hr>
+
+
+    <!-- ========================================
+         CREATE GOAL
+         ======================================== -->
+
+    <section>
+
+        <h2>Create a Goal</h2>
+
+
+        <form id="goalForm">
+
+
+            <label for="goalTitle">
+                Goal Title
+            </label>
+
+            <br>
+
+            <input type="text"
+                   id="goalTitle"
+                   required>
+
+            <br><br>
+
+
+            <label for="goalDescription">
+                Description
+            </label>
+
+            <br>
+
+            <textarea id="goalDescription"></textarea>
+
+            <br><br>
+
+
+            <label for="goalDeadline">
+                Deadline
+            </label>
+
+            <br>
+
+            <input type="date"
+                   id="goalDeadline">
+
+            <br><br>
+
+
+            <label for="goalCurrent">
+                Current Progress
+            </label>
+
+            <br>
+
+            <input type="number"
+                   id="goalCurrent"
+                   min="0"
+                   value="0">
+
+            <br><br>
+
+
+            <label for="goalTarget">
+                Target
+            </label>
+
+            <br>
+
+            <input type="number"
+                   id="goalTarget"
+                   min="1"
+                   value="100">
+
+            <br><br>
+
+
+            <label for="goalUnit">
+                Unit
+            </label>
+
+            <br>
+
+            <input type="text"
+                   id="goalUnit"
+                   placeholder="e.g. hours">
+
+            <br><br>
+
+
+            <button type="submit"
+                    id="goalButton">
+                Create Goal
+            </button>
+
+
+        </form>
+
+
+        <p id="goalMessage"></p>
+
+    </section>
+
+
+    <hr>
+
+
+    <!-- ========================================
+         GOALS
+         ======================================== -->
+
+    <section>
+
+        <h2>Goals</h2>
+
+        <div id="goalsContainer">
+
+            <p>
+                Loading goals...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <hr>
+
+
+    <!-- ========================================
+         LOGOUT
+         ======================================== -->
+
+    <button id="logoutButton">
+        Logout
+    </button>
+
+
+    <!-- ========================================
+         JAVASCRIPT
+         ======================================== -->
+
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>

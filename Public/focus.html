@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>StudyTrack - Focus</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+    <!-- ========================================
+         PAGE HEADER
+         ======================================== -->
+
+    <header>
+
+        <h1>StudyTrack</h1>
+
+        <h2>
+            Focus
+        </h2>
+
+        <p>
+            Use focused work sessions to stay
+            productive and reduce distractions.
+        </p>
+
+        <p>
+            Welcome,
+            <span id="userName">
+                User
+            </span>!
+        </p>
+
+        <p id="userEmail"></p>
+
+    </header>
+
+
+    <!-- ========================================
+         NAVIGATION
+         ======================================== -->
+
+    <nav>
+
+        <a href="/dashboard.html">
+            Dashboard
+        </a>
+
+        |
+
+        <a href="/habits.html">
+            Habits
+        </a>
+
+        |
+
+        <a href="/tasks.html">
+            Tasks
+        </a>
+
+        |
+
+        <a href="/reminders.html">
+            Reminders
+        </a>
+
+        |
+
+        <a href="/focus.html">
+            Focus
+        </a>
+
+    </nav>
+
+
+    <!-- ========================================
+         FOCUS TIMER
+         ======================================== -->
+
+    <section>
+
+        <h2>
+            Focus Timer
+        </h2>
+
+
+        <div id="timer">
+            25:00
+        </div>
+
+
+        <button id="startButton">
+            Start Focus
+        </button>
+
+
+        <button id="pauseButton"
+                disabled>
+            Pause
+        </button>
+
+
+        <button id="completeButton"
+                disabled>
+            Complete Session
+        </button>
+
+
+        <button id="resetButton">
+            Reset
+        </button>
+
+
+        <p id="focusMessage"></p>
+
+    </section>
+
+
+    <!-- ========================================
+         FOCUS SESSION HISTORY
+         ======================================== -->
+
+    <section>
+
+        <h2>
+            Focus Session History
+        </h2>
+
+
+        <div id="focusHistory">
+
+            <p>
+                Loading focus sessions...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================
+         LOGOUT
+         ======================================== -->
+
+    <button id="logoutButton">
+        Logout
+    </button>
+
+
+    <!-- ========================================
+         JAVASCRIPT
+         ======================================== -->
+
+    <script src="focus.js"></script>
+
+</body>
+
+</html>
