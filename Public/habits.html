@@ -18,160 +18,725 @@
 
 <body>
 
-    <!-- ========================================
+    <!-- =====================================================
          PAGE HEADER
-         ======================================== -->
+         ===================================================== -->
 
-    <header>
+    <header class="dashboard-header">
 
-        <h1>StudyTrack</h1>
+        <div class="header-brand">
 
-        <h2>
-            Habits
-        </h2>
+            <div class="brand-icon">
+                ST
+            </div>
 
-        <p>
-            Build consistent habits and
-            track your daily progress.
-        </p>
+            <div class="brand-text">
 
-        <p>
-            Welcome,
-            <span id="userName">
-                User
-            </span>!
-        </p>
+                <h1>
+                    StudyTrack
+                </h1>
 
-        <p id="userEmail"></p>
+                <p>
+                    Student Productivity System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <div class="header-user">
+
+                <span>
+                    Welcome,
+                    <strong id="userName">
+                        User
+                    </strong>
+                </span>
+
+                <p id="userEmail">
+                    Loading...
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 DAY / NIGHT SELECTOR
+                 ================================================= -->
+
+            <div class="header-theme-control">
+
+                <div class="theme-switch"
+                     role="group"
+                     aria-label="Appearance">
+
+                    <button type="button"
+                            id="dayModeButton"
+                            class="theme-switch-button"
+                            aria-label="Switch to day mode">
+
+                        <span class="theme-switch-icon">
+                            ☀
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Day
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            id="nightModeButton"
+                            class="theme-switch-button"
+                            aria-label="Switch to night mode">
+
+                        <span class="theme-switch-icon">
+                            ☾
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Night
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </header>
 
 
-    <!-- ========================================
-         NAVIGATION
-         ======================================== -->
 
-    <nav>
+    <!-- =====================================================
+         MAIN DASHBOARD LAYOUT
+         ===================================================== -->
 
-        <a href="/dashboard.html">
-            Dashboard
-        </a>
-
-        |
-
-        <a href="/habits.html">
-            Habits
-        </a>
-
-        |
-
-        <a href="/tasks.html">
-            Tasks
-        </a>
-
-        |
-
-        <a href="/reminders.html">
-            Reminders
-        </a>
-
-        |
-
-        <a href="/focus.html">
-            Focus
-        </a>
-
-    </nav>
+    <div class="dashboard-layout">
 
 
-    <!-- ========================================
-         CREATE HABIT
-         ======================================== -->
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
 
-    <section>
+        <aside class="side-navigation">
 
-        <h2>
-            Create a Habit
-        </h2>
-
-
-        <form id="habitForm">
+            <nav class="sidebar-nav"
+                 aria-label="Main navigation">
 
 
-            <label for="habitName">
-                Habit Name
-            </label>
+                <!-- Dashboard -->
 
-            <br>
+                <a href="/dashboard.html"
+                   class="sidebar-nav-link">
 
-            <input type="text"
-                   id="habitName"
-                   placeholder="e.g. Read for 30 minutes"
-                   required>
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-            <br><br>
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
+                            <rect x="3"
+                                  y="3"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
 
-            <label for="habitDescription">
-                Description
-            </label>
+                            <rect x="14"
+                                  y="3"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
 
-            <br>
+                            <rect x="3"
+                                  y="14"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
 
-            <textarea id="habitDescription"
-                      placeholder="Describe the habit"></textarea>
+                            <rect x="14"
+                                  y="14"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
 
-            <br><br>
+                        </svg>
 
+                    </span>
 
-            <button type="submit"
-                    id="habitButton">
-                Create Habit
-            </button>
+                    <span>
+                        Dashboard
+                    </span>
 
-
-        </form>
-
-
-        <p id="habitMessage"></p>
-
-    </section>
-
-
-    <!-- ========================================
-         HABITS
-         ======================================== -->
-
-    <section>
-
-        <h2>
-            My Habits
-        </h2>
-
-
-        <div id="habitsContainer">
-
-            <p>
-                Loading habits...
-            </p>
-
-        </div>
-
-    </section>
+                </a>
 
 
-    <!-- ========================================
-         LOGOUT
-         ======================================== -->
 
-    <button id="logoutButton">
-        Logout
-    </button>
+                <!-- Goals -->
+
+                <a href="/goals.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="8">
+                            </circle>
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="4">
+                            </circle>
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="1">
+                            </circle>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Goals
+                    </span>
+
+                </a>
 
 
-    <!-- ========================================
+
+                <!-- Habits -->
+
+                <a href="/habits.html"
+                   class="sidebar-nav-link active"
+                   aria-current="page">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M7 7h10">
+                            </path>
+
+                            <path d="M7 12h10">
+                            </path>
+
+                            <path d="M7 17h6">
+                            </path>
+
+                            <path d="M4 7h.01">
+                            </path>
+
+                            <path d="M4 12h.01">
+                            </path>
+
+                            <path d="M4 17h.01">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Habits
+                    </span>
+
+                </a>
+
+
+
+                <!-- Tasks -->
+
+                <a href="/tasks.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <rect x="4"
+                                  y="3"
+                                  width="16"
+                                  height="18"
+                                  rx="2">
+                            </rect>
+
+                            <path d="M8 8h8">
+                            </path>
+
+                            <path d="M8 12h8">
+                            </path>
+
+                            <path d="M8 16h5">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Tasks
+                    </span>
+
+                </a>
+
+
+
+                <!-- Reminders -->
+
+                <a href="/reminders.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9">
+                            </path>
+
+                            <path d="M10 21h4">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Reminders
+                    </span>
+
+                </a>
+
+
+
+                <!-- Focus -->
+
+                <a href="/focus.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="8">
+                            </circle>
+
+                            <path d="M12 8v4l3 2">
+                            </path>
+
+                            <path d="M9 3h6">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Focus
+                    </span>
+
+                </a>
+
+
+
+                <!-- Profile -->
+
+                <a href="/profile.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <circle cx="12"
+                                    cy="8"
+                                    r="4">
+                            </circle>
+
+                            <path d="M4 21c0-4 3.5-7 8-7s8 3 8 7">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+
+            <!-- =================================================
+                 LOGOUT
+                 ================================================= -->
+
+            <div class="sidebar-bottom">
+
+                <button type="button"
+                        id="logoutButton"
+                        class="logout-button">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M10 17l5-5-5-5">
+                            </path>
+
+                            <path d="M15 12H3">
+                            </path>
+
+                            <path d="M21 19V5">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </button>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             MAIN CONTENT
+             ================================================= -->
+
+        <main class="dashboard-main">
+
+            <div class="dashboard-container">
+
+
+                <!-- =================================================
+                     PAGE INTRODUCTION
+                     ================================================= -->
+
+                <section class="dashboard-intro page-intro">
+
+                    <p class="section-eyebrow">
+                        HABIT MANAGEMENT
+                    </p>
+
+                    <h2>
+                        Your Habits
+                    </h2>
+
+                    <p>
+                        Build consistent routines, track your
+                        progress, and turn small actions into
+                        lasting habits.
+                    </p>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     CREATE HABIT
+                     ================================================= -->
+
+                <section class="dashboard-panel goal-form-panel">
+
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                BUILD A ROUTINE
+                            </p>
+
+                            <h2>
+                                Create a New Habit
+                            </h2>
+
+                            <p>
+                                Add a habit that you want to
+                                practise consistently.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <form id="habitForm"
+                          class="goal-form">
+
+
+                        <!-- Habit Name -->
+
+                        <div class="form-group">
+
+                            <label for="habitName">
+                                Habit Name
+                            </label>
+
+                            <input type="text"
+                                   id="habitName"
+                                   name="habitName"
+                                   placeholder="e.g. Read for 30 minutes"
+                                   required>
+
+                            <span class="form-help">
+                                Give your habit a clear and
+                                specific name.
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- Frequency -->
+
+                        <div class="form-group">
+
+                            <label for="habitFrequency">
+                                Frequency
+                            </label>
+
+                            <select id="habitFrequency"
+                                    name="habitFrequency">
+
+                                <option value="Daily">
+                                    Daily
+                                </option>
+
+                                <option value="Weekly">
+                                    Weekly
+                                </option>
+
+                                <option value="Monthly">
+                                    Monthly
+                                </option>
+
+                            </select>
+
+                            <span class="form-help">
+                                Choose how often you want
+                                to practise this habit.
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- Description -->
+
+                        <div class="form-group full-width">
+
+                            <label for="habitDescription">
+                                Description
+                            </label>
+
+                            <textarea id="habitDescription"
+                                      name="habitDescription"
+                                      placeholder="Describe what this habit involves and why it matters to you."></textarea>
+
+                        </div>
+
+
+
+                        <!-- Start Date -->
+
+                        <div class="form-group">
+
+                            <label for="habitStartDate">
+                                Start Date
+                            </label>
+
+                            <input type="date"
+                                   id="habitStartDate"
+                                   name="habitStartDate">
+
+                            <span class="form-help">
+                                The date you want to begin
+                                tracking this habit.
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- Form Actions -->
+
+                        <div class="form-actions">
+
+                            <button type="submit"
+                                    id="habitButton"
+                                    class="primary-button">
+
+                                Create Habit
+
+                            </button>
+
+                        </div>
+
+
+
+                        <!-- Form Message -->
+
+                        <p id="habitMessage"
+                           class="form-message"
+                           aria-live="polite">
+                        </p>
+
+
+                    </form>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     MY HABITS
+                     ================================================= -->
+
+                <section class="dashboard-panel goals-panel">
+
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                CONSISTENCY
+                            </p>
+
+                            <h2>
+                                My Habits
+                            </h2>
+
+                            <p>
+                                Review and manage the routines
+                                you are currently tracking.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div id="habitsContainer"
+                         class="goals-container">
+
+                        <div class="empty-state">
+
+                            <p>
+                                Loading habits...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="dashboard-footer">
+
+        <p>
+            StudyTrack
+        </p>
+
+        <p>
+            Student Productivity System
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================================
          JAVASCRIPT
-         ======================================== -->
+         ===================================================== -->
 
     <script src="habits.js"></script>
 

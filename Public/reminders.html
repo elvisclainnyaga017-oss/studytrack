@@ -18,186 +18,689 @@
 
 <body>
 
-    <!-- ========================================
-         PAGE HEADER
-         ======================================== -->
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
-    <header>
+    <header class="dashboard-header">
 
-        <h1>StudyTrack</h1>
+        <div class="header-brand">
 
-        <h2>
-            Reminders
-        </h2>
+            <div class="brand-icon">
+                ST
+            </div>
 
-        <p>
-            Keep track of important dates,
-            activities, and deadlines.
-        </p>
+            <div class="brand-text">
 
-        <p>
-            Welcome,
-            <span id="userName">
-                User
-            </span>!
-        </p>
+                <h1>
+                    StudyTrack
+                </h1>
 
-        <p id="userEmail"></p>
+                <p>
+                    Student Productivity System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <!-- USER -->
+
+            <div class="header-user">
+
+                <strong id="userName">
+                    User
+                </strong>
+
+                <span id="userEmail">
+                    Loading...
+                </span>
+
+            </div>
+
+
+            <!-- DAY / NIGHT -->
+
+            <div class="header-theme-control">
+
+                <div class="theme-switch"
+                     aria-label="Theme selector">
+
+                    <button type="button"
+                            id="dayModeButton"
+                            class="theme-switch-button"
+                            aria-label="Switch to day mode"
+                            title="Day mode">
+
+                        <span class="theme-switch-icon"
+                              aria-hidden="true">
+
+                            <svg viewBox="0 0 24 24"
+                                 width="14"
+                                 height="14"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.8">
+
+                                <circle cx="12"
+                                        cy="12"
+                                        r="4">
+                                </circle>
+
+                                <path d="M12 2v2"></path>
+                                <path d="M12 20v2"></path>
+                                <path d="M4.93 4.93l1.41 1.41"></path>
+                                <path d="M17.66 17.66l1.41 1.41"></path>
+                                <path d="M2 12h2"></path>
+                                <path d="M20 12h2"></path>
+                                <path d="M4.93 19.07l1.41-1.41"></path>
+                                <path d="M17.66 6.34l1.41-1.41"></path>
+
+                            </svg>
+
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Day
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            id="nightModeButton"
+                            class="theme-switch-button"
+                            aria-label="Switch to night mode"
+                            title="Night mode">
+
+                        <span class="theme-switch-icon"
+                              aria-hidden="true">
+
+                            <svg viewBox="0 0 24 24"
+                                 width="14"
+                                 height="14"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.8">
+
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3
+                                         7 7 0 0 0 21 12.79z">
+                                </path>
+
+                            </svg>
+
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Night
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </header>
 
 
-    <!-- ========================================
-         NAVIGATION
-         ======================================== -->
+    <!-- =====================================================
+         PAGE LAYOUT
+         ===================================================== -->
 
-    <nav>
-
-        <a href="/dashboard.html">
-            Dashboard
-        </a>
-
-        |
-
-        <a href="/habits.html">
-            Habits
-        </a>
-
-        |
-
-        <a href="/tasks.html">
-            Tasks
-        </a>
-
-        |
-
-        <a href="/reminders.html">
-            Reminders
-        </a>
-
-        |
-
-        <a href="/focus.html">
-            Focus
-        </a>
-
-    </nav>
+    <div class="dashboard-layout">
 
 
-    <!-- ========================================
-         CREATE REMINDER
-         ======================================== -->
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
 
-    <section>
+        <aside class="side-navigation">
 
-        <h2>
-            Create a Reminder
-        </h2>
-
-
-        <form id="reminderForm">
+            <nav class="sidebar-nav"
+                 aria-label="Main navigation">
 
 
-            <label for="reminderTitle">
-                Reminder Title
-            </label>
+                <!-- DASHBOARD -->
 
-            <br>
+                <a href="/dashboard.html"
+                   class="sidebar-nav-link">
 
-            <input type="text"
-                   id="reminderTitle"
-                   placeholder="e.g. Submit project proposal"
-                   required>
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-            <br><br>
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8">
 
+                            <rect x="3"
+                                  y="3"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
 
-            <label for="reminderDescription">
-                Description
-            </label>
+                            <rect x="14"
+                                  y="3"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
 
-            <br>
+                            <rect x="3"
+                                  y="14"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
 
-            <textarea id="reminderDescription"
-                      placeholder="Describe the reminder"></textarea>
+                            <rect x="14"
+                                  y="14"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
 
-            <br><br>
+                        </svg>
 
+                    </span>
 
-            <label for="reminderDate">
-                Date
-            </label>
+                    <span>
+                        Dashboard
+                    </span>
 
-            <br>
-
-            <input type="date"
-                   id="reminderDate"
-                   required>
-
-            <br><br>
-
-
-            <label for="reminderTime">
-                Time
-            </label>
-
-            <br>
-
-            <input type="time"
-                   id="reminderTime"
-                   required>
-
-            <br><br>
-
-
-            <button type="submit"
-                    id="createReminderButton">
-                Create Reminder
-            </button>
+                </a>
 
 
-        </form>
+                <!-- GOALS -->
+
+                <a href="/goals.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="9">
+                            </circle>
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="5">
+                            </circle>
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="1.5">
+                            </circle>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Goals
+                    </span>
+
+                </a>
 
 
-        <p id="reminderMessage"></p>
+                <!-- HABITS -->
 
-    </section>
+                <a href="/habits.html"
+                   class="sidebar-nav-link">
 
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-    <!-- ========================================
-         REMINDERS
-         ======================================== -->
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8">
 
-    <section>
+                            <path d="M12 20s-7-4.35-7-10
+                                     a4 4 0 0 1 7-2.5
+                                     A4 4 0 0 1 19 10
+                                     c0 5.65-7 10-7 10z">
+                            </path>
 
-        <h2>
-            My Reminders
-        </h2>
+                        </svg>
 
+                    </span>
 
-        <div id="remindersContainer">
+                    <span>
+                        Habits
+                    </span>
 
-            <p>
-                Loading reminders...
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================================
-         LOGOUT
-         ======================================== -->
-
-    <button id="logoutButton">
-        Logout
-    </button>
+                </a>
 
 
-    <!-- ========================================
+                <!-- TASKS -->
+
+                <a href="/tasks.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8">
+
+                            <rect x="4"
+                                  y="3"
+                                  width="16"
+                                  height="18"
+                                  rx="2">
+                            </rect>
+
+                            <path d="M8 7h8"></path>
+                            <path d="M8 11h8"></path>
+                            <path d="M8 15h5"></path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Tasks
+                    </span>
+
+                </a>
+
+
+                <!-- REMINDERS -->
+
+                <a href="/reminders.html"
+                   class="sidebar-nav-link active">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8">
+
+                            <path d="M18 8a6 6 0 0 0-12 0
+                                     c0 7-3 7-3 9h18c0-2-3-2-3-9">
+                            </path>
+
+                            <path d="M10 21h4"></path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Reminders
+                    </span>
+
+                </a>
+
+
+                <!-- FOCUS -->
+
+                <a href="/focus.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="9">
+                            </circle>
+
+                            <path d="M12 7v5l3 2"></path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Focus
+                    </span>
+
+                </a>
+
+
+                <!-- PROFILE -->
+
+                <a href="/profile.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8">
+
+                            <circle cx="12"
+                                    cy="8"
+                                    r="4">
+                            </circle>
+
+                            <path d="M4 21
+                                     c0-4.42 3.58-8 8-8
+                                     s8 3.58 8 8">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- =================================================
+                 LOGOUT
+                 ================================================= -->
+
+            <div class="sidebar-bottom">
+
+                <button type="button"
+                        id="logoutButton"
+                        class="logout-button">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8">
+
+                            <path d="M9 21H5
+                                     a2 2 0 0 1-2-2V5
+                                     a2 2 0 0 1 2-2h4">
+                            </path>
+
+                            <path d="M16 17l5-5-5-5"></path>
+
+                            <path d="M21 12H9"></path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+             ================================================= -->
+
+        <main class="dashboard-main">
+
+            <div class="dashboard-container">
+
+
+                <!-- =================================================
+                     PAGE INTRO
+                     ================================================= -->
+
+                <section class="dashboard-intro page-intro">
+
+                    <p class="section-eyebrow">
+                        REMINDER MANAGEMENT
+                    </p>
+
+                    <h2>
+                        Stay on Schedule
+                    </h2>
+
+                    <p>
+                        Keep track of important dates, activities,
+                        deadlines, and other things you do not want
+                        to forget.
+                    </p>
+
+                </section>
+
+
+                <!-- =================================================
+                     CREATE REMINDER
+                     ================================================= -->
+
+                <section class="goal-form-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                NEW REMINDER
+                            </p>
+
+                            <h2>
+                                Create a Reminder
+                            </h2>
+
+                            <p>
+                                Add an important event or deadline
+                                to your reminder list.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <form id="reminderForm"
+                          class="goal-form">
+
+
+                        <!-- TITLE -->
+
+                        <div class="form-group">
+
+                            <label for="reminderTitle">
+                                Reminder Title
+                            </label>
+
+                            <input type="text"
+                                   id="reminderTitle"
+                                   name="title"
+                                   placeholder="e.g. Submit project proposal"
+                                   autocomplete="off"
+                                   maxlength="150"
+                                   required>
+
+                        </div>
+
+
+                        <!-- DATE -->
+
+                        <div class="form-group">
+
+                            <label for="reminderDate">
+                                Date
+                            </label>
+
+                            <input type="date"
+                                   id="reminderDate"
+                                   name="date"
+                                   required>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="form-group full-width">
+
+                            <label for="reminderDescription">
+                                Description
+                            </label>
+
+                            <textarea id="reminderDescription"
+                                      name="description"
+                                      rows="4"
+                                      maxlength="500"
+                                      placeholder="Describe what you need to remember"></textarea>
+
+                        </div>
+
+
+                        <!-- TIME -->
+
+                        <div class="form-group">
+
+                            <label for="reminderTime">
+                                Time
+                            </label>
+
+                            <input type="time"
+                                   id="reminderTime"
+                                   name="time"
+                                   required>
+
+                            <span class="form-help">
+                                Choose the time you want to remember the event.
+                            </span>
+
+                        </div>
+
+
+                        <!-- ACTION -->
+
+                        <div class="form-actions">
+
+                            <button type="submit"
+                                    id="createReminderButton"
+                                    class="primary-button">
+
+                                Create Reminder
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- MESSAGE -->
+
+                        <p id="reminderMessage"
+                           class="form-message"
+                           role="status"
+                           aria-live="polite">
+                        </p>
+
+                    </form>
+
+                </section>
+
+
+                <!-- =================================================
+                     REMINDERS LIST
+                     ================================================= -->
+
+                <section class="goals-panel reminders-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                YOUR REMINDERS
+                            </p>
+
+                            <h2>
+                                My Reminders
+                            </h2>
+
+                            <p>
+                                Review and manage your upcoming
+                                reminders.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="remindersContainer"
+                         class="reminders-container">
+
+                        <div class="empty-state">
+
+                            <h3>
+                                Loading reminders...
+                            </h3>
+
+                            <p>
+                                Please wait while your reminders
+                                are being loaded.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 FOOTER
+                 ================================================= -->
+
+            <footer class="dashboard-footer">
+
+                <p>
+                    StudyTrack
+                </p>
+
+                <p>
+                    StudyTrack &copy; 2026
+                </p>
+
+            </footer>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
          JAVASCRIPT
-         ======================================== -->
+         ===================================================== -->
 
     <script src="reminders.js"></script>
 

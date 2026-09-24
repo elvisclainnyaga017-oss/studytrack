@@ -22,189 +22,675 @@
          PAGE HEADER
          ======================================== -->
 
-    <header>
+    <header class="dashboard-header">
 
-        <h1>StudyTrack</h1>
+        <div class="header-brand">
 
-        <h2>
-            Tasks
-        </h2>
+            <div class="brand-icon">
+                ST
+            </div>
 
-        <p>
-            Organize your work and keep track
-            of what needs to be completed.
-        </p>
+            <div class="brand-text">
 
-        <p>
-            Welcome,
-            <span id="userName">
-                User
-            </span>!
-        </p>
+                <h1>
+                    StudyTrack
+                </h1>
 
-        <p id="userEmail"></p>
+                <p>
+                    Productivity System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <div class="header-user">
+
+                <span>
+                    Welcome,
+                    <strong id="userName">
+                        User
+                    </strong>
+                </span>
+
+                <p id="userEmail"></p>
+
+            </div>
+
+
+            <!-- ========================================
+                 DAY / NIGHT SELECTOR
+                 ======================================== -->
+
+            <div class="header-theme-control">
+
+                <div class="theme-switch"
+                     role="group"
+                     aria-label="Appearance">
+
+                    <button type="button"
+                            id="dayModeButton"
+                            class="theme-switch-button active"
+                            aria-label="Switch to day mode">
+
+                        <span class="theme-switch-icon">
+                            ☀
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Day
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            id="nightModeButton"
+                            class="theme-switch-button"
+                            aria-label="Switch to night mode">
+
+                        <span class="theme-switch-icon">
+                            ☾
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Night
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </header>
 
 
     <!-- ========================================
-         NAVIGATION
+         PAGE LAYOUT
          ======================================== -->
 
-    <nav>
+    <div class="dashboard-layout">
 
-        <a href="/dashboard.html">
-            Dashboard
-        </a>
 
-        |
+        <!-- ========================================
+             SIDEBAR NAVIGATION
+             ======================================== -->
 
-        <a href="/habits.html">
-            Habits
-        </a>
+        <aside class="side-navigation">
 
-        |
+            <nav class="sidebar-nav"
+                 aria-label="Main navigation">
 
-        <a href="/tasks.html">
-            Tasks
-        </a>
 
-        |
+                <!-- Dashboard -->
 
-        <a href="/reminders.html">
-            Reminders
-        </a>
+                <a href="/dashboard.html"
+                   class="sidebar-nav-link">
 
-        |
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-        <a href="/focus.html">
-            Focus
-        </a>
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
-    </nav>
+                            <rect x="3"
+                                  y="3"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
+
+                            <rect x="14"
+                                  y="3"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
+
+                            <rect x="3"
+                                  y="14"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
+
+                            <rect x="14"
+                                  y="14"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- Goals -->
+
+                <a href="/goals.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="8">
+                            </circle>
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="4">
+                            </circle>
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="1.2"
+                                    fill="currentColor"
+                                    stroke="none">
+                            </circle>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Goals
+                    </span>
+
+                </a>
+
+
+                <!-- Habits -->
+
+                <a href="/habits.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M20 7v5h-5">
+                            </path>
+
+                            <path d="M4 17v-5h5">
+                            </path>
+
+                            <path d="M6.2 9A7 7 0 0 1 20 12">
+                            </path>
+
+                            <path d="M17.8 15A7 7 0 0 1 4 12">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Habits
+                    </span>
+
+                </a>
+
+
+                <!-- Tasks -->
+
+                <a href="/tasks.html"
+                   class="sidebar-nav-link active"
+                   aria-current="page">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <rect x="4"
+                                  y="3"
+                                  width="16"
+                                  height="18"
+                                  rx="2">
+                            </rect>
+
+                            <path d="M8 8l1.5 1.5L12 7">
+                            </path>
+
+                            <path d="M13.5 9H17">
+                            </path>
+
+                            <path d="M8 13l1.5 1.5L12 12">
+                            </path>
+
+                            <path d="M13.5 14H17">
+                            </path>
+
+                            <path d="M8 18h9">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Tasks
+                    </span>
+
+                </a>
+
+
+                <!-- Reminders -->
+
+                <a href="/reminders.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9">
+                            </path>
+
+                            <path d="M10 21h4">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Reminders
+                    </span>
+
+                </a>
+
+
+                <!-- Focus -->
+
+                <a href="/focus.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="8">
+                            </circle>
+
+                            <path d="M12 8v4l2.5 2.5">
+                            </path>
+
+                            <path d="M9 3h6">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Focus
+                    </span>
+
+                </a>
+
+
+                <!-- Profile -->
+
+                <a href="/profile.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <circle cx="12"
+                                    cy="8"
+                                    r="3.5">
+                            </circle>
+
+                            <path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- ========================================
+                 LOGOUT
+                 ======================================== -->
+
+            <div class="sidebar-bottom">
+
+                <button type="button"
+                        id="logoutButton"
+                        class="logout-button">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M10 17l5-5-5-5">
+                            </path>
+
+                            <path d="M15 12H3">
+                            </path>
+
+                            <path d="M13 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ========================================
+             MAIN CONTENT
+             ======================================== -->
+
+        <main class="dashboard-main">
+
+            <div class="dashboard-container">
+
+
+                <!-- ========================================
+                     PAGE INTRODUCTION
+                     ======================================== -->
+
+                <section class="dashboard-intro page-intro">
+
+                    <p class="section-eyebrow">
+                        TASK MANAGEMENT
+                    </p>
+
+                    <h2>
+                        Your Tasks
+                    </h2>
+
+                    <p>
+                        Organize your work, set priorities,
+                        and keep track of what needs to be completed.
+                    </p>
+
+                </section>
+
+
+                <!-- ========================================
+                     CREATE TASK PANEL
+                     ======================================== -->
+
+                <section class="dashboard-panel goal-form-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                PLAN
+                            </p>
+
+                            <h2>
+                                Create a New Task
+                            </h2>
+
+                            <p>
+                                Add a task with a due date and
+                                priority to keep your workload organized.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <form id="taskForm"
+                          class="goal-form">
+
+
+                        <!-- Task title -->
+
+                        <div class="form-group">
+
+                            <label for="taskTitle">
+                                Task Title
+                            </label>
+
+                            <input type="text"
+                                   id="taskTitle"
+                                   placeholder="e.g. Complete project report"
+                                   autocomplete="off"
+                                   required>
+
+                        </div>
+
+
+                        <!-- Priority -->
+
+                        <div class="form-group">
+
+                            <label for="taskPriority">
+                                Priority
+                            </label>
+
+                            <select id="taskPriority">
+
+                                <option value="Low">
+                                    Low
+                                </option>
+
+                                <option value="Medium"
+                                        selected>
+                                    Medium
+                                </option>
+
+                                <option value="High">
+                                    High
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Description -->
+
+                        <div class="form-group full-width">
+
+                            <label for="taskDescription">
+                                Description
+                            </label>
+
+                            <textarea id="taskDescription"
+                                      placeholder="Describe what needs to be completed."></textarea>
+
+                        </div>
+
+
+                        <!-- Due date -->
+
+                        <div class="form-group">
+
+                            <label for="taskDueDate">
+                                Due Date
+                            </label>
+
+                            <input type="date"
+                                   id="taskDueDate">
+
+                        </div>
+
+
+                        <!-- Form actions -->
+
+                        <div class="form-actions">
+
+                            <button type="submit"
+                                    id="taskButton"
+                                    class="primary-button">
+
+                                Create Task
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- Form message -->
+
+                        <p id="taskMessage"
+                           class="form-message"
+                           role="status"
+                           aria-live="polite">
+                        </p>
+
+                    </form>
+
+                </section>
+
+
+                <!-- ========================================
+                     TASK LIST PANEL
+                     ======================================== -->
+
+                <section class="dashboard-panel goals-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                WORKLOAD
+                            </p>
+
+                            <h2>
+                                My Tasks
+                            </h2>
+
+                            <p>
+                                Review your tasks and update their
+                                progress as you work through them.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="tasksContainer"
+                         class="goals-container">
+
+                        <div class="empty-state">
+
+                            <p>
+                                Loading tasks...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </main>
+
+    </div>
 
 
     <!-- ========================================
-         CREATE TASK
+         FOOTER
          ======================================== -->
 
-    <section>
+    <footer class="dashboard-footer">
 
-        <h2>
-            Create a Task
-        </h2>
+        <p>
+            StudyTrack
+        </p>
 
+        <p>
+            Stay organized. Build consistency. Make progress.
+        </p>
 
-        <form id="taskForm">
-
-
-            <label for="taskTitle">
-                Task Title
-            </label>
-
-            <br>
-
-            <input type="text"
-                   id="taskTitle"
-                   placeholder="e.g. Complete project report"
-                   required>
-
-            <br><br>
-
-
-            <label for="taskDescription">
-                Description
-            </label>
-
-            <br>
-
-            <textarea id="taskDescription"
-                      placeholder="Describe the task"></textarea>
-
-            <br><br>
-
-
-            <label for="taskDueDate">
-                Due Date
-            </label>
-
-            <br>
-
-            <input type="date"
-                   id="taskDueDate">
-
-            <br><br>
-
-
-            <label for="taskPriority">
-                Priority
-            </label>
-
-            <br>
-
-            <select id="taskPriority">
-
-                <option value="Low">
-                    Low
-                </option>
-
-                <option value="Medium"
-                        selected>
-                    Medium
-                </option>
-
-                <option value="High">
-                    High
-                </option>
-
-            </select>
-
-            <br><br>
-
-
-            <button type="submit"
-                    id="taskButton">
-                Create Task
-            </button>
-
-
-        </form>
-
-
-        <p id="taskMessage"></p>
-
-    </section>
-
-
-    <!-- ========================================
-         TASKS
-         ======================================== -->
-
-    <section>
-
-        <h2>
-            My Tasks
-        </h2>
-
-
-        <div id="tasksContainer">
-
-            <p>
-                Loading tasks...
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================================
-         LOGOUT
-         ======================================== -->
-
-    <button id="logoutButton">
-        Logout
-    </button>
+    </footer>
 
 
     <!-- ========================================

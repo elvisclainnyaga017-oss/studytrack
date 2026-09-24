@@ -1,129 +1,471 @@
-// ========================================
-// HABIT PAGE ELEMENTS
-// ========================================
-
-const habitForm = document.getElementById('habitForm');
-
-const habitMessage = document.getElementById('habitMessage');
-
-const habitsContainer = document.getElementById('habitsContainer');
-
-const logoutButton = document.getElementById('logoutButton');
+// =========================================================
+// STUDYTRACK - HABITS PAGE
+// =========================================================
 
 
-// ========================================
-// CREATE HABIT
-// ========================================
+// =========================================================
+// PAGE ELEMENTS
+// =========================================================
 
-habitForm.addEventListener('submit', async (event) => {
+const habitForm =
+    document.getElementById('habitForm');
 
-    event.preventDefault();
+const habitMessage =
+    document.getElementById('habitMessage');
+
+const habitsContainer =
+    document.getElementById('habitsContainer');
+
+const logoutButton =
+    document.getElementById('logoutButton');
+
+const userName =
+    document.getElementById('userName');
+
+const userEmail =
+    document.getElementById('userEmail');
+
+const dayModeButton =
+    document.getElementById('dayModeButton');
+
+const nightModeButton =
+    document.getElementById('nightModeButton');
+
+const habitStartDate =
+    document.getElementById('habitStartDate');
 
 
-    const name =
-        document.getElementById('habitName').value.trim();
+// =========================================================
+// DEFAULT START DATE
+// =========================================================
 
-    const description =
-        document.getElementById('habitDescription').value.trim();
+function setDefaultStartDate() {
 
-
-    // The current HTML form does not ask for
-    // frequency or start date.
-    // Use the backend defaults instead.
-
-    const frequency = 'Daily';
-
-    const startDate = new Date()
-        .toISOString()
-        .substring(0, 10);
-
-
-    if (name === '') {
-
-        habitMessage.textContent =
-            'Habit name is required.';
-
+    if (!habitStartDate) {
         return;
     }
 
 
-    habitMessage.textContent =
-        'Creating habit...';
+    const today =
+        new Date();
 
 
-    try {
+    const year =
+        today.getFullYear();
 
-        const response = await fetch(
-            '/api/habits',
-            {
-                method: 'POST',
 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+    const month =
+        String(today.getMonth() + 1)
+            .padStart(2, '0');
 
-                credentials: 'include',
 
-                body: JSON.stringify({
+    const day =
+        String(today.getDate())
+            .padStart(2, '0');
 
-                    name: name,
 
-                    description: description,
+    habitStartDate.value =
+        `${year}-${month}-${day}`;
+}
 
-                    frequency: frequency,
 
-                    start_date: startDate
+// =========================================================
+// THEME MANAGEMENT
+// =========================================================
 
-                })
-            }
+function applyTheme(theme) {
+
+    if (theme === 'night') {
+
+        document.body.classList.add(
+            'night-mode'
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            'night-mode'
+        );
+
+    }
+
+
+    updateThemeButtons();
+}
+
+
+function updateThemeButtons() {
+
+    if (!dayModeButton || !nightModeButton) {
+        return;
+    }
+
+
+    const isNightMode =
+        document.body.classList.contains(
+            'night-mode'
         );
 
 
-        const data = await response.json();
+    dayModeButton.classList.toggle(
+        'active',
+        !isNightMode
+    );
 
 
-        if (response.ok) {
+    nightModeButton.classList.toggle(
+        'active',
+        isNightMode
+    );
 
-            habitMessage.textContent =
-                'Habit created successfully!';
 
-            habitForm.reset();
+    dayModeButton.setAttribute(
+        'aria-pressed',
+        String(!isNightMode)
+    );
 
-            loadHabits();
 
-        } else {
+    nightModeButton.setAttribute(
+        'aria-pressed',
+        String(isNightMode)
+    );
+}
 
-            habitMessage.textContent =
-                data.message ||
-                'Could not create habit.';
+
+function setTheme(theme) {
+
+    localStorage.setItem(
+        'studytrack-theme',
+        theme
+    );
+
+
+    applyTheme(theme);
+}
+
+
+function loadSavedTheme() {
+
+    const savedTheme =
+        localStorage.getItem(
+            'studytrack-theme'
+        );
+
+
+    if (savedTheme === 'night') {
+
+        applyTheme('night');
+
+    } else {
+
+        applyTheme('day');
+
+    }
+}
+
+
+if (dayModeButton) {
+
+    dayModeButton.addEventListener(
+        'click',
+        () => {
+
+            setTheme('day');
+
+        }
+    );
+}
+
+
+if (nightModeButton) {
+
+    nightModeButton.addEventListener(
+        'click',
+        () => {
+
+            setTheme('night');
+
+        }
+    );
+}
+
+
+// Apply saved theme immediately.
+loadSavedTheme();
+
+
+// =========================================================
+// LOAD USER
+// =========================================================
+
+async function loadUser() {
+
+    try {
+
+        const response =
+            await fetch(
+                '/api/me',
+                {
+                    credentials: 'include'
+                }
+            );
+
+
+        if (!response.ok) {
+
+            window.location.href =
+                '/login.html';
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (data.user) {
+
+            if (userName) {
+
+                userName.textContent =
+                    data.user.full_name ||
+                    'User';
+
+            }
+
+
+            if (userEmail) {
+
+                userEmail.textContent =
+                    data.user.email ||
+                    '';
+
+            }
+
         }
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Load user error:',
+            error
+        );
 
-        habitMessage.textContent =
-            'Could not connect to the server.';
+
+        window.location.href =
+            '/login.html';
+
     }
 
-});
+}
 
 
-// ========================================
+// =========================================================
+// FORM MESSAGE
+// =========================================================
+
+function showHabitMessage(
+    message,
+    type = 'default'
+) {
+
+    if (!habitMessage) {
+        return;
+    }
+
+
+    habitMessage.textContent =
+        message;
+
+
+    habitMessage.classList.add(
+        'show'
+    );
+
+
+    habitMessage.dataset.type =
+        type;
+
+}
+
+
+// =========================================================
+// CREATE HABIT
+// =========================================================
+
+habitForm.addEventListener(
+    'submit',
+    async (event) => {
+
+        event.preventDefault();
+
+
+        const name =
+            document.getElementById(
+                'habitName'
+            ).value.trim();
+
+
+        const description =
+            document.getElementById(
+                'habitDescription'
+            ).value.trim();
+
+
+        const frequency =
+            document.getElementById(
+                'habitFrequency'
+            ).value;
+
+
+        const startDate =
+            document.getElementById(
+                'habitStartDate'
+            ).value;
+
+
+        if (name === '') {
+
+            showHabitMessage(
+                'Habit name is required.'
+            );
+
+            return;
+
+        }
+
+
+        if (startDate === '') {
+
+            showHabitMessage(
+                'Please select a start date.'
+            );
+
+            return;
+
+        }
+
+
+        showHabitMessage(
+            'Creating habit...'
+        );
+
+
+        const habitButton =
+            document.getElementById(
+                'habitButton'
+            );
+
+
+        habitButton.disabled =
+            true;
+
+
+        try {
+
+            const response =
+                await fetch(
+                    '/api/habits',
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json'
+                        },
+
+                        credentials: 'include',
+
+                        body: JSON.stringify({
+
+                            name:
+                                name,
+
+                            description:
+                                description,
+
+                            frequency:
+                                frequency,
+
+                            start_date:
+                                startDate
+
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (response.ok) {
+
+                showHabitMessage(
+                    'Habit created successfully!'
+                );
+
+
+                habitForm.reset();
+
+
+                setDefaultStartDate();
+
+
+                await loadHabits();
+
+            } else {
+
+                showHabitMessage(
+                    data.message ||
+                    'Could not create habit.'
+                );
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                'Create habit error:',
+                error
+            );
+
+
+            showHabitMessage(
+                'Could not connect to the server.'
+            );
+
+
+        } finally {
+
+            habitButton.disabled =
+                false;
+
+        }
+
+    }
+);
+
+
+// =========================================================
 // LOAD HABITS
-// ========================================
+// =========================================================
 
 async function loadHabits() {
 
     try {
 
-        const response = await fetch(
-            '/api/habits',
-            {
-                credentials: 'include'
-            }
-        );
+        const response =
+            await fetch(
+                '/api/habits',
+                {
+                    credentials: 'include'
+                }
+            );
 
 
         if (response.status === 401) {
@@ -132,19 +474,27 @@ async function loadHabits() {
                 '/login.html';
 
             return;
+
         }
 
 
         if (!response.ok) {
 
-            habitsContainer.textContent =
-                'Could not load habits.';
+            habitsContainer.innerHTML = `
+                <div class="empty-state">
+                    <p>
+                        Could not load your habits.
+                    </p>
+                </div>
+            `;
 
             return;
+
         }
 
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
 
         if (
@@ -153,109 +503,220 @@ async function loadHabits() {
         ) {
 
             habitsContainer.innerHTML = `
-                <p>
-                    You have no habits yet.
-                </p>
+                <div class="empty-state">
+
+                    <p>
+                        You have no habits yet.
+                        Create your first habit above
+                        to start building consistency.
+                    </p>
+
+                </div>
             `;
 
             return;
+
         }
 
 
-        habitsContainer.innerHTML = '';
+        habitsContainer.innerHTML =
+            '';
 
 
-        data.habits.forEach((habit) => {
+        data.habits.forEach(
+            (habit) => {
 
-            const habitElement =
-                document.createElement('div');
-
-
-            habitElement.innerHTML = `
-
-                <h3>
-                    ${habit.name}
-                </h3>
+                const habitElement =
+                    document.createElement(
+                        'article'
+                    );
 
 
-                <p>
-                    ${habit.description || 'No description'}
-                </p>
+                habitElement.className =
+                    'goal-card';
 
 
-                <p>
-                    Frequency:
-                    ${habit.frequency || 'Daily'}
-                </p>
+                const startDate =
+                    habit.start_date
+                        ? String(
+                            habit.start_date
+                        ).substring(0, 10)
+                        : 'No start date';
 
 
-                <p>
-                    Start Date:
-                    ${habit.start_date
-                    ? String(habit.start_date)
-                        .substring(0, 10)
-                    : 'No start date'
-                }
-                </p>
+                const description =
+                    habit.description &&
+                        habit.description.trim() !== ''
+                        ? habit.description
+                        : 'No description provided.';
 
 
-                <p>
-                    Status:
-                    ${habit.status || 'Active'}
-                </p>
+                const frequency =
+                    habit.frequency ||
+                    'Daily';
 
 
-                <button
-                    onclick="editHabit(${habit.id})"
-                >
-                    Edit Habit
-                </button>
+                const status =
+                    habit.status ||
+                    'Active';
 
 
-                <button
-                    onclick="deleteHabit(${habit.id})"
-                >
-                    Delete Habit
-                </button>
+                habitElement.innerHTML = `
+
+                    <div class="goal-card-header">
+
+                        <div class="goal-card-title">
+
+                            <h3>
+                                ${escapeHtml(
+                    habit.name
+                )}
+                            </h3>
+
+                            <p>
+                                ${escapeHtml(
+                    description
+                )}
+                            </p>
+
+                        </div>
 
 
-                <hr>
+                        <span class="goal-status">
 
-            `;
+                            ${escapeHtml(
+                    status
+                )}
+
+                        </span>
+
+                    </div>
 
 
-            habitsContainer.appendChild(
-                habitElement
-            );
+                    <div class="goal-meta">
 
-        });
+                        <span>
+                            Frequency:
+                            <strong>
+                                ${escapeHtml(
+                    frequency
+                )}
+                            </strong>
+                        </span>
+
+
+                        <span>
+                            Start Date:
+                            <strong>
+                                ${escapeHtml(
+                    startDate
+                )}
+                            </strong>
+                        </span>
+
+                    </div>
+
+
+                    <div class="goal-actions">
+
+                        <button
+                            type="button"
+                            class="goal-action-button primary"
+                            onclick="editHabit(${habit.id})">
+
+                            Edit Habit
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="goal-action-button danger"
+                            onclick="deleteHabit(${habit.id})">
+
+                            Delete Habit
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                habitsContainer.appendChild(
+                    habitElement
+                );
+
+            }
+        );
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Load habits error:',
+            error
+        );
 
-        habitsContainer.textContent =
-            'Could not connect to the server.';
+
+        habitsContainer.innerHTML = `
+            <div class="empty-state">
+                <p>
+                    Could not connect to the server.
+                </p>
+            </div>
+        `;
+
     }
 
 }
 
 
-// ========================================
+// =========================================================
+// ESCAPE HTML
+// =========================================================
+
+function escapeHtml(value) {
+
+    const div =
+        document.createElement(
+            'div'
+        );
+
+
+    div.textContent =
+        value ?? '';
+
+
+    return div.innerHTML;
+}
+
+
+// =========================================================
 // EDIT HABIT
-// ========================================
+// =========================================================
 
 async function editHabit(habitId) {
 
     try {
 
-        const response = await fetch(
-            '/api/habits',
-            {
-                credentials: 'include'
-            }
-        );
+        const response =
+            await fetch(
+                '/api/habits',
+                {
+                    credentials: 'include'
+                }
+            );
+
+
+        if (response.status === 401) {
+
+            window.location.href =
+                '/login.html';
+
+            return;
+
+        }
 
 
         if (!response.ok) {
@@ -265,33 +726,41 @@ async function editHabit(habitId) {
             );
 
             return;
+
         }
 
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
 
-        const habit = data.habits.find(
-            (item) => item.id === habitId
-        );
+        const habit =
+            data.habits.find(
+                (item) =>
+                    item.id === habitId
+            );
 
 
         if (!habit) {
 
-            alert('Habit not found.');
+            alert(
+                'Habit not found.'
+            );
 
             return;
+
         }
 
 
-        // ----------------------------------------
+        // -----------------------------------------------------
         // HABIT NAME
-        // ----------------------------------------
+        // -----------------------------------------------------
 
-        const newName = prompt(
-            'Enter the habit name:',
-            habit.name
-        );
+        const newName =
+            prompt(
+                'Enter the habit name:',
+                habit.name
+            );
 
 
         if (newName === null) {
@@ -306,17 +775,19 @@ async function editHabit(habitId) {
             );
 
             return;
+
         }
 
 
-        // ----------------------------------------
+        // -----------------------------------------------------
         // DESCRIPTION
-        // ----------------------------------------
+        // -----------------------------------------------------
 
-        const newDescription = prompt(
-            'Enter the habit description:',
-            habit.description || ''
-        );
+        const newDescription =
+            prompt(
+                'Enter the habit description:',
+                habit.description || ''
+            );
 
 
         if (newDescription === null) {
@@ -324,14 +795,15 @@ async function editHabit(habitId) {
         }
 
 
-        // ----------------------------------------
+        // -----------------------------------------------------
         // FREQUENCY
-        // ----------------------------------------
+        // -----------------------------------------------------
 
-        const newFrequency = prompt(
-            'Enter the frequency (Daily, Weekly, or Monthly):',
-            habit.frequency || 'Daily'
-        );
+        const newFrequency =
+            prompt(
+                'Enter the frequency (Daily, Weekly, or Monthly):',
+                habit.frequency || 'Daily'
+            );
 
 
         if (newFrequency === null) {
@@ -346,20 +818,27 @@ async function editHabit(habitId) {
             );
 
             return;
+
         }
 
 
-        // ----------------------------------------
+        // -----------------------------------------------------
         // START DATE
-        // ----------------------------------------
+        // -----------------------------------------------------
 
-        const newStartDate = prompt(
-            'Enter the start date (YYYY-MM-DD):',
+        const currentStartDate =
             habit.start_date
-                ? String(habit.start_date)
-                    .substring(0, 10)
-                : ''
-        );
+                ? String(
+                    habit.start_date
+                ).substring(0, 10)
+                : '';
+
+
+        const newStartDate =
+            prompt(
+                'Enter the start date (YYYY-MM-DD):',
+                currentStartDate
+            );
 
 
         if (newStartDate === null) {
@@ -374,17 +853,19 @@ async function editHabit(habitId) {
             );
 
             return;
+
         }
 
 
-        // ----------------------------------------
+        // -----------------------------------------------------
         // STATUS
-        // ----------------------------------------
+        // -----------------------------------------------------
 
-        const newStatus = prompt(
-            'Enter the status (Active or Inactive):',
-            habit.status || 'Active'
-        );
+        const newStatus =
+            prompt(
+                'Enter the status (Active or Inactive):',
+                habit.status || 'Active'
+            );
 
 
         if (newStatus === null) {
@@ -399,43 +880,47 @@ async function editHabit(habitId) {
             );
 
             return;
+
         }
 
 
-        // ----------------------------------------
+        // -----------------------------------------------------
         // UPDATE HABIT
-        // ----------------------------------------
+        // -----------------------------------------------------
 
-        const updateResponse = await fetch(
-            `/api/habits/${habitId}`,
-            {
-                method: 'PUT',
+        const updateResponse =
+            await fetch(
+                `/api/habits/${habitId}`,
+                {
+                    method: 'PUT',
 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
 
-                credentials: 'include',
+                    credentials: 'include',
 
-                body: JSON.stringify({
+                    body: JSON.stringify({
 
-                    name: newName.trim(),
+                        name:
+                            newName.trim(),
 
-                    description:
-                        newDescription.trim(),
+                        description:
+                            newDescription.trim(),
 
-                    frequency:
-                        newFrequency.trim(),
+                        frequency:
+                            newFrequency.trim(),
 
-                    start_date:
-                        newStartDate.trim(),
+                        start_date:
+                            newStartDate.trim(),
 
-                    status:
-                        newStatus.trim()
+                        status:
+                            newStatus.trim()
 
-                })
-            }
-        );
+                    })
+                }
+            );
 
 
         const updateData =
@@ -448,7 +933,8 @@ async function editHabit(habitId) {
                 'Habit updated successfully!'
             );
 
-            loadHabits();
+
+            await loadHabits();
 
         } else {
 
@@ -456,30 +942,37 @@ async function editHabit(habitId) {
                 updateData.message ||
                 'Could not update habit.'
             );
+
         }
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Edit habit error:',
+            error
+        );
+
 
         alert(
             'Could not connect to the server.'
         );
+
     }
 
 }
 
 
-// ========================================
+// =========================================================
 // DELETE HABIT
-// ========================================
+// =========================================================
 
 async function deleteHabit(habitId) {
 
-    const confirmed = confirm(
-        'Are you sure you want to delete this habit?'
-    );
+    const confirmed =
+        confirm(
+            'Are you sure you want to delete this habit?'
+        );
 
 
     if (!confirmed) {
@@ -489,14 +982,25 @@ async function deleteHabit(habitId) {
 
     try {
 
-        const response = await fetch(
-            `/api/habits/${habitId}`,
-            {
-                method: 'DELETE',
+        const response =
+            await fetch(
+                `/api/habits/${habitId}`,
+                {
+                    method: 'DELETE',
 
-                credentials: 'include'
-            }
-        );
+                    credentials: 'include'
+                }
+            );
+
+
+        if (response.status === 401) {
+
+            window.location.href =
+                '/login.html';
+
+            return;
+
+        }
 
 
         const data =
@@ -505,7 +1009,7 @@ async function deleteHabit(habitId) {
 
         if (response.ok) {
 
-            loadHabits();
+            await loadHabits();
 
         } else {
 
@@ -513,24 +1017,30 @@ async function deleteHabit(habitId) {
                 data.message ||
                 'Could not delete habit.'
             );
+
         }
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Delete habit error:',
+            error
+        );
+
 
         alert(
             'Could not connect to the server.'
         );
+
     }
 
 }
 
 
-// ========================================
+// =========================================================
 // LOGOUT
-// ========================================
+// =========================================================
 
 logoutButton.addEventListener(
     'click',
@@ -538,14 +1048,15 @@ logoutButton.addEventListener(
 
         try {
 
-            const response = await fetch(
-                '/api/logout',
-                {
-                    method: 'POST',
+            const response =
+                await fetch(
+                    '/api/logout',
+                    {
+                        method: 'POST',
 
-                    credentials: 'include'
-                }
-            );
+                        credentials: 'include'
+                    }
+                );
 
 
             if (response.ok) {
@@ -558,24 +1069,34 @@ logoutButton.addEventListener(
                 alert(
                     'Could not log out.'
                 );
+
             }
 
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                'Logout error:',
+                error
+            );
+
 
             alert(
                 'Could not connect to the server.'
             );
+
         }
 
     }
 );
 
 
-// ========================================
+// =========================================================
 // START PAGE
-// ========================================
+// =========================================================
+
+setDefaultStartDate();
+
+loadUser();
 
 loadHabits();

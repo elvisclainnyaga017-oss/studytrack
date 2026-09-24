@@ -1,6 +1,7 @@
 /* =========================================================
    STUDYTRACK - MAIN STYLESHEET
    Accessible Productivity Color System
+   Responsive Desktop, Tablet and Mobile Layout
    ========================================================= */
 
 
@@ -9,8 +10,6 @@
    ========================================================= */
 
 :root {
-    /* ---------- Day mode ---------- */
-
     --page-background: #f4f7f8;
     --surface: #ffffff;
     --surface-soft: #f7f9fa;
@@ -21,12 +20,10 @@
     --text-subtle: #8b969e;
     --border: #dfe6e9;
     --border-soft: #e9eef0;
-    /* Calm blue-teal accent */
     --accent: #287c83;
     --accent-hover: #216b71;
     --accent-soft: #e6f2f2;
     --accent-border: #b9d8da;
-    /* Status colors */
     --success: #397653;
     --success-soft: #e8f3ec;
     --success-border: #c5ddce;
@@ -36,9 +33,7 @@
     --danger: #9a4f50;
     --danger-soft: #f8eaea;
     --danger-border: #e2c2c2;
-    /* Focus */
     --focus-ring: rgba(40, 124, 131, 0.20);
-    /* Shadows */
     --shadow-soft: 0 5px 18px rgba(23, 35, 43, 0.045);
     --shadow-hover: 0 8px 24px rgba(23, 35, 43, 0.075);
 }
@@ -59,12 +54,12 @@ html {
 }
 
 body {
-    min-height: 100vh;
     background: var(--page-background);
     color: var(--text-primary);
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.5;
+    overflow-x: hidden;
 }
 
 button,
@@ -78,9 +73,18 @@ button {
     cursor: pointer;
 }
 
+    button:disabled {
+        cursor: not-allowed;
+    }
+
 a {
     color: inherit;
     text-decoration: none;
+}
+
+img,
+svg {
+    max-width: 100%;
 }
 
 
@@ -94,11 +98,11 @@ a {
     left: 0;
     right: 0;
     z-index: 1000;
+    min-height: 72px;
+    padding: 0 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 72px;
-    padding: 0 28px;
     background: #182124;
     border-bottom: 1px solid #2d393d;
     color: #ffffff;
@@ -110,38 +114,38 @@ a {
     gap: 12px;
 }
 
-.brand-icon,
-.sidebar-brand-icon {
+.brand-icon {
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
-    border: 1px solid #405055;
-    border-radius: 8px;
-    background: #222d31;
+    border-radius: 10px;
+    background: #287c83;
     color: #ffffff;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
+    flex-shrink: 0;
 }
+
+    .brand-icon svg {
+        width: 21px;
+        height: 21px;
+    }
 
 .brand-text {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
 }
 
 .header-brand h1 {
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
+    font-size: 17px;
     line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.2px;
 }
 
 .header-brand p {
-    color: #aab5ba;
+    color: #aab7bb;
     font-size: 11px;
     line-height: 1.3;
 }
@@ -149,27 +153,28 @@ a {
 .header-right {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 18px;
 }
 
 .header-user {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 2px;
+    gap: 1px;
 }
 
     .header-user span {
+        color: #dce5e7;
+        font-size: 11px;
+    }
+
+    .header-user strong {
         color: #ffffff;
         font-size: 13px;
     }
 
-    .header-user strong {
-        font-weight: 700;
-    }
-
     .header-user p {
-        color: #9eabb0;
+        color: #91a0a5;
         font-size: 10px;
     }
 
@@ -181,44 +186,38 @@ a {
 .header-theme-control {
     display: flex;
     align-items: center;
-    flex-shrink: 0;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid #364448;
+    border-radius: 10px;
+    background: #202b2f;
 }
 
 .theme-switch {
     display: flex;
     align-items: center;
-    gap: 3px;
-    padding: 3px;
-    min-height: 39px;
-    border: 1px solid #405055;
-    border-radius: 10px;
-    background: #222d31;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    gap: 4px;
 }
 
 .theme-switch-button {
-    position: relative;
+    min-height: 32px;
+    padding: 6px 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    min-width: 72px;
-    height: 31px;
-    padding: 0 11px;
-    border: 1px solid transparent;
+    border: 0;
     border-radius: 7px;
-    outline: none;
     background: transparent;
-    color: #9da9ae;
-    font-size: 10px;
+    color: #aebbc0;
+    font-size: 11px;
     font-weight: 700;
-    line-height: 1;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
     .theme-switch-button:hover {
         color: #ffffff;
-        background: #2c393d;
+        background: #2b393d;
     }
 
     .theme-switch-button:active {
@@ -226,36 +225,32 @@ a {
     }
 
     .theme-switch-button:focus-visible {
-        border-color: #78aeb2;
-        box-shadow: 0 0 0 3px rgba(120, 174, 178, 0.18);
+        outline: 3px solid rgba(114, 183, 186, 0.35);
+        outline-offset: 2px;
     }
 
     .theme-switch-button.active {
         background: #ffffff;
-        border-color: #ffffff;
         color: #182124;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
     }
 
         .theme-switch-button.active:hover {
             background: #f0f4f5;
-            border-color: #f0f4f5;
-            color: #182124;
         }
 
 .theme-switch-icon {
+    width: 15px;
+    height: 15px;
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 14px;
-    height: 14px;
-    color: inherit;
-    font-size: 12px;
-    line-height: 1;
 }
 
+    .theme-switch-icon svg {
+        width: 100%;
+        height: 100%;
+    }
+
 .theme-switch-text {
-    line-height: 1;
+    white-space: nowrap;
 }
 
 
@@ -282,93 +277,61 @@ a {
     width: 250px;
     display: flex;
     flex-direction: column;
-    background: #182124;
-    border-right: 1px solid #2d393d;
-    color: #ffffff;
-}
-
-.sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    padding: 24px 20px 20px;
-    border-bottom: 1px solid #2d393d;
-}
-
-.sidebar-brand-icon {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-}
-
-.sidebar-brand h2 {
-    color: #ffffff;
-    font-size: 13px;
-    font-weight: 800;
-}
-
-.sidebar-brand p {
-    margin-top: 1px;
-    color: #7f8d92;
-    font-size: 9px;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    padding: 18px 14px;
+    background: #202b2f;
+    border-right: 1px solid #2f3b3f;
+    color: #dce5e7;
     overflow-y: auto;
 }
 
-.sidebar-nav-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    list-style: none;
-}
-
-.sidebar-nav-item {
-    list-style: none;
+.sidebar-nav {
+    padding: 22px 14px;
 }
 
 .sidebar-nav-link {
+    width: 100%;
+    min-height: 44px;
     display: flex;
     align-items: center;
     gap: 12px;
-    width: 100%;
-    min-height: 42px;
-    padding: 0 12px;
-    border-radius: 8px;
-    color: #a7b2b6;
-    font-size: 12px;
+    margin-bottom: 5px;
+    padding: 10px 13px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    color: #b7c3c7;
+    font-size: 13px;
     font-weight: 600;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
     .sidebar-nav-link:hover {
-        background: #243034;
+        background: #29373b;
         color: #ffffff;
     }
 
     .sidebar-nav-link.active {
-        background: #ffffff;
-        color: #182124;
+        background: #2c4649;
+        border-color: #3d6266;
+        color: #ffffff;
     }
 
 .nav-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     width: 20px;
     height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
 }
 
     .nav-icon svg {
-        display: block;
         width: 18px;
         height: 18px;
     }
+
+.sidebar-nav-link:focus-visible {
+    outline: 3px solid rgba(114, 183, 186, 0.3);
+    outline-offset: 2px;
+}
 
 
 /* =========================================================
@@ -378,33 +341,38 @@ a {
 .sidebar-bottom {
     margin-top: auto;
     padding: 14px;
-    border-top: 1px solid #2d393d;
+    border-top: 1px solid #2f3b3f;
 }
 
 .logout-button {
+    width: 100%;
+    min-height: 44px;
     display: flex;
     align-items: center;
     gap: 12px;
-    width: 100%;
-    min-height: 42px;
-    padding: 0 12px;
-    border: 0;
-    border-radius: 8px;
+    padding: 10px 13px;
+    border: 1px solid transparent;
+    border-radius: 9px;
     background: transparent;
-    color: #a7b2b6;
-    font-size: 12px;
+    color: #b7c3c7;
+    font-size: 13px;
     font-weight: 600;
     text-align: left;
     transition: background 0.2s ease, color 0.2s ease;
 }
 
     .logout-button:hover {
-        background: #243034;
+        background: #3b2b2c;
         color: #ffffff;
     }
 
     .logout-button .nav-icon {
         color: inherit;
+    }
+
+    .logout-button:focus-visible {
+        outline: 3px solid rgba(114, 183, 186, 0.3);
+        outline-offset: 2px;
     }
 
 
@@ -430,23 +398,22 @@ a {
    ========================================================= */
 
 .dashboard-intro {
-    margin-bottom: 38px;
+    margin-bottom: 34px;
 }
 
     .dashboard-intro h2 {
-        margin-bottom: 9px;
+        margin-bottom: 7px;
         color: var(--text-primary);
-        font-size: 29px;
+        font-size: 30px;
+        line-height: 1.2;
         font-weight: 800;
         letter-spacing: -0.6px;
-        line-height: 1.2;
     }
 
     .dashboard-intro p:last-child {
-        max-width: 720px;
         color: var(--text-secondary);
-        font-size: 13px;
-        line-height: 1.65;
+        font-size: 14px;
+        max-width: 720px;
     }
 
 
@@ -455,12 +422,12 @@ a {
    ========================================================= */
 
 .section-eyebrow {
-    margin-bottom: 7px;
-    color: var(--text-secondary);
+    margin-bottom: 5px;
+    color: var(--accent);
     font-size: 10px;
+    line-height: 1.2;
     font-weight: 800;
-    letter-spacing: 1px;
-    line-height: 1.3;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
 }
 
@@ -469,35 +436,33 @@ a {
     align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
-    margin-bottom: 20px;
+    padding: 24px;
 }
 
     .panel-heading h2,
     .panel-heading h3 {
         color: var(--text-primary);
-        font-size: 17px;
-        font-weight: 800;
+        font-size: 19px;
         line-height: 1.3;
+        font-weight: 800;
     }
 
     .panel-heading p:not(.section-eyebrow) {
-        margin-top: 7px;
-        color: var(--text-secondary);
-        font-size: 11px;
-        line-height: 1.55;
+        margin-top: 5px;
+        color: var(--text-muted);
+        font-size: 12px;
     }
 
 .panel-link {
-    flex-shrink: 0;
-    margin-top: 2px;
-    color: var(--text-secondary);
-    font-size: 11px;
+    color: var(--accent);
+    font-size: 12px;
     font-weight: 700;
-    transition: color 0.2s ease;
+    white-space: nowrap;
 }
 
     .panel-link:hover {
-        color: var(--accent);
+        color: var(--accent-hover);
+        text-decoration: underline;
     }
 
 
@@ -506,133 +471,117 @@ a {
    ========================================================= */
 
 .summary-section {
-    margin-bottom: 38px;
+    margin-bottom: 28px;
 }
 
 .summary-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 18px;
+    gap: 16px;
 }
 
 .summary-card {
+    min-width: 0;
     display: flex;
     align-items: flex-start;
-    gap: 17px;
-    min-width: 0;
-    padding: 23px;
+    gap: 14px;
+    padding: 20px;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    background: var(--surface);
     box-shadow: var(--shadow-soft);
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
     .summary-card:hover {
         transform: translateY(-2px);
-        border-color: #cbd6da;
         box-shadow: var(--shadow-hover);
+        border-color: var(--accent-border);
     }
 
-
-/* =========================================================
-   12. SUMMARY ICONS
-   ========================================================= */
-
 .summary-card-icon {
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-    flex: 0 0 42px;
-    border: 1px solid var(--accent-border);
+    flex-shrink: 0;
     border-radius: 10px;
     background: var(--accent-soft);
     color: var(--accent);
 }
 
     .summary-card-icon svg {
-        display: block;
         width: 21px;
         height: 21px;
     }
 
 .summary-card-content {
     min-width: 0;
-    flex: 1;
 }
 
     .summary-card-content h3 {
-        margin-bottom: 13px;
-        color: var(--text-primary);
-        font-size: 13px;
+        margin-bottom: 2px;
+        color: var(--text-secondary);
+        font-size: 11px;
         font-weight: 700;
-        line-height: 1.35;
     }
 
-    .summary-card-content > strong {
+    .summary-card-content strong {
         display: block;
-        color: #132027;
-        font-size: 30px;
-        font-weight: 800;
-        line-height: 1;
+        color: var(--text-primary);
+        font-size: 24px;
+        line-height: 1.2;
     }
 
-    .summary-card-content > p {
-        margin-top: 8px;
+    .summary-card-content p {
+        margin-top: 3px;
         color: var(--text-muted);
-        font-size: 10px;
-        line-height: 1.45;
+        font-size: 11px;
     }
 
 .summary-card-details {
-    margin-top: 19px;
+    margin-top: 7px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
     .summary-card-details span {
-        display: block;
-        padding-top: 10px;
-        border-top: 1px solid var(--border-soft);
         color: var(--text-muted);
         font-size: 10px;
-        line-height: 1.45;
     }
 
-        .summary-card-details span + span {
-            margin-top: 9px;
-        }
-
     .summary-card-details strong {
+        display: inline;
         color: var(--text-secondary);
+        font-size: 10px;
     }
 
 
 /* =========================================================
-   13. PANELS
+   12. PANELS
    ========================================================= */
 
 .dashboard-panel,
 .goal-form-panel,
 .goals-panel {
-    min-width: 0;
-    margin-bottom: 38px;
+    margin-bottom: 24px;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    background: var(--surface);
     box-shadow: var(--shadow-soft);
 }
 
     .dashboard-panel > .panel-heading,
     .goal-form-panel > .panel-heading,
     .goals-panel > .panel-heading {
-        padding: 24px 24px 0;
+        border-bottom: 1px solid var(--border-soft);
     }
 
 
 /* =========================================================
-   14. UPCOMING REMINDERS
+   13. UPCOMING REMINDERS
    ========================================================= */
 
 .reminders-panel {
@@ -640,37 +589,43 @@ a {
 }
 
 .reminder-list {
-    display: flex;
-    flex-direction: column;
+    padding-bottom: 8px;
 }
 
 .reminder-card {
     display: flex;
     align-items: flex-start;
-    gap: 17px;
-    padding: 21px 24px;
-    border-bottom: 1px solid var(--border-soft);
+    gap: 16px;
+    margin: 0 24px 16px;
+    padding: 20px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+    .reminder-card:hover {
+        border-color: var(--accent-border);
+        box-shadow: var(--shadow-soft);
+    }
+
     .reminder-card:last-child {
-        border-bottom: 0;
+        margin-bottom: 20px;
     }
 
 .reminder-icon {
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-    border: 1px solid var(--accent-border);
+    flex-shrink: 0;
     border-radius: 10px;
     background: var(--accent-soft);
     color: var(--accent);
 }
 
     .reminder-icon svg {
-        display: block;
         width: 20px;
         height: 20px;
     }
@@ -681,77 +636,97 @@ a {
 }
 
     .reminder-content h3 {
-        margin-bottom: 6px;
+        margin-bottom: 5px;
         color: var(--text-primary);
-        font-size: 13px;
-        font-weight: 800;
-        line-height: 1.4;
+        font-size: 15px;
+        line-height: 1.3;
     }
 
     .reminder-content p {
-        margin-bottom: 8px;
         color: var(--text-secondary);
-        font-size: 11px;
-        line-height: 1.55;
+        font-size: 12px;
     }
 
 .reminder-date {
-    color: var(--text-secondary);
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 1.5;
+    margin-top: 9px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
 }
 
 .reminder-status {
     display: inline-flex;
     align-items: center;
-    min-height: 24px;
-    padding: 0 9px;
-    border: 1px solid var(--warning-border);
+    min-height: 26px;
+    padding: 4px 9px;
     border-radius: 999px;
-    background: var(--warning-soft);
-    color: var(--warning);
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 800;
-    letter-spacing: 0.4px;
-    line-height: 1;
-    text-transform: uppercase;
 }
+
+    .reminder-status.pending {
+        background: var(--warning-soft);
+        border: 1px solid var(--warning-border);
+        color: var(--warning);
+    }
+
+    .reminder-status.completed {
+        background: var(--success-soft);
+        border: 1px solid var(--success-border);
+        color: var(--success);
+    }
+
+.reminder-status-select {
+    min-width: 140px;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+    .reminder-status-select:hover {
+        border-color: var(--accent-border);
+    }
+
+    .reminder-status-select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--focus-ring);
+    }
 
 
 /* =========================================================
-   15. EMPTY STATES
+   14. EMPTY STATES
    ========================================================= */
 
 .empty-state {
-    padding: 38px 24px;
+    padding: 40px 24px;
     text-align: center;
 }
 
     .empty-state p {
         color: var(--text-muted);
-        font-size: 12px;
-        line-height: 1.55;
+        font-size: 13px;
     }
 
 
 /* =========================================================
-   16. CREATE GOAL FORM
+   15. GOAL / TASK FORMS
    ========================================================= */
 
 .goal-form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 24px;
-    row-gap: 22px;
-    padding: 26px 24px 24px;
+    gap: 20px;
+    padding: 24px;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
+    min-width: 0;
 }
 
     .form-group.full-width {
@@ -759,42 +734,46 @@ a {
     }
 
     .form-group label {
-        color: var(--text-secondary);
-        font-size: 11px;
-        font-weight: 800;
-        line-height: 1.4;
+        display: block;
+        margin-bottom: 7px;
+        color: var(--text-primary);
+        font-size: 12px;
+        font-weight: 700;
     }
 
     .form-group input,
     .form-group textarea,
     .form-group select {
-        display: block;
         width: 100%;
-        max-width: 100%;
         border: 1px solid var(--border);
         border-radius: 8px;
-        outline: none;
         background: var(--surface);
         color: var(--text-primary);
-        font-size: 12px;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        font-size: 13px;
     }
 
     .form-group input,
     .form-group select {
-        height: 44px;
+        min-height: 42px;
         padding: 0 12px;
     }
 
     .form-group textarea {
-        min-height: 112px;
+        min-height: 110px;
         padding: 11px 12px;
         resize: vertical;
     }
 
+        .form-group input:hover,
+        .form-group textarea:hover,
+        .form-group select:hover {
+            border-color: var(--accent-border);
+        }
+
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
+            outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--focus-ring);
         }
@@ -805,38 +784,41 @@ a {
         }
 
 .form-help {
-    color: var(--text-subtle);
+    margin-top: 5px;
+    color: var(--text-muted);
     font-size: 10px;
-    line-height: 1.45;
 }
 
 .form-actions {
     grid-column: 1 / -1;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding-top: 6px;
+    gap: 10px;
+    padding-top: 2px;
 }
 
 
 /* =========================================================
-   17. BUTTONS
+   16. BUTTONS
    ========================================================= */
 
-.primary-button {
+.primary-button,
+.secondary-button {
+    min-height: 40px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 40px;
-    padding: 0 18px;
-    border: 1px solid var(--accent);
+    padding: 9px 16px;
     border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.primary-button {
+    border: 1px solid var(--accent);
     background: var(--accent);
     color: #ffffff;
-    font-size: 11px;
-    font-weight: 800;
-    line-height: 1;
-    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
     .primary-button:hover {
@@ -844,65 +826,60 @@ a {
         border-color: var(--accent-hover);
     }
 
-    .primary-button:active {
+.secondary-button {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+}
+
+    .secondary-button:hover {
+        border-color: var(--accent-border);
+        color: var(--accent);
+    }
+
+    .primary-button:active,
+    .secondary-button:active {
         transform: translateY(1px);
     }
 
     .primary-button:focus-visible,
     .secondary-button:focus-visible,
     .goal-action-button:focus-visible,
-    .sidebar-nav-link:focus-visible,
-    .logout-button:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px var(--focus-ring);
-    }
-
-.secondary-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 38px;
-    padding: 0 15px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--surface);
-    color: var(--text-secondary);
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1;
-}
-
-    .secondary-button:hover {
-        background: var(--surface-soft);
-        border-color: #cbd6da;
+    .task-status-select:focus-visible,
+    .reminder-status-select:focus-visible {
+        outline: 3px solid var(--focus-ring);
+        outline-offset: 2px;
     }
 
 
 /* =========================================================
-   18. GOALS
+   17. GOALS
    ========================================================= */
 
 .goals-panel {
-    margin-bottom: 42px;
+    overflow: hidden;
 }
 
 .goals-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+    padding-bottom: 8px;
 }
 
 .goal-card {
-    margin: 0 24px 14px;
+    margin: 0 24px 16px;
     padding: 24px;
+    background: var(--surface-soft);
     border: 1px solid var(--border);
     border-radius: 12px;
-    background: var(--surface);
-    box-shadow: var(--shadow-soft);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+    .goal-card:hover {
+        border-color: var(--accent-border);
+        box-shadow: var(--shadow-soft);
+    }
+
     .goal-card:last-child {
-        margin-bottom: 24px;
+        margin-bottom: 20px;
     }
 
 .goal-card-header {
@@ -910,7 +887,7 @@ a {
     align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
-    margin-bottom: 14px;
+    margin-bottom: 20px;
 }
 
 .goal-card-title {
@@ -918,65 +895,51 @@ a {
 }
 
     .goal-card-title h3 {
-        margin-bottom: 5px;
         color: var(--text-primary);
-        font-size: 14px;
-        font-weight: 800;
-        line-height: 1.4;
+        font-size: 16px;
+        line-height: 1.3;
     }
 
     .goal-card-title p {
+        margin-top: 5px;
         color: var(--text-secondary);
-        font-size: 11px;
-        line-height: 1.55;
+        font-size: 12px;
     }
 
 .goal-status {
+    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    min-height: 24px;
-    padding: 0 9px;
-    border: 1px solid var(--success-border);
+    min-height: 26px;
+    padding: 4px 9px;
     border-radius: 999px;
-    background: var(--success-soft);
-    color: var(--success);
-    font-size: 9px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    font-size: 10px;
     font-weight: 800;
-    letter-spacing: 0.4px;
-    line-height: 1;
-    text-transform: uppercase;
 }
 
 .goal-progress-area {
-    margin-top: 20px;
+    margin-bottom: 18px;
 }
 
 .goal-progress-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    gap: 10px;
+    margin-bottom: 7px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 700;
 }
 
-    .goal-progress-header span {
-        color: var(--text-muted);
-        font-size: 10px;
-        font-weight: 600;
-    }
-
-    .goal-progress-header strong {
-        color: var(--text-secondary);
-        font-size: 11px;
-    }
-
 .goal-progress-bar {
-    overflow: hidden;
     width: 100%;
-    height: 7px;
+    height: 8px;
+    overflow: hidden;
     border-radius: 999px;
-    background: #e4eaec;
+    background: var(--surface-muted);
 }
 
 .goal-progress-fill {
@@ -990,14 +953,12 @@ a {
 .goal-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 14px;
+    gap: 14px;
 }
 
     .goal-meta span {
         color: var(--text-muted);
         font-size: 10px;
-        line-height: 1.5;
     }
 
     .goal-meta strong {
@@ -1006,41 +967,35 @@ a {
 
 
 /* =========================================================
-   18A. GOAL ACTION BUTTONS
+   18. GOAL ACTION BUTTONS
    ========================================================= */
 
 .goal-actions {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid var(--border-soft);
+    gap: 8px;
+    margin-top: 18px;
 }
 
 .goal-action-button {
+    min-height: 34px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 125px;
-    min-height: 38px;
-    padding: 0 18px;
+    padding: 7px 12px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 7px;
     background: var(--surface);
     color: var(--text-secondary);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-    line-height: 1;
-    white-space: nowrap;
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
     .goal-action-button:hover {
-        background: var(--surface-soft);
-        border-color: #cbd6da;
-        color: var(--text-primary);
+        border-color: var(--accent-border);
+        color: var(--accent);
+        background: var(--accent-soft);
     }
 
     .goal-action-button:active {
@@ -1048,32 +1003,192 @@ a {
     }
 
     .goal-action-button.primary {
-        background: var(--accent);
         border-color: var(--accent);
+        background: var(--accent);
         color: #ffffff;
     }
 
         .goal-action-button.primary:hover {
-            background: var(--accent-hover);
             border-color: var(--accent-hover);
+            background: var(--accent-hover);
             color: #ffffff;
         }
 
     .goal-action-button.danger {
-        background: var(--danger-soft);
         border-color: var(--danger-border);
         color: var(--danger);
     }
 
         .goal-action-button.danger:hover {
-            background: #f4dddd;
-            border-color: #d4aaaa;
-            color: #823f40;
+            background: var(--danger-soft);
+            border-color: var(--danger);
+            color: var(--danger);
         }
 
 
 /* =========================================================
-   19. TABLES
+   19. TASKS
+   Tasks deliberately use the same visual language as Goals.
+   ========================================================= */
+
+.task-card {
+    margin: 0 24px 16px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .task-card:hover {
+        border-color: var(--accent-border);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .task-card:last-child {
+        margin-bottom: 20px;
+    }
+
+.task-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 16px;
+}
+
+.task-card-title {
+    min-width: 0;
+}
+
+    .task-card-title h3 {
+        color: var(--text-primary);
+        font-size: 16px;
+        line-height: 1.3;
+    }
+
+.task-card-description {
+    margin-top: 6px;
+}
+
+    .task-card-description p {
+        color: var(--text-secondary);
+        font-size: 12px;
+    }
+
+.task-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.task-status,
+.task-priority {
+    display: inline-flex;
+    align-items: center;
+    min-height: 25px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+    .task-status.pending {
+        background: var(--warning-soft);
+        border: 1px solid var(--warning-border);
+        color: var(--warning);
+    }
+
+    .task-status.in-progress {
+        background: var(--accent-soft);
+        border: 1px solid var(--accent-border);
+        color: var(--accent);
+    }
+
+    .task-status.completed {
+        background: var(--success-soft);
+        border: 1px solid var(--success-border);
+        color: var(--success);
+    }
+
+    .task-priority.high {
+        background: var(--danger-soft);
+        border: 1px solid var(--danger-border);
+        color: var(--danger);
+    }
+
+    .task-priority.medium {
+        background: var(--warning-soft);
+        border: 1px solid var(--warning-border);
+        color: var(--warning);
+    }
+
+    .task-priority.low {
+        background: var(--surface-muted);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+    }
+
+.task-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+    .task-meta span {
+        color: var(--text-muted);
+        font-size: 10px;
+    }
+
+    .task-meta strong {
+        color: var(--text-secondary);
+    }
+
+.task-status-control {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 17px;
+}
+
+    .task-status-control label {
+        color: var(--text-secondary);
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+.task-status-select {
+    min-width: 140px;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+    .task-status-select:hover {
+        border-color: var(--accent-border);
+    }
+
+.task-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.task-card .goal-action-button {
+    min-height: 34px;
+}
+
+
+/* =========================================================
+   20. TABLES
    ========================================================= */
 
 .data-table-wrapper {
@@ -1084,91 +1199,102 @@ a {
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 11px;
 }
 
-    .data-table th {
-        padding: 13px 10px;
-        border-bottom: 1px solid var(--border);
-        color: var(--text-secondary);
-        font-size: 9px;
-        font-weight: 800;
+    .data-table th,
+    .data-table td {
+        padding: 13px 16px;
+        border-bottom: 1px solid var(--border-soft);
         text-align: left;
+        vertical-align: middle;
+    }
+
+    .data-table th {
+        background: var(--surface-soft);
+        color: var(--text-secondary);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 
     .data-table td {
-        padding: 14px 10px;
-        border-bottom: 1px solid var(--border-soft);
         color: var(--text-secondary);
+        font-size: 12px;
     }
 
     .data-table tr:last-child td {
         border-bottom: 0;
     }
 
+    .data-table tbody tr:hover {
+        background: var(--surface-soft);
+    }
+
 
 /* =========================================================
-   20. FORM MESSAGES
+   21. FORM MESSAGES
    ========================================================= */
 
 .form-message {
     display: none;
-    margin-top: 0;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
+    margin: 0 24px 20px;
+    padding: 11px 13px;
+    border: 1px solid transparent;
     border-radius: 8px;
-    background: var(--surface-muted);
-    color: var(--text-secondary);
-    font-size: 11px;
-    line-height: 1.5;
+    font-size: 12px;
+    font-weight: 600;
 }
 
     .form-message.show {
         display: block;
     }
 
+    .form-message.success {
+        background: var(--success-soft);
+        border-color: var(--success-border);
+        color: var(--success);
+    }
+
+    .form-message.error {
+        background: var(--danger-soft);
+        border-color: var(--danger-border);
+        color: var(--danger);
+    }
+
 
 /* =========================================================
-   21. FOOTER
+   22. FOOTER
    ========================================================= */
 
 .dashboard-footer {
     display: grid;
-    grid-template-columns: 250px minmax(0, 1fr);
-    min-height: 88px;
-    margin-left: 0;
-    background: var(--surface);
+    grid-template-columns: 250px 1fr;
+    margin-left: 250px;
+    border-top: 1px solid var(--border);
 }
 
-    .dashboard-footer p:first-child {
+    .dashboard-footer p {
+        min-height: 54px;
         display: flex;
         align-items: center;
-        min-height: 88px;
-        padding: 20px 28px;
-        background: #182124;
-        border-right: 1px solid #2d393d;
-        color: #ffffff;
-        font-size: 13px;
-        font-weight: 700;
+        padding: 12px 24px;
+        font-size: 10px;
     }
 
-    .dashboard-footer p:last-child {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        min-height: 88px;
-        padding: 20px 40px;
-        background: var(--surface);
-        color: var(--text-muted);
-        font-size: 12px;
-        text-align: right;
-    }
+        .dashboard-footer p:first-child {
+            background: #202b2f;
+            color: #b7c3c7;
+        }
+
+        .dashboard-footer p:last-child {
+            background: var(--surface);
+            color: var(--text-muted);
+        }
 
 
 /* =========================================================
-   22. NIGHT MODE - BASE
+   23. NIGHT MODE - COLOR TOKENS
    ========================================================= */
 
 body.night-mode {
@@ -1186,91 +1312,66 @@ body.night-mode {
     --accent-hover: #86c5c8;
     --accent-soft: #1b3436;
     --accent-border: #315a5d;
-    --success: #83bd99;
-    --success-soft: #1c3326;
-    --success-border: #365844;
-    --warning: #d2aa65;
-    --warning-soft: #352c1e;
-    --warning-border: #625033;
-    --danger: #d39494;
-    --danger-soft: #352224;
-    --danger-border: #624043;
-    --focus-ring: rgba(114, 183, 186, 0.22);
-    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.22);
-    --shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.28);
-    background: var(--page-background);
-    color: var(--text-primary);
+    --success: #82c19a;
+    --success-soft: #193024;
+    --success-border: #315641;
+    --warning: #d8b06b;
+    --warning-soft: #352b1b;
+    --warning-border: #5d4b2d;
+    --danger: #d28a8b;
+    --danger-soft: #352021;
+    --danger-border: #5b3637;
+    --focus-ring: rgba(114, 183, 186, 0.25);
+    --shadow-soft: 0 5px 18px rgba(0, 0, 0, 0.20);
+    --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.28);
 }
 
 
     /* =========================================================
-   23. NIGHT MODE - MAIN CONTENT
+   24. NIGHT MODE - GENERAL
    ========================================================= */
 
-    body.night-mode .dashboard-intro h2 {
-        color: var(--text-primary);
-    }
-
-    body.night-mode .dashboard-intro p:last-child {
-        color: var(--text-secondary);
-    }
-
-    body.night-mode .section-eyebrow {
-        color: var(--text-secondary);
-    }
-
+    body.night-mode .dashboard-intro h2,
     body.night-mode .panel-heading h2,
-    body.night-mode .panel-heading h3 {
+    body.night-mode .panel-heading h3,
+    body.night-mode .summary-card-content strong,
+    body.night-mode .goal-card-title h3,
+    body.night-mode .task-card-title h3,
+    body.night-mode .reminder-content h3,
+    body.night-mode .form-group label {
         color: var(--text-primary);
     }
 
-    body.night-mode .panel-heading p:not(.section-eyebrow) {
+    body.night-mode .dashboard-intro p:last-child,
+    body.night-mode .panel-heading p:not(.section-eyebrow),
+    body.night-mode .summary-card-content p,
+    body.night-mode .goal-card-title p,
+    body.night-mode .task-card-description p,
+    body.night-mode .reminder-content p {
         color: var(--text-secondary);
     }
-
-    body.night-mode .panel-link {
-        color: var(--text-secondary);
-    }
-
-        body.night-mode .panel-link:hover {
-            color: var(--accent);
-        }
 
 
     /* =========================================================
-   24. NIGHT MODE - SUMMARY CARDS
+   25. NIGHT MODE - SUMMARY CARDS
    ========================================================= */
 
     body.night-mode .summary-card {
         background: var(--surface);
         border-color: var(--border);
-        box-shadow: var(--shadow-soft);
     }
 
         body.night-mode .summary-card:hover {
-            border-color: #405055;
+            border-color: var(--accent-border);
         }
 
     body.night-mode .summary-card-icon {
         background: var(--accent-soft);
-        border-color: var(--accent-border);
         color: var(--accent);
     }
 
-    body.night-mode .summary-card-content h3 {
-        color: var(--text-primary);
-    }
-
-    body.night-mode .summary-card-content > strong {
-        color: #ffffff;
-    }
-
-    body.night-mode .summary-card-content > p {
-        color: var(--text-muted);
-    }
-
+    body.night-mode .summary-card-content h3,
     body.night-mode .summary-card-details span {
-        border-top-color: var(--border-soft);
         color: var(--text-muted);
     }
 
@@ -1280,7 +1381,7 @@ body.night-mode {
 
 
     /* =========================================================
-   25. NIGHT MODE - PANELS
+   26. NIGHT MODE - PANELS
    ========================================================= */
 
     body.night-mode .dashboard-panel,
@@ -1288,55 +1389,44 @@ body.night-mode {
     body.night-mode .goals-panel {
         background: var(--surface);
         border-color: var(--border);
-        box-shadow: var(--shadow-soft);
     }
+
+        body.night-mode .dashboard-panel > .panel-heading,
+        body.night-mode .goal-form-panel > .panel-heading,
+        body.night-mode .goals-panel > .panel-heading {
+            border-bottom-color: var(--border-soft);
+        }
 
 
     /* =========================================================
-   26. NIGHT MODE - REMINDERS
+   27. NIGHT MODE - REMINDERS
    ========================================================= */
 
     body.night-mode .reminder-card {
-        border-bottom-color: var(--border-soft);
+        background: var(--surface-soft);
+        border-color: var(--border);
     }
+
+        body.night-mode .reminder-card:hover {
+            border-color: var(--accent-border);
+        }
 
     body.night-mode .reminder-icon {
         background: var(--accent-soft);
-        border-color: var(--accent-border);
         color: var(--accent);
-    }
-
-    body.night-mode .reminder-content h3 {
-        color: var(--text-primary);
-    }
-
-    body.night-mode .reminder-content p {
-        color: var(--text-secondary);
-    }
-
-    body.night-mode .reminder-date {
-        color: var(--text-secondary);
-    }
-
-    body.night-mode .reminder-status {
-        background: var(--warning-soft);
-        border-color: var(--warning-border);
-        color: var(--warning);
     }
 
 
     /* =========================================================
-   27. NIGHT MODE - FORM
+   28. NIGHT MODE - FORM CONTROLS
    ========================================================= */
-
-    body.night-mode .form-group label {
-        color: var(--text-secondary);
-    }
 
     body.night-mode .form-group input,
     body.night-mode .form-group textarea,
-    body.night-mode .form-group select {
-        background: #11181b;
+    body.night-mode .form-group select,
+    body.night-mode .task-status-select,
+    body.night-mode .reminder-status-select {
+        background: var(--surface);
         border-color: var(--border);
         color: var(--text-primary);
     }
@@ -1346,171 +1436,109 @@ body.night-mode {
             color: var(--text-subtle);
         }
 
-        body.night-mode .form-group input:focus,
-        body.night-mode .form-group textarea:focus,
-        body.night-mode .form-group select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--focus-ring);
-        }
-
-    body.night-mode .form-help {
-        color: var(--text-subtle);
-    }
-
-
-    /* =========================================================
-   28. NIGHT MODE - BUTTONS
-   ========================================================= */
-
-    body.night-mode .primary-button {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: #102022;
-    }
-
-        body.night-mode .primary-button:hover {
-            background: var(--accent-hover);
-            border-color: var(--accent-hover);
-        }
-
-    body.night-mode .secondary-button {
-        background: var(--surface-soft);
-        border-color: var(--border);
-        color: var(--text-secondary);
-    }
-
-        body.night-mode .secondary-button:hover {
-            background: #253033;
-            border-color: #405055;
+        body.night-mode .form-group input:hover,
+        body.night-mode .form-group textarea:hover,
+        body.night-mode .form-group select:hover,
+        body.night-mode .task-status-select:hover,
+        body.night-mode .reminder-status-select:hover {
+            border-color: var(--accent-border);
         }
 
 
     /* =========================================================
-   29. NIGHT MODE - GOALS
+   29. NIGHT MODE - BUTTONS
    ========================================================= */
 
-    body.night-mode .goal-card {
+    body.night-mode .secondary-button,
+    body.night-mode .goal-action-button {
         background: var(--surface);
         border-color: var(--border);
-        box-shadow: var(--shadow-soft);
-    }
-
-    body.night-mode .goal-card-title h3 {
-        color: var(--text-primary);
-    }
-
-    body.night-mode .goal-card-title p {
         color: var(--text-secondary);
     }
 
-    body.night-mode .goal-status {
-        background: var(--success-soft);
-        border-color: var(--success-border);
-        color: var(--success);
+        body.night-mode .secondary-button:hover,
+        body.night-mode .goal-action-button:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent-border);
+            color: var(--accent);
+        }
+
+
+    /* =========================================================
+   30. NIGHT MODE - GOALS / TASKS
+   ========================================================= */
+
+    body.night-mode .goal-card,
+    body.night-mode .task-card {
+        background: var(--surface-soft);
+        border-color: var(--border);
     }
 
-    body.night-mode .goal-progress-header span {
-        color: var(--text-muted);
-    }
-
-    body.night-mode .goal-progress-header strong {
-        color: var(--text-secondary);
-    }
+        body.night-mode .goal-card:hover,
+        body.night-mode .task-card:hover {
+            border-color: var(--accent-border);
+        }
 
     body.night-mode .goal-progress-bar {
-        background: #293437;
+        background: var(--surface-muted);
     }
 
     body.night-mode .goal-progress-fill {
         background: var(--accent);
     }
 
-    body.night-mode .goal-meta span {
-        color: var(--text-muted);
-    }
-
-    body.night-mode .goal-meta strong {
-        color: var(--text-secondary);
-    }
-
-    body.night-mode .goal-actions {
-        border-top-color: var(--border-soft);
-    }
-
-    body.night-mode .goal-action-button {
-        background: var(--surface-soft);
-        border-color: var(--border);
-        color: var(--text-secondary);
-    }
-
-        body.night-mode .goal-action-button:hover {
-            background: #253033;
-            border-color: #405055;
-            color: #ffffff;
-        }
-
-        body.night-mode .goal-action-button.primary {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #102022;
-        }
-
-            body.night-mode .goal-action-button.primary:hover {
-                background: var(--accent-hover);
-                border-color: var(--accent-hover);
-                color: #102022;
-            }
-
-        body.night-mode .goal-action-button.danger {
-            background: var(--danger-soft);
-            border-color: var(--danger-border);
-            color: var(--danger);
-        }
-
-            body.night-mode .goal-action-button.danger:hover {
-                background: #40292b;
-                border-color: #765052;
-                color: #e2aaaa;
-            }
-
 
     /* =========================================================
-   30. NIGHT MODE - TABLES
+   31. NIGHT MODE - TABLES
    ========================================================= */
 
     body.night-mode .data-table th {
-        border-bottom-color: var(--border);
+        background: var(--surface-soft);
         color: var(--text-secondary);
     }
 
     body.night-mode .data-table td {
-        border-bottom-color: var(--border-soft);
         color: var(--text-secondary);
+    }
+
+    body.night-mode .data-table th,
+    body.night-mode .data-table td {
+        border-bottom-color: var(--border-soft);
+    }
+
+    body.night-mode .data-table tbody tr:hover {
+        background: var(--surface-soft);
     }
 
 
     /* =========================================================
-   31. NIGHT MODE - ALERTS
+   32. NIGHT MODE - ALERTS
    ========================================================= */
 
-    body.night-mode .form-message {
-        background: var(--surface-muted);
-        border-color: var(--border);
-        color: var(--text-secondary);
+    body.night-mode .form-message.success {
+        background: var(--success-soft);
+        border-color: var(--success-border);
+        color: var(--success);
+    }
+
+    body.night-mode .form-message.error {
+        background: var(--danger-soft);
+        border-color: var(--danger-border);
+        color: var(--danger);
     }
 
 
     /* =========================================================
-   32. NIGHT MODE - FOOTER
+   33. NIGHT MODE - FOOTER
    ========================================================= */
 
     body.night-mode .dashboard-footer {
-        background: var(--surface);
+        border-top-color: var(--border);
     }
 
         body.night-mode .dashboard-footer p:first-child {
-            background: #182124;
-            border-right-color: #2d393d;
+            background: #11191b;
+            color: var(--text-secondary);
         }
 
         body.night-mode .dashboard-footer p:last-child {
@@ -1520,7 +1548,134 @@ body.night-mode {
 
 
 /* =========================================================
-   33. RESPONSIVE - SMALL DESKTOP
+   34. PAGE INTRO BADGE
+   ========================================================= */
+
+.page-intro .section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    margin-bottom: 10px;
+    padding: 4px 9px;
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+
+/* =========================================================
+   35. GOAL FORM PANEL
+   ========================================================= */
+
+.goal-form-panel {
+    overflow: hidden;
+}
+
+    .goal-form-panel .panel-heading {
+        align-items: center;
+    }
+
+        .goal-form-panel .panel-heading > div {
+            min-width: 0;
+        }
+
+        .goal-form-panel .panel-heading h2 {
+            font-size: 19px;
+        }
+
+        .goal-form-panel .panel-heading p:not(.section-eyebrow) {
+            max-width: 650px;
+        }
+
+
+/* =========================================================
+   36. GOAL FORM
+   ========================================================= */
+
+.goal-form {
+    align-items: start;
+}
+
+    .goal-form .form-group {
+        min-width: 0;
+    }
+
+        .goal-form .form-group label {
+            color: var(--text-primary);
+        }
+
+
+    /* =========================================================
+   37. GOAL FORM INPUT POLISH
+   ========================================================= */
+
+    .goal-form input,
+    .goal-form textarea,
+    .goal-form select {
+        appearance: none;
+    }
+
+    .goal-form input,
+    .goal-form textarea,
+    .goal-form select {
+        background: var(--surface);
+        color: var(--text-primary);
+    }
+
+        .goal-form input:focus,
+        .goal-form textarea:focus,
+        .goal-form select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--focus-ring);
+        }
+
+    .goal-form #goalMessage,
+    .goal-form #taskMessage {
+        grid-column: 1 / -1;
+        margin: 0 24px 20px;
+    }
+
+
+/* =========================================================
+   38. GOALS CONTAINER
+   ========================================================= */
+
+.goals-container {
+    width: 100%;
+}
+
+    .goals-container > .empty-state {
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+
+
+/* =========================================================
+   39. NIGHT MODE POLISH
+   ========================================================= */
+
+body.night-mode .page-intro .section-eyebrow {
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+    color: var(--accent);
+}
+
+body.night-mode .goal-form-panel .panel-heading,
+body.night-mode .goals-panel .panel-heading {
+    border-bottom-color: var(--border-soft);
+}
+
+body.night-mode .empty-state p {
+    color: var(--text-muted);
+}
+
+
+/* =========================================================
+   40. RESPONSIVE - TABLET / SMALL DESKTOP
    ========================================================= */
 
 @media (max-width: 1050px) {
@@ -1530,19 +1685,19 @@ body.night-mode {
     }
 
     .dashboard-main {
-        padding-left: 28px;
-        padding-right: 28px;
+        padding: 28px;
     }
 }
 
 
 /* =========================================================
-   34. RESPONSIVE - TABLET
+   41. RESPONSIVE - TABLET
    ========================================================= */
 
 @media (max-width: 800px) {
 
     .dashboard-header {
+        min-height: 68px;
         padding: 0 18px;
     }
 
@@ -1552,118 +1707,119 @@ body.night-mode {
 
     .side-navigation {
         width: 220px;
+        top: 68px;
+    }
+
+    .dashboard-layout {
+        padding-top: 68px;
     }
 
     .dashboard-main {
         margin-left: 220px;
-        padding: 32px 22px 40px;
+        padding: 26px 22px 40px;
     }
 
     .dashboard-footer {
-        grid-template-columns: 220px minmax(0, 1fr);
+        grid-template-columns: 220px 1fr;
+        margin-left: 220px;
     }
-
-        .dashboard-footer p:first-child {
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-        .dashboard-footer p:last-child {
-            padding-left: 24px;
-            padding-right: 24px;
-        }
 
     .summary-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .dashboard-intro {
-        margin-bottom: 32px;
+    .goal-card,
+    .task-card,
+    .reminder-card {
+        padding: 20px;
+    }
+
+    .goal-card-header,
+    .task-card-header {
+        gap: 14px;
     }
 }
 
 
 /* =========================================================
-   35. RESPONSIVE - MOBILE
+   42. RESPONSIVE - MOBILE
    ========================================================= */
 
 @media (max-width: 600px) {
 
     .dashboard-header {
+        position: fixed;
         min-height: 64px;
-        padding: 0 14px;
-    }
-
-    .header-brand h1 {
-        font-size: 17px;
-    }
-
-    .header-brand p {
-        font-size: 9px;
-    }
-
-    .brand-icon {
-        width: 30px;
-        height: 30px;
-    }
-
-    .header-right {
-        gap: 10px;
-    }
-
-    .theme-switch {
-        min-height: 35px;
-        gap: 2px;
-        padding: 3px;
-        border-radius: 9px;
-    }
-
-    .theme-switch-button {
-        min-width: 50px;
-        height: 27px;
-        padding: 0 8px;
-        font-size: 9px;
-        border-radius: 6px;
-    }
-
-    .theme-switch-icon {
-        display: none;
+        padding: 0 12px;
     }
 
     .dashboard-layout {
         padding-top: 64px;
     }
 
-    .side-navigation {
-        position: static;
-        width: 100%;
-        min-height: auto;
-        border-right: 0;
-        border-bottom: 1px solid #2d393d;
+    .header-brand {
+        gap: 8px;
     }
 
-    .sidebar-brand {
+    .brand-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+    }
+
+        .brand-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+    .header-brand h1 {
+        font-size: 15px;
+    }
+
+    .header-brand p {
+        font-size: 9px;
+    }
+
+    .header-theme-control {
+        gap: 2px;
+        padding: 3px;
+    }
+
+    .theme-switch-button {
+        min-height: 29px;
+        padding: 5px 7px;
+    }
+
+    .theme-switch-text {
         display: none;
     }
 
+    .side-navigation {
+        position: static;
+        width: 100%;
+        height: auto;
+        display: block;
+        border-right: 0;
+        border-bottom: 1px solid #2f3b3f;
+        overflow: visible;
+    }
+
     .sidebar-nav {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
         padding: 10px;
     }
 
-    .sidebar-nav-list {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 5px;
-    }
-
     .sidebar-nav-link {
-        flex-direction: column;
+        min-height: 42px;
         justify-content: center;
-        gap: 4px;
-        min-height: 58px;
-        padding: 7px 4px;
-        text-align: center;
+        flex-direction: column;
+        gap: 3px;
+        margin-bottom: 0;
+        padding: 6px;
         font-size: 9px;
+        text-align: center;
     }
 
     .nav-icon {
@@ -1672,73 +1828,65 @@ body.night-mode {
     }
 
         .nav-icon svg {
-            width: 17px;
-            height: 17px;
+            width: 16px;
+            height: 16px;
         }
 
     .sidebar-bottom {
-        display: block;
         padding: 8px 10px;
+        border-top: 1px solid #2f3b3f;
     }
 
     .logout-button {
+        min-height: 38px;
         justify-content: center;
+        padding: 7px;
+        font-size: 10px;
     }
 
     .dashboard-main {
         margin-left: 0;
-        padding: 28px 16px 34px;
+        padding: 24px 14px 34px;
     }
 
     .dashboard-intro {
-        margin-bottom: 28px;
+        margin-bottom: 25px;
     }
 
         .dashboard-intro h2 {
-            margin-bottom: 8px;
-            font-size: 23px;
+            font-size: 25px;
         }
 
         .dashboard-intro p:last-child {
-            font-size: 12px;
-            line-height: 1.6;
+            font-size: 13px;
         }
 
     .summary-grid {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 12px;
     }
 
     .summary-card {
-        padding: 19px;
+        padding: 17px;
     }
 
     .dashboard-panel,
     .goal-form-panel,
     .goals-panel {
-        margin-bottom: 30px;
-    }
-
-        .dashboard-panel > .panel-heading,
-        .goal-form-panel > .panel-heading,
-        .goals-panel > .panel-heading {
-            padding: 21px 18px 0;
-        }
-
-    .panel-heading {
-        gap: 12px;
+        border-radius: 10px;
         margin-bottom: 18px;
     }
 
-        .panel-heading h2,
-        .panel-heading h3 {
-            font-size: 16px;
-        }
+    .panel-heading {
+        padding: 19px;
+        flex-direction: column;
+        gap: 10px;
+    }
 
     .goal-form {
         grid-template-columns: 1fr;
-        padding: 22px 18px;
-        row-gap: 20px;
+        gap: 16px;
+        padding: 19px;
     }
 
     .form-group.full-width {
@@ -1749,133 +1897,174 @@ body.night-mode {
         grid-column: auto;
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
     }
 
-        .form-actions .primary-button,
-        .form-actions .secondary-button {
-            width: 100%;
-        }
+    .primary-button,
+    .secondary-button {
+        width: 100%;
+    }
+
+    .goal-card,
+    .task-card {
+        margin: 0 12px 12px;
+        padding: 17px;
+    }
 
     .reminder-card {
-        gap: 14px;
-        padding: 19px 18px;
-    }
-
-    .goal-card {
-        margin-left: 18px;
-        margin-right: 18px;
-        padding: 20px;
-    }
-
-    .goal-card-header {
-        flex-direction: column;
+        margin: 0 12px 12px;
+        padding: 17px;
         gap: 12px;
-        margin-bottom: 13px;
     }
 
-    .goal-progress-area {
-        margin-top: 18px;
-    }
-
-    .goal-actions {
-        align-items: stretch;
+    .goal-card-header,
+    .task-card-header {
+        flex-direction: column;
         gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .goal-status {
+        align-self: flex-start;
+    }
+
+    .goal-meta,
+    .task-meta {
+        gap: 8px 12px;
+    }
+
+    .goal-actions,
+    .task-actions {
+        gap: 7px;
     }
 
     .goal-action-button {
-        flex: 1 1 100%;
-        min-width: 0;
-        width: 100%;
+        flex: 1 1 auto;
+    }
+
+    .reminder-status-select {
+        min-width: 125px;
     }
 
     .dashboard-footer {
         grid-template-columns: 1fr;
+        margin-left: 0;
     }
 
-        .dashboard-footer p:first-child,
-        .dashboard-footer p:last-child {
+        .dashboard-footer p {
             min-height: auto;
-            justify-content: center;
-            padding: 18px;
-            text-align: center;
-        }
-
-        .dashboard-footer p:first-child {
-            border-right: 0;
-            border-bottom: 1px solid #2d393d;
+            padding: 11px 16px;
         }
 }
 
 
 /* =========================================================
-   36. RESPONSIVE - VERY SMALL SCREENS
+   43. RESPONSIVE - VERY SMALL MOBILE
    ========================================================= */
 
 @media (max-width: 420px) {
 
     .dashboard-header {
-        padding: 0 10px;
+        padding: 0 9px;
     }
 
-    .header-brand p {
-        display: none;
-    }
-
+    .header-brand p,
     .brand-icon {
         display: none;
     }
 
-    .header-right {
-        gap: 6px;
+    .header-brand h1 {
+        font-size: 14px;
     }
 
-    .theme-switch {
-        gap: 2px;
-    }
-
-    .theme-switch-button {
-        min-width: 45px;
-        height: 28px;
-        padding: 0 6px;
-        font-size: 8px;
+    .sidebar-nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .dashboard-main {
-        padding-left: 12px;
-        padding-right: 12px;
+        padding: 20px 10px 28px;
     }
 
-    .sidebar-nav-list {
-        grid-template-columns: repeat(2, 1fr);
+    .dashboard-intro h2 {
+        font-size: 22px;
     }
 
-    .summary-card-content > strong {
-        font-size: 26px;
+    .summary-card {
+        padding: 15px;
     }
 
-    .reminder-card {
-        gap: 12px;
+    .summary-card-icon {
+        width: 37px;
+        height: 37px;
+    }
+
+    .summary-card-content strong {
+        font-size: 21px;
+    }
+
+    .panel-heading {
         padding: 16px;
     }
 
+    .goal-form {
+        padding: 16px;
+    }
+
+    .goal-card,
+    .task-card,
+    .reminder-card {
+        margin-left: 9px;
+        margin-right: 9px;
+        padding: 15px;
+    }
+
+    .reminder-card {
+        flex-direction: column;
+    }
+
     .reminder-icon {
-        width: 38px;
-        height: 38px;
-        min-width: 38px;
+        width: 36px;
+        height: 36px;
     }
 
-    .goal-card {
-        margin-left: 12px;
-        margin-right: 12px;
-        padding: 18px;
-    }
-
-    .goal-actions {
-        gap: 8px;
+    .reminder-date {
+        line-height: 1.6;
     }
 
     .goal-action-button {
         width: 100%;
+    }
+
+    .task-status-control {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .task-status-select,
+    .reminder-status-select {
+        width: 100%;
+    }
+
+    .dashboard-footer p {
+        font-size: 9px;
+    }
+}
+
+
+/* =========================================================
+   44. REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
     }
 }
