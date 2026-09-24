@@ -5,23 +5,113 @@ let goals = [];
 // GET PAGE ELEMENTS
 // ========================================
 
-const userName =
-    document.getElementById('userName');
+const userName = document.getElementById('userName');
+const userEmail = document.getElementById('userEmail');
+const goalForm = document.getElementById('goalForm');
+const goalMessage = document.getElementById('goalMessage');
+const goalsContainer = document.getElementById('goalsContainer');
+const logoutButton = document.getElementById('logoutButton');
 
-const userEmail =
-    document.getElementById('userEmail');
 
-const goalForm =
-    document.getElementById('goalForm');
+// ========================================
+// DAY / NIGHT THEME
+// ========================================
 
-const goalMessage =
-    document.getElementById('goalMessage');
+const dayModeButton =
+    document.getElementById('dayModeButton');
 
-const goalsContainer =
-    document.getElementById('goalsContainer');
+const nightModeButton =
+    document.getElementById('nightModeButton');
 
-const logoutButton =
-    document.getElementById('logoutButton');
+
+function applyTheme(theme) {
+
+    if (theme === 'night') {
+
+        document.body.classList.add('night-mode');
+
+        if (dayModeButton) {
+            dayModeButton.classList.remove('active');
+        }
+
+        if (nightModeButton) {
+            nightModeButton.classList.add('active');
+        }
+
+    } else {
+
+        document.body.classList.remove('night-mode');
+
+        if (nightModeButton) {
+            nightModeButton.classList.remove('active');
+        }
+
+        if (dayModeButton) {
+            dayModeButton.classList.add('active');
+        }
+
+    }
+
+    localStorage.setItem(
+        'studytrack-theme',
+        theme
+    );
+}
+
+
+// ========================================
+// DAY MODE BUTTON
+// ========================================
+
+if (dayModeButton) {
+
+    dayModeButton.addEventListener(
+        'click',
+        function () {
+
+            applyTheme('day');
+
+        }
+    );
+
+}
+
+
+// ========================================
+// NIGHT MODE BUTTON
+// ========================================
+
+if (nightModeButton) {
+
+    nightModeButton.addEventListener(
+        'click',
+        function () {
+
+            applyTheme('night');
+
+        }
+    );
+
+}
+
+
+// ========================================
+// LOAD SAVED THEME
+// ========================================
+
+const savedTheme =
+    localStorage.getItem('studytrack-theme');
+
+
+if (savedTheme === 'night') {
+
+    applyTheme('night');
+
+} else {
+
+    applyTheme('day');
+
+}
 
 
 // ========================================
@@ -32,31 +122,21 @@ async function loadUser() {
 
     try {
 
-        const response =
-            await fetch(
-
-                '/api/me',
-
-                {
-                    credentials:
-                        'include'
-                }
-
-            );
+        const response = await fetch('/api/me', {
+            credentials: 'include'
+        });
 
 
         if (!response.ok) {
 
-            window.location.href =
-                '/login.html';
+            window.location.href = '/login.html';
 
             return;
 
         }
 
 
-        const data =
-            await response.json();
+        const data = await response.json();
 
 
         userName.textContent =
@@ -65,9 +145,14 @@ async function loadUser() {
         userEmail.textContent =
             data.user.email;
 
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Load user error:',
+            error
+        );
+
 
         window.location.href =
             '/login.html';
@@ -83,45 +168,48 @@ async function loadUser() {
 
 goalForm.addEventListener(
     'submit',
-    async (event) => {
+    async function (event) {
 
         event.preventDefault();
 
 
         const title =
-            document.getElementById(
-                'goalTitle'
-            ).value.trim();
+            document
+                .getElementById('goalTitle')
+                .value
+                .trim();
 
 
         const description =
-            document.getElementById(
-                'goalDescription'
-            ).value.trim();
+            document
+                .getElementById('goalDescription')
+                .value
+                .trim();
 
 
         const deadline =
-            document.getElementById(
-                'goalDeadline'
-            ).value;
+            document
+                .getElementById('goalDeadline')
+                .value;
 
 
-        const current_value =
-            document.getElementById(
-                'goalCurrent'
-            ).value;
+        const currentValue =
+            document
+                .getElementById('goalCurrent')
+                .value;
 
 
-        const target_value =
-            document.getElementById(
-                'goalTarget'
-            ).value;
+        const targetValue =
+            document
+                .getElementById('goalTarget')
+                .value;
 
 
         const unit =
-            document.getElementById(
-                'goalUnit'
-            ).value.trim();
+            document
+                .getElementById('goalUnit')
+                .value
+                .trim();
 
 
         if (!title) {
@@ -138,43 +226,41 @@ goalForm.addEventListener(
 
             const response =
                 await fetch(
-
                     '/api/goals',
-
                     {
 
                         method: 'POST',
 
                         headers: {
-
                             'Content-Type':
                                 'application/json'
-
                         },
 
-                        credentials:
-                            'include',
+                        credentials: 'include',
 
-                        body:
-                            JSON.stringify({
+                        body: JSON.stringify({
 
-                                title,
-                                description,
-                                deadline,
-                                current_value:
-                                    Number(
-                                        current_value || 0
-                                    ),
-                                target_value:
-                                    Number(
-                                        target_value || 100
-                                    ),
-                                unit
+                            title: title,
 
-                            })
+                            description: description,
+
+                            deadline: deadline,
+
+                            current_value:
+                                Number(
+                                    currentValue || 0
+                                ),
+
+                            target_value:
+                                Number(
+                                    targetValue || 100
+                                ),
+
+                            unit: unit
+
+                        })
 
                     }
-
                 );
 
 
@@ -214,9 +300,14 @@ goalForm.addEventListener(
 
             await loadDashboardSummary();
 
+
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                'Create goal error:',
+                error
+            );
+
 
             goalMessage.textContent =
                 'Could not connect to the server.';
@@ -240,9 +331,10 @@ function formatDate(dateValue) {
     }
 
 
-    return String(
-        dateValue
-    ).substring(0, 10);
+    return String(dateValue).substring(
+        0,
+        10
+    );
 
 }
 
@@ -260,35 +352,28 @@ async function updateGoalProgress(
 
         const response =
             await fetch(
-
-                `/api/goals/${goalId}/progress`,
-
+                '/api/goals/' +
+                goalId +
+                '/progress',
                 {
 
                     method: 'PUT',
 
                     headers: {
-
                         'Content-Type':
                             'application/json'
-
                     },
 
-                    credentials:
-                        'include',
+                    credentials: 'include',
 
-                    body:
-                        JSON.stringify({
+                    body: JSON.stringify({
 
-                            current_value:
-                                Number(
-                                    currentValue
-                                )
+                        current_value:
+                            Number(currentValue)
 
-                        })
+                    })
 
                 }
-
             );
 
 
@@ -312,9 +397,14 @@ async function updateGoalProgress(
 
         await loadDashboardSummary();
 
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Update goal progress error:',
+            error
+        );
+
 
         alert(
             'Could not connect to the server.'
@@ -416,47 +506,39 @@ async function editGoal(goal) {
 
         const response =
             await fetch(
-
-                `/api/goals/${goal.id}`,
-
+                '/api/goals/' +
+                goal.id,
                 {
 
                     method: 'PUT',
 
                     headers: {
-
                         'Content-Type':
                             'application/json'
-
                     },
 
-                    credentials:
-                        'include',
+                    credentials: 'include',
 
-                    body:
-                        JSON.stringify({
+                    body: JSON.stringify({
 
-                            title:
-                                newTitle.trim(),
+                        title:
+                            newTitle.trim(),
 
-                            description:
-                                newDescription.trim(),
+                        description:
+                            newDescription.trim(),
 
-                            deadline:
-                                newDeadline,
+                        deadline:
+                            newDeadline,
 
-                            target_value:
-                                Number(
-                                    newTarget
-                                ),
+                        target_value:
+                            Number(newTarget),
 
-                            unit:
-                                newUnit.trim()
+                        unit:
+                            newUnit.trim()
 
-                        })
+                    })
 
                 }
-
             );
 
 
@@ -480,9 +562,14 @@ async function editGoal(goal) {
 
         await loadDashboardSummary();
 
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Edit goal error:',
+            error
+        );
+
 
         alert(
             'Could not connect to the server.'
@@ -516,18 +603,15 @@ async function deleteGoal(goalId) {
 
         const response =
             await fetch(
-
-                `/api/goals/${goalId}`,
-
+                '/api/goals/' +
+                goalId,
                 {
 
                     method: 'DELETE',
 
-                    credentials:
-                        'include'
+                    credentials: 'include'
 
                 }
-
             );
 
 
@@ -551,9 +635,14 @@ async function deleteGoal(goalId) {
 
         await loadDashboardSummary();
 
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Delete goal error:',
+            error
+        );
+
 
         alert(
             'Could not connect to the server.'
@@ -570,104 +659,370 @@ async function deleteGoal(goalId) {
 
 function displayGoals() {
 
-    if (
-        !goals ||
-        goals.length === 0
-    ) {
+    // ========================================
+    // NO GOALS
+    // ========================================
+
+    if (!goals || goals.length === 0) {
 
         goalsContainer.innerHTML =
-
-            '<p>You have no goals yet.</p>';
+            '<div class="empty-state">' +
+            '<p>You have no goals yet.</p>' +
+            '</div>';
 
         return;
 
     }
 
 
+    // Clear previous content
     goalsContainer.innerHTML = '';
 
 
+    // ========================================
+    // DISPLAY EVERY GOAL
+    // ========================================
+
     goals.forEach(
-        (goal) => {
+        function (goal) {
+
+            // ========================================
+            // MAIN GOAL CARD
+            // ========================================
 
             const goalItem =
                 document.createElement('div');
 
 
-            goalItem.innerHTML = `
+            goalItem.className =
+                'goal-card';
 
-                <hr>
 
-                <h3>
-                    ${goal.title}
-                </h3>
+            // ========================================
+            // GOAL CARD HEADER
+            // ========================================
 
-                <p>
-                    ${goal.description || ''}
-                </p>
+            const goalHeader =
+                document.createElement('div');
 
-                <p>
-                    Progress:
-                    ${goal.current_value}
-                    /
-                    ${goal.target_value}
-                    ${goal.unit || ''}
-                </p>
 
-                <p>
-                    Deadline:
-                    ${formatDate(goal.deadline)}
-                </p>
+            goalHeader.className =
+                'goal-card-header';
 
-                <p>
-                    Status:
-                    ${goal.status}
-                </p>
 
-                <button
-                    data-action="progress"
-                >
-                    Update Progress
-                </button>
+            // ========================================
+            // TITLE AREA
+            // ========================================
 
-                <button
-                    data-action="edit"
-                >
-                    Edit Goal
-                </button>
+            const titleArea =
+                document.createElement('div');
 
-                <button
-                    data-action="delete"
-                >
-                    Delete Goal
-                </button>
 
-            `;
+            titleArea.className =
+                'goal-card-title';
 
+
+            const title =
+                document.createElement('h3');
+
+
+            title.textContent =
+                goal.title;
+
+
+            const description =
+                document.createElement('p');
+
+
+            description.textContent =
+                goal.description || '';
+
+
+            titleArea.appendChild(
+                title
+            );
+
+
+            titleArea.appendChild(
+                description
+            );
+
+
+            // ========================================
+            // STATUS
+            // ========================================
+
+            const status =
+                document.createElement('span');
+
+
+            status.className =
+                'goal-status';
+
+
+            status.textContent =
+                goal.status;
+
+
+            goalHeader.appendChild(
+                titleArea
+            );
+
+
+            goalHeader.appendChild(
+                status
+            );
+
+
+            goalItem.appendChild(
+                goalHeader
+            );
+
+
+            // ========================================
+            // PROGRESS AREA
+            // ========================================
+
+            const progressArea =
+                document.createElement('div');
+
+
+            progressArea.className =
+                'goal-progress-area';
+
+
+            const progressHeader =
+                document.createElement('div');
+
+
+            progressHeader.className =
+                'goal-progress-header';
+
+
+            const progressLabel =
+                document.createElement('span');
+
+
+            progressLabel.textContent =
+                'Progress';
+
+
+            const progressValue =
+                document.createElement('strong');
+
+
+            const currentValue =
+                Number(
+                    goal.current_value || 0
+                );
+
+
+            const targetValue =
+                Number(
+                    goal.target_value || 0
+                );
+
+
+            progressValue.textContent =
+                currentValue +
+                ' / ' +
+                targetValue +
+                ' ' +
+                (goal.unit || '');
+
+
+            progressHeader.appendChild(
+                progressLabel
+            );
+
+
+            progressHeader.appendChild(
+                progressValue
+            );
+
+
+            // ========================================
+            // PROGRESS PERCENTAGE
+            // ========================================
+
+            let progressPercentage = 0;
+
+
+            if (targetValue > 0) {
+
+                progressPercentage =
+                    (
+                        currentValue /
+                        targetValue
+                    ) *
+                    100;
+
+            }
+
+
+            progressPercentage =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        progressPercentage
+                    )
+                );
+
+
+            // ========================================
+            // PROGRESS BAR
+            // ========================================
+
+            const progressBar =
+                document.createElement('div');
+
+
+            progressBar.className =
+                'goal-progress-bar';
+
+
+            const progressFill =
+                document.createElement('div');
+
+
+            progressFill.className =
+                'goal-progress-fill';
+
+
+            progressFill.style.width =
+                progressPercentage + '%';
+
+
+            progressBar.appendChild(
+                progressFill
+            );
+
+
+            progressArea.appendChild(
+                progressHeader
+            );
+
+
+            progressArea.appendChild(
+                progressBar
+            );
+
+
+            goalItem.appendChild(
+                progressArea
+            );
+
+
+            // ========================================
+            // GOAL META INFORMATION
+            // ========================================
+
+            const goalMeta =
+                document.createElement('div');
+
+
+            goalMeta.className =
+                'goal-meta';
+
+
+            // Deadline
+            const deadline =
+                document.createElement('span');
+
+
+            deadline.innerHTML =
+                'Deadline: <strong>' +
+                formatDate(goal.deadline) +
+                '</strong>';
+
+
+            // Current progress
+            const currentMeta =
+                document.createElement('span');
+
+
+            currentMeta.innerHTML =
+                'Current: <strong>' +
+                currentValue +
+                '</strong>';
+
+
+            // Target
+            const targetMeta =
+                document.createElement('span');
+
+
+            targetMeta.innerHTML =
+                'Target: <strong>' +
+                targetValue +
+                '</strong>';
+
+
+            goalMeta.appendChild(
+                deadline
+            );
+
+
+            goalMeta.appendChild(
+                currentMeta
+            );
+
+
+            goalMeta.appendChild(
+                targetMeta
+            );
+
+
+            goalItem.appendChild(
+                goalMeta
+            );
+
+
+            // ========================================
+            // GOAL ACTIONS CONTAINER
+            // ========================================
+
+            const goalActions =
+                document.createElement('div');
+
+
+            goalActions.className =
+                'goal-actions';
+
+
+            // ========================================
+            // UPDATE PROGRESS BUTTON
+            // ========================================
 
             const progressButton =
-                goalItem.querySelector(
-                    '[data-action="progress"]'
-                );
+                document.createElement('button');
+
+
+            progressButton.type =
+                'button';
+
+
+            progressButton.className =
+                'goal-action-button primary';
+
+
+            progressButton.textContent =
+                'Update Progress';
 
 
             progressButton.addEventListener(
                 'click',
-                () => {
+                function () {
 
                     const newProgress =
                         prompt(
-
                             'Enter the new progress value:',
-
                             goal.current_value
-
                         );
 
 
-                    if (
-                        newProgress === null
-                    ) {
+                    if (newProgress === null) {
 
                         return;
 
@@ -675,26 +1030,37 @@ function displayGoals() {
 
 
                     updateGoalProgress(
-
                         goal.id,
-
                         newProgress
-
                     );
 
                 }
             );
 
 
+            // ========================================
+            // EDIT BUTTON
+            // ========================================
+
             const editButton =
-                goalItem.querySelector(
-                    '[data-action="edit"]'
-                );
+                document.createElement('button');
+
+
+            editButton.type =
+                'button';
+
+
+            editButton.className =
+                'goal-action-button';
+
+
+            editButton.textContent =
+                'Edit Goal';
 
 
             editButton.addEventListener(
                 'click',
-                () => {
+                function () {
 
                     editGoal(goal);
 
@@ -702,21 +1068,69 @@ function displayGoals() {
             );
 
 
+            // ========================================
+            // DELETE BUTTON
+            // ========================================
+
             const deleteButton =
-                goalItem.querySelector(
-                    '[data-action="delete"]'
-                );
+                document.createElement('button');
+
+
+            deleteButton.type =
+                'button';
+
+
+            deleteButton.className =
+                'goal-action-button danger';
+
+
+            deleteButton.textContent =
+                'Delete Goal';
 
 
             deleteButton.addEventListener(
                 'click',
-                () => {
+                function () {
 
-                    deleteGoal(goal.id);
+                    deleteGoal(
+                        goal.id
+                    );
 
                 }
             );
 
+
+            // ========================================
+            // ADD BUTTONS TO ACTIONS CONTAINER
+            // ========================================
+
+            goalActions.appendChild(
+                progressButton
+            );
+
+
+            goalActions.appendChild(
+                editButton
+            );
+
+
+            goalActions.appendChild(
+                deleteButton
+            );
+
+
+            // ========================================
+            // ADD ACTIONS TO GOAL CARD
+            // ========================================
+
+            goalItem.appendChild(
+                goalActions
+            );
+
+
+            // ========================================
+            // ADD GOAL CARD TO PAGE
+            // ========================================
 
             goalsContainer.appendChild(
                 goalItem
@@ -734,55 +1148,184 @@ function displayGoals() {
 
 async function loadGoals() {
 
+    // Show loading state
+    goalsContainer.innerHTML =
+        '<p>Loading goals...</p>';
+
+
     try {
 
         const response =
             await fetch(
-
                 '/api/goals',
-
                 {
-
-                    credentials:
-                        'include'
-
+                    credentials: 'include'
                 }
-
             );
 
 
-        const data =
-            await response.json();
+        // Try to read server response
+        let data;
 
 
-        if (!response.ok) {
+        try {
+
+            data =
+                await response.json();
+
+        } catch (jsonError) {
+
+            console.error(
+                'Invalid goals response:',
+                jsonError
+            );
+
 
             goalsContainer.innerHTML =
-
-                `<p>
-                    ${data.message}
-                </p>`;
+                '<p>Could not load goals.</p>';
 
             return;
 
         }
 
 
+        // Server rejected request
+        if (!response.ok) {
+
+            console.error(
+                'Goals request failed:',
+                response.status,
+                data
+            );
+
+
+            goalsContainer.innerHTML =
+                '<p>' +
+                (
+                    data.message ||
+                    'Could not load goals.'
+                ) +
+                '</p>';
+
+
+            return;
+
+        }
+
+
+        // Get goals from server
         goals =
-            data.goals;
+            Array.isArray(data.goals)
+                ? data.goals
+                : [];
 
 
+        // Display goals
         displayGoals();
+
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Load goals error:',
+            error
+        );
+
 
         goalsContainer.innerHTML =
-
-            '<p>Could not load goals.</p>';
+            '<p>Could not connect to the server.</p>';
 
     }
+
+}
+
+
+// ========================================
+// CREATE REMINDER BELL ICON
+// ========================================
+
+function createReminderBellIcon() {
+
+    const svg =
+        document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'svg'
+        );
+
+
+    svg.setAttribute(
+        'viewBox',
+        '0 0 24 24'
+    );
+
+
+    svg.setAttribute(
+        'fill',
+        'none'
+    );
+
+
+    svg.setAttribute(
+        'stroke',
+        'currentColor'
+    );
+
+
+    svg.setAttribute(
+        'stroke-width',
+        '1.8'
+    );
+
+
+    svg.setAttribute(
+        'stroke-linecap',
+        'round'
+    );
+
+
+    svg.setAttribute(
+        'stroke-linejoin',
+        'round'
+    );
+
+
+    const bellBody =
+        document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'path'
+        );
+
+
+    bellBody.setAttribute(
+        'd',
+        'M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9'
+    );
+
+
+    const bellClapper =
+        document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'path'
+        );
+
+
+    bellClapper.setAttribute(
+        'd',
+        'M10 21h4'
+    );
+
+
+    svg.appendChild(
+        bellBody
+    );
+
+
+    svg.appendChild(
+        bellClapper
+    );
+
+
+    return svg;
 
 }
 
@@ -795,55 +1338,61 @@ async function loadDashboardSummary() {
 
     try {
 
-        const [
-            goalsResponse,
-            tasksResponse,
-            habitsResponse,
-            remindersResponse,
-            focusResponse
-        ] = await Promise.all([
+        const results =
+            await Promise.all([
 
-            fetch(
-                '/api/goals',
-                {
-                    credentials:
-                        'include'
-                }
-            ),
+                fetch(
+                    '/api/goals',
+                    {
+                        credentials: 'include'
+                    }
+                ),
 
-            fetch(
-                '/api/tasks',
-                {
-                    credentials:
-                        'include'
-                }
-            ),
+                fetch(
+                    '/api/tasks',
+                    {
+                        credentials: 'include'
+                    }
+                ),
 
-            fetch(
-                '/api/habits',
-                {
-                    credentials:
-                        'include'
-                }
-            ),
+                fetch(
+                    '/api/habits',
+                    {
+                        credentials: 'include'
+                    }
+                ),
 
-            fetch(
-                '/api/reminders',
-                {
-                    credentials:
-                        'include'
-                }
-            ),
+                fetch(
+                    '/api/reminders',
+                    {
+                        credentials: 'include'
+                    }
+                ),
 
-            fetch(
-                '/api/focus',
-                {
-                    credentials:
-                        'include'
-                }
-            )
+                fetch(
+                    '/api/focus',
+                    {
+                        credentials: 'include'
+                    }
+                )
 
-        ]);
+            ]);
+
+
+        const goalsResponse =
+            results[0];
+
+        const tasksResponse =
+            results[1];
+
+        const habitsResponse =
+            results[2];
+
+        const remindersResponse =
+            results[3];
+
+        const focusResponse =
+            results[4];
 
 
         const goalsData =
@@ -879,20 +1428,26 @@ async function loadDashboardSummary() {
         document.getElementById(
             'completedGoals'
         ).textContent =
-
             dashboardGoals.filter(
-                goal =>
-                    goal.status === 'Completed'
+                function (goal) {
+
+                    return goal.status ===
+                        'Completed';
+
+                }
             ).length;
 
 
         document.getElementById(
             'inProgressGoals'
         ).textContent =
-
             dashboardGoals.filter(
-                goal =>
-                    goal.status === 'In Progress'
+                function (goal) {
+
+                    return goal.status ===
+                        'In Progress';
+
+                }
             ).length;
 
 
@@ -913,20 +1468,26 @@ async function loadDashboardSummary() {
         document.getElementById(
             'pendingTasks'
         ).textContent =
-
             dashboardTasks.filter(
-                task =>
-                    task.status !== 'Completed'
+                function (task) {
+
+                    return task.status !==
+                        'Completed';
+
+                }
             ).length;
 
 
         document.getElementById(
             'completedTasks'
         ).textContent =
-
             dashboardTasks.filter(
-                task =>
-                    task.status === 'Completed'
+                function (task) {
+
+                    return task.status ===
+                        'Completed';
+
+                }
             ).length;
 
 
@@ -947,10 +1508,13 @@ async function loadDashboardSummary() {
         document.getElementById(
             'activeHabits'
         ).textContent =
-
             dashboardHabits.filter(
-                habit =>
-                    habit.status === 'Active'
+                function (habit) {
+
+                    return habit.status ===
+                        'Active';
+
+                }
             ).length;
 
 
@@ -964,8 +1528,12 @@ async function loadDashboardSummary() {
 
         const completedFocus =
             dashboardFocus.filter(
-                session =>
-                    session.status === 'Completed'
+                function (session) {
+
+                    return session.status ===
+                        'Completed';
+
+                }
             );
 
 
@@ -977,21 +1545,19 @@ async function loadDashboardSummary() {
 
         const totalFocusMinutes =
             completedFocus.reduce(
-
-                (
+                function (
                     total,
                     session
-                ) => {
+                ) {
 
                     return total +
                         Number(
-                            session.duration_minutes || 0
+                            session.duration_minutes ||
+                            0
                         );
 
                 },
-
                 0
-
             );
 
 
@@ -1017,7 +1583,7 @@ async function loadDashboardSummary() {
             dashboardReminders
 
                 .filter(
-                    (reminder) => {
+                    function (reminder) {
 
                         if (
                             reminder.status ===
@@ -1048,55 +1614,72 @@ async function loadDashboardSummary() {
                             String(
                                 reminder.reminder_time ||
                                 '00:00'
-                            ).substring(0, 5);
+                            ).substring(
+                                0,
+                                5
+                            );
 
 
                         const reminderDateTime =
                             new Date(
-                                `${date}T${time}`
+                                date +
+                                'T' +
+                                time
                             );
 
 
                         return (
-                            reminderDateTime >= now
+                            reminderDateTime >=
+                            now
                         );
 
                     }
                 )
 
                 .sort(
-                    (a, b) => {
+                    function (a, b) {
 
                         const aDate =
                             new Date(
-                                `${formatDate(
+                                formatDate(
                                     a.reminder_date
-                                )}T${String(
+                                ) +
+                                'T' +
+                                String(
                                     a.reminder_time ||
                                     '00:00'
-                                ).substring(0, 5)}`
+                                ).substring(
+                                    0,
+                                    5
+                                )
                             );
 
 
                         const bDate =
                             new Date(
-                                `${formatDate(
+                                formatDate(
                                     b.reminder_date
-                                )}T${String(
+                                ) +
+                                'T' +
+                                String(
                                     b.reminder_time ||
                                     '00:00'
-                                ).substring(0, 5)}`
+                                ).substring(
+                                    0,
+                                    5
+                                )
                             );
 
 
-                        return (
-                            aDate - bDate
-                        );
+                        return aDate - bDate;
 
                     }
                 )
 
-                .slice(0, 5);
+                .slice(
+                    0,
+                    5
+                );
 
 
         const remindersContainer =
@@ -1105,12 +1688,18 @@ async function loadDashboardSummary() {
             );
 
 
+        // ========================================
+        // DISPLAY REMINDERS
+        // ========================================
+
         if (
             upcomingReminders.length === 0
         ) {
 
             remindersContainer.innerHTML =
-                '<p>No upcoming reminders.</p>';
+                '<div class="empty-state">' +
+                '<p>No upcoming reminders.</p>' +
+                '</div>';
 
         } else {
 
@@ -1119,7 +1708,7 @@ async function loadDashboardSummary() {
 
 
             upcomingReminders.forEach(
-                (reminder) => {
+                function (reminder) {
 
                     const reminderItem =
                         document.createElement(
@@ -1127,39 +1716,274 @@ async function loadDashboardSummary() {
                         );
 
 
-                    reminderItem.innerHTML = `
+                    reminderItem.className =
+                        'reminder-card';
 
-                        <hr>
 
-                        <h3>
-                            ${reminder.title}
-                        </h3>
+                    // ========================================
+                    // HEADER
+                    // ========================================
 
-                        <p>
-                            ${reminder.description || ''}
-                        </p>
+                    const header =
+                        document.createElement(
+                            'div'
+                        );
 
-                        <p>
-                            Date:
-                            ${formatDate(
-                        reminder.reminder_date
-                    )}
-                        </p>
 
-                        <p>
-                            Time:
-                            ${String(
-                        reminder.reminder_time ||
-                        ''
-                    ).substring(0, 5)}
-                        </p>
+                    header.className =
+                        'reminder-card-header';
 
-                        <p>
-                            Status:
-                            ${reminder.status}
-                        </p>
 
-                    `;
+                    // ========================================
+                    // REMINDER BELL ICON
+                    // ========================================
+
+                    const icon =
+                        document.createElement(
+                            'div'
+                        );
+
+
+                    icon.className =
+                        'reminder-icon';
+
+
+                    icon.setAttribute(
+                        'aria-hidden',
+                        'true'
+                    );
+
+
+                    const bellIcon =
+                        createReminderBellIcon();
+
+
+                    icon.appendChild(
+                        bellIcon
+                    );
+
+
+                    const titleArea =
+                        document.createElement(
+                            'div'
+                        );
+
+
+                    titleArea.className =
+                        'reminder-title';
+
+
+                    const title =
+                        document.createElement(
+                            'h3'
+                        );
+
+
+                    title.textContent =
+                        reminder.title;
+
+
+                    const status =
+                        document.createElement(
+                            'span'
+                        );
+
+
+                    status.textContent =
+                        reminder.status;
+
+
+                    titleArea.appendChild(
+                        title
+                    );
+
+
+                    titleArea.appendChild(
+                        status
+                    );
+
+
+                    header.appendChild(
+                        icon
+                    );
+
+
+                    header.appendChild(
+                        titleArea
+                    );
+
+
+                    reminderItem.appendChild(
+                        header
+                    );
+
+
+                    // ========================================
+                    // DESCRIPTION
+                    // ========================================
+
+                    const content =
+                        document.createElement(
+                            'div'
+                        );
+
+
+                    content.className =
+                        'reminder-card-content';
+
+
+                    const description =
+                        document.createElement(
+                            'p'
+                        );
+
+
+                    description.textContent =
+                        reminder.description ||
+                        'No description provided.';
+
+
+                    content.appendChild(
+                        description
+                    );
+
+
+                    reminderItem.appendChild(
+                        content
+                    );
+
+
+                    // ========================================
+                    // DETAILS
+                    // ========================================
+
+                    const details =
+                        document.createElement(
+                            'div'
+                        );
+
+
+                    details.className =
+                        'reminder-card-details';
+
+
+                    // ========================================
+                    // DATE
+                    // ========================================
+
+                    const dateDetail =
+                        document.createElement(
+                            'div'
+                        );
+
+
+                    dateDetail.className =
+                        'reminder-detail';
+
+
+                    const dateLabel =
+                        document.createElement(
+                            'span'
+                        );
+
+
+                    dateLabel.className =
+                        'detail-label';
+
+
+                    dateLabel.textContent =
+                        'DATE';
+
+
+                    const dateValue =
+                        document.createElement(
+                            'strong'
+                        );
+
+
+                    dateValue.textContent =
+                        formatDate(
+                            reminder.reminder_date
+                        );
+
+
+                    dateDetail.appendChild(
+                        dateLabel
+                    );
+
+
+                    dateDetail.appendChild(
+                        dateValue
+                    );
+
+
+                    // ========================================
+                    // TIME
+                    // ========================================
+
+                    const timeDetail =
+                        document.createElement(
+                            'div'
+                        );
+
+
+                    timeDetail.className =
+                        'reminder-detail';
+
+
+                    const timeLabel =
+                        document.createElement(
+                            'span'
+                        );
+
+
+                    timeLabel.className =
+                        'detail-label';
+
+
+                    timeLabel.textContent =
+                        'TIME';
+
+
+                    const timeValue =
+                        document.createElement(
+                            'strong'
+                        );
+
+
+                    timeValue.textContent =
+                        String(
+                            reminder.reminder_time ||
+                            ''
+                        ).substring(
+                            0,
+                            5
+                        );
+
+
+                    timeDetail.appendChild(
+                        timeLabel
+                    );
+
+
+                    timeDetail.appendChild(
+                        timeValue
+                    );
+
+
+                    details.appendChild(
+                        dateDetail
+                    );
+
+
+                    details.appendChild(
+                        timeDetail
+                    );
+
+
+                    reminderItem.appendChild(
+                        details
+                    );
 
 
                     remindersContainer.appendChild(
@@ -1171,9 +1995,13 @@ async function loadDashboardSummary() {
 
         }
 
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Dashboard summary error:',
+            error
+        );
 
     }
 
@@ -1189,23 +2017,20 @@ async function logout() {
     try {
 
         await fetch(
-
             '/api/logout',
-
             {
-
                 method: 'POST',
-
-                credentials:
-                    'include'
-
+                credentials: 'include'
             }
-
         );
+
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            'Logout error:',
+            error
+        );
 
     }
 

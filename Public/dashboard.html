@@ -8,7 +8,9 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>StudyTrack Dashboard</title>
+    <title>
+        StudyTrack Dashboard
+    </title>
 
     <link rel="stylesheet"
           href="style.css">
@@ -18,351 +20,986 @@
 
 <body>
 
-    <!-- ========================================
-         PAGE HEADER
-         ======================================== -->
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
-    <header>
+    <header class="dashboard-header">
 
-        <h1>StudyTrack Dashboard</h1>
+        <!-- BRAND -->
 
-        <h2>
-            Welcome,
-            <span id="userName">
-                User
-            </span>!
-        </h2>
+        <div class="header-brand">
 
-        <p id="userEmail"></p>
+            <div class="brand-icon">
+                ST
+            </div>
+
+            <div class="brand-text">
+
+                <h1>
+                    StudyTrack
+                </h1>
+
+                <p>
+                    Student Productivity System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- HEADER RIGHT SIDE -->
+
+        <div class="header-right">
+
+            <!-- USER INFORMATION -->
+
+            <div class="header-user">
+
+                <span>
+                    Welcome,
+                    <strong id="userName">
+                        User
+                    </strong>!
+                </span>
+
+                <p id="userEmail">
+                    user@example.com
+                </p>
+
+            </div>
+
+
+            <!-- DAY / NIGHT SELECTOR -->
+
+            <div class="header-theme-control">
+
+                <div class="theme-switch"
+                     role="group"
+                     aria-label="Choose appearance">
+
+                    <button type="button"
+                            id="dayModeButton"
+                            class="theme-switch-button active"
+                            aria-label="Switch to day mode">
+
+                        <span class="theme-switch-icon"
+                              aria-hidden="true">
+                            ☀
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Day
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            id="nightModeButton"
+                            class="theme-switch-button"
+                            aria-label="Switch to night mode">
+
+                        <span class="theme-switch-icon"
+                              aria-hidden="true">
+                            ☾
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Night
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </header>
 
 
-    <hr>
 
+    <!-- =====================================================
+         DASHBOARD LAYOUT
+         ===================================================== -->
 
-    <!-- ========================================
-         NAVIGATION
-         ======================================== -->
+    <div class="dashboard-layout">
 
-    <nav>
 
-        <a href="/dashboard.html">
-            Dashboard
-        </a>
+        <!-- =================================================
+             SIDE NAVIGATION
+             ================================================= -->
 
-        |
+        <aside class="side-navigation">
 
-        <a href="/habits.html">
-            Habits
-        </a>
 
-        |
+            <!-- SIDEBAR BRAND -->
 
-        <a href="/tasks.html">
-            Tasks
-        </a>
+            <div class="sidebar-brand">
 
-        |
+                <div class="sidebar-brand-icon">
+                    ST
+                </div>
 
-        <a href="/reminders.html">
-            Reminders
-        </a>
+                <div>
 
-        |
+                    <h2>
+                        StudyTrack
+                    </h2>
 
-        <a href="/focus.html">
-            Focus
-        </a>
+                    <p>
+                        Productivity System
+                    </p>
 
-    </nav>
+                </div>
 
+            </div>
 
-    <hr>
 
+            <!-- =================================================
+                 SIDEBAR NAVIGATION
+                 ================================================= -->
 
-    <!-- ========================================
-         PRODUCTIVITY SUMMARY
-         ======================================== -->
+            <nav class="sidebar-nav"
+                 aria-label="Main navigation">
 
-    <section>
 
-        <h2>Productivity Summary</h2>
+                <!-- DASHBOARD -->
 
+                <a href="/dashboard.html"
+                   class="sidebar-nav-link active">
 
-        <!-- GOALS SUMMARY -->
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-        <div>
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
-            <h3>Goals</h3>
+                            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
 
-            <p>
-                Total Goals:
-                <span id="totalGoals">
-                    0
-                </span>
-            </p>
+                        </svg>
 
-            <p>
-                Completed:
-                <span id="completedGoals">
-                    0
-                </span>
-            </p>
+                    </span>
 
-            <p>
-                In Progress:
-                <span id="inProgressGoals">
-                    0
-                </span>
-            </p>
+                    <span>
+                        Dashboard
+                    </span>
 
-        </div>
+                </a>
 
 
-        <!-- TASKS SUMMARY -->
+                <!-- GOALS -->
 
-        <div>
+                <a href="/goals.html"
+                   class="sidebar-nav-link">
 
-            <h3>Tasks</h3>
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-            <p>
-                Total Tasks:
-                <span id="totalTasks">
-                    0
-                </span>
-            </p>
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
-            <p>
-                Pending:
-                <span id="pendingTasks">
-                    0
-                </span>
-            </p>
+                            <circle cx="12" cy="12" r="8.5"></circle>
+                            <circle cx="12" cy="12" r="4.5"></circle>
+                            <circle cx="12" cy="12" r="1"></circle>
 
-            <p>
-                Completed:
-                <span id="completedTasks">
-                    0
-                </span>
-            </p>
+                        </svg>
 
-        </div>
+                    </span>
 
+                    <span>
+                        Goals
+                    </span>
 
-        <!-- HABITS SUMMARY -->
+                </a>
 
-        <div>
 
-            <h3>Habits</h3>
+                <!-- HABITS -->
 
-            <p>
-                Total Habits:
-                <span id="totalHabits">
-                    0
-                </span>
-            </p>
+                <a href="/habits.html"
+                   class="sidebar-nav-link">
 
-            <p>
-                Active:
-                <span id="activeHabits">
-                    0
-                </span>
-            </p>
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-        </div>
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
+                            <path d="M20 11a8 8 0 1 1-2.34-5.66"></path>
+                            <path d="M20 4v7h-7"></path>
+                            <path d="M8.5 12.5l2.2 2.2 4.8-5"></path>
 
-        <!-- FOCUS SUMMARY -->
+                        </svg>
 
-        <div>
+                    </span>
 
-            <h3>Focus</h3>
+                    <span>
+                        Habits
+                    </span>
 
-            <p>
-                Completed Sessions:
-                <span id="completedFocusSessions">
-                    0
-                </span>
-            </p>
+                </a>
 
-            <p>
-                Focus Minutes:
-                <span id="focusMinutes">
-                    0
-                </span>
-            </p>
 
-        </div>
+                <!-- TASKS -->
 
-    </section>
+                <a href="/tasks.html"
+                   class="sidebar-nav-link">
 
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-    <hr>
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
+                            <rect x="4" y="3" width="16" height="18" rx="2"></rect>
+                            <path d="M8 8h.01"></path>
+                            <path d="M11 8h5"></path>
+                            <path d="M8 12h.01"></path>
+                            <path d="M11 12h5"></path>
+                            <path d="M8 16h.01"></path>
+                            <path d="M11 16h5"></path>
 
-    <!-- ========================================
-         UPCOMING REMINDERS
-         ======================================== -->
+                        </svg>
 
-    <section>
+                    </span>
 
-        <h2>Upcoming Reminders</h2>
+                    <span>
+                        Tasks
+                    </span>
 
-        <div id="upcomingReminders">
+                </a>
 
-            <p>
-                No upcoming reminders.
-            </p>
 
-        </div>
+                <!-- REMINDERS -->
 
-    </section>
+                <a href="/reminders.html"
+                   class="sidebar-nav-link">
 
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-    <hr>
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                            <path d="M10 21h4"></path>
 
-    <!-- ========================================
-         CREATE GOAL
-         ======================================== -->
+                        </svg>
 
-    <section>
+                    </span>
 
-        <h2>Create a Goal</h2>
+                    <span>
+                        Reminders
+                    </span>
 
+                </a>
 
-        <form id="goalForm">
 
+                <!-- FOCUS -->
 
-            <label for="goalTitle">
-                Goal Title
-            </label>
+                <a href="/focus.html"
+                   class="sidebar-nav-link">
 
-            <br>
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-            <input type="text"
-                   id="goalTitle"
-                   required>
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
-            <br><br>
+                            <circle cx="12" cy="13" r="8"></circle>
+                            <path d="M12 9v4l2.5 1.5"></path>
+                            <path d="M9 3h6"></path>
+                            <path d="M12 3v2"></path>
 
+                        </svg>
 
-            <label for="goalDescription">
-                Description
-            </label>
+                    </span>
 
-            <br>
+                    <span>
+                        Focus
+                    </span>
 
-            <textarea id="goalDescription"></textarea>
+                </a>
 
-            <br><br>
 
+                <!-- PROFILE -->
 
-            <label for="goalDeadline">
-                Deadline
-            </label>
+                <a href="/profile.html"
+                   class="sidebar-nav-link">
 
-            <br>
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-            <input type="date"
-                   id="goalDeadline">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
-            <br><br>
+                            <circle cx="12" cy="8" r="3.5"></circle>
+                            <path d="M5 20c.8-3.5 3.2-5.5 7-5.5s6.2 2 7 5.5"></path>
 
+                        </svg>
 
-            <label for="goalCurrent">
-                Current Progress
-            </label>
+                    </span>
 
-            <br>
+                    <span>
+                        Profile
+                    </span>
 
-            <input type="number"
-                   id="goalCurrent"
-                   min="0"
-                   value="0">
+                </a>
 
-            <br><br>
+            </nav>
 
 
-            <label for="goalTarget">
-                Target
-            </label>
+            <!-- =================================================
+                 SIDEBAR BOTTOM
+                 ================================================= -->
 
-            <br>
+            <div class="sidebar-bottom">
 
-            <input type="number"
-                   id="goalTarget"
-                   min="1"
-                   value="100">
+                <button type="button"
+                        id="logoutButton"
+                        class="logout-button">
 
-            <br><br>
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
-            <label for="goalUnit">
-                Unit
-            </label>
+                            <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"></path>
+                            <path d="M14 8l4 4-4 4"></path>
+                            <path d="M9 12h9"></path>
 
-            <br>
+                        </svg>
 
-            <input type="text"
-                   id="goalUnit"
-                   placeholder="e.g. hours">
+                    </span>
 
-            <br><br>
+                    <span>
+                        Logout
+                    </span>
 
+                </button>
 
-            <button type="submit"
-                    id="goalButton">
-                Create Goal
-            </button>
+            </div>
 
+        </aside>
 
-        </form>
 
 
-        <p id="goalMessage"></p>
+        <!-- =================================================
+             MAIN DASHBOARD
+             ================================================= -->
 
-    </section>
+        <main class="dashboard-main">
 
+            <div class="dashboard-container">
 
-    <hr>
 
+                <!-- =================================================
+                     DASHBOARD INTRO
+                     ================================================= -->
 
-    <!-- ========================================
-         GOALS
-         ======================================== -->
+                <section class="dashboard-intro">
 
-    <section>
+                    <p class="section-eyebrow">
+                        YOUR PRODUCTIVITY
+                    </p>
 
-        <h2>Goals</h2>
+                    <h2>
+                        Dashboard
+                    </h2>
 
-        <div id="goalsContainer">
+                    <p>
+                        Keep track of your goals, tasks, habits,
+                        reminders and focus sessions in one place.
+                    </p>
 
-            <p>
-                Loading goals...
-            </p>
+                </section>
 
-        </div>
 
-    </section>
 
+                <!-- =================================================
+                     PRODUCTIVITY SUMMARY
+                     ================================================= -->
 
-    <hr>
+                <section class="summary-section">
 
+                    <div class="panel-heading">
 
-    <!-- ========================================
-         LOGOUT
-         ======================================== -->
+                        <div>
 
-    <button id="logoutButton">
-        Logout
-    </button>
+                            <p class="section-eyebrow">
+                                OVERVIEW
+                            </p>
 
+                            <h2>
+                                Productivity Summary
+                            </h2>
 
-    <!-- ========================================
-         JAVASCRIPT
-         ======================================== -->
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-grid">
+
+
+                        <!-- GOALS -->
+
+                        <div class="summary-card">
+
+                            <div class="summary-card-icon"
+                                 aria-hidden="true">
+
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <circle cx="12" cy="12" r="8.5"></circle>
+                                    <circle cx="12" cy="12" r="4.5"></circle>
+                                    <circle cx="12" cy="12" r="1"></circle>
+
+                                </svg>
+
+                            </div>
+
+                            <div class="summary-card-content">
+
+                                <h3>
+                                    Goals
+                                </h3>
+
+                                <strong id="totalGoals">
+                                    0
+                                </strong>
+
+                                <p>
+                                    Total goals
+                                </p>
+
+                                <div class="summary-card-details">
+
+                                    <span>
+                                        Completed:
+                                        <strong id="completedGoals">
+                                            0
+                                        </strong>
+                                    </span>
+
+                                    <span>
+                                        In Progress:
+                                        <strong id="inProgressGoals">
+                                            0
+                                        </strong>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- TASKS -->
+
+                        <div class="summary-card">
+
+                            <div class="summary-card-icon"
+                                 aria-hidden="true">
+
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <rect x="4" y="3" width="16" height="18" rx="2"></rect>
+
+                                    <path d="M8 8l1.2 1.2L11.5 7"></path>
+                                    <path d="M13 8h3"></path>
+
+                                    <path d="M8 12l1.2 1.2 2.3-2.2"></path>
+                                    <path d="M13 12h3"></path>
+
+                                    <path d="M8 16l1.2 1.2 2.3-2.2"></path>
+                                    <path d="M13 16h3"></path>
+
+                                </svg>
+
+                            </div>
+
+                            <div class="summary-card-content">
+
+                                <h3>
+                                    Tasks
+                                </h3>
+
+                                <strong id="totalTasks">
+                                    0
+                                </strong>
+
+                                <p>
+                                    Total tasks
+                                </p>
+
+                                <div class="summary-card-details">
+
+                                    <span>
+                                        Pending:
+                                        <strong id="pendingTasks">
+                                            0
+                                        </strong>
+                                    </span>
+
+                                    <span>
+                                        Completed:
+                                        <strong id="completedTasks">
+                                            0
+                                        </strong>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- HABITS -->
+
+                        <div class="summary-card">
+
+                            <div class="summary-card-icon"
+                                 aria-hidden="true">
+
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <path d="M20 11a8 8 0 1 1-2.34-5.66"></path>
+                                    <path d="M20 4v7h-7"></path>
+                                    <path d="M8.5 12.5l2.2 2.2 4.8-5"></path>
+
+                                </svg>
+
+                            </div>
+
+                            <div class="summary-card-content">
+
+                                <h3>
+                                    Habits
+                                </h3>
+
+                                <strong id="totalHabits">
+                                    0
+                                </strong>
+
+                                <p>
+                                    Total habits
+                                </p>
+
+                                <div class="summary-card-details">
+
+                                    <span>
+                                        Active:
+                                        <strong id="activeHabits">
+                                            0
+                                        </strong>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- FOCUS -->
+
+                        <div class="summary-card">
+
+                            <div class="summary-card-icon"
+                                 aria-hidden="true">
+
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <circle cx="12" cy="13" r="8"></circle>
+
+                                    <path d="M12 9v4l2.5 1.5"></path>
+
+                                    <path d="M9 3h6"></path>
+
+                                    <path d="M12 3v2"></path>
+
+                                </svg>
+
+                            </div>
+
+                            <div class="summary-card-content">
+
+                                <h3>
+                                    Focus
+                                </h3>
+
+                                <strong id="completedFocusSessions">
+                                    0
+                                </strong>
+
+                                <p>
+                                    Completed sessions
+                                </p>
+
+                                <div class="summary-card-details">
+
+                                    <span>
+                                        Focus Minutes:
+                                        <strong id="focusMinutes">
+                                            0
+                                        </strong>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     UPCOMING REMINDERS
+                     ================================================= -->
+
+                <section class="dashboard-panel reminders-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                STAY ON TRACK
+                            </p>
+
+                            <h2>
+                                Upcoming Reminders
+                            </h2>
+
+                        </div>
+
+                        <a href="/reminders.html"
+                           class="panel-link">
+                            View All
+                        </a>
+
+                    </div>
+
+
+                    <div id="upcomingReminders">
+
+                        <div class="empty-state">
+
+                            <p>
+                                Loading reminders...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     CREATE GOAL
+                     ================================================= -->
+
+                <section class="dashboard-panel goal-form-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                PLAN AHEAD
+                            </p>
+
+                            <h2>
+                                Create a Goal
+                            </h2>
+
+                            <p>
+                                Add a measurable goal and track
+                                your progress over time.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- IMPORTANT:
+                         goal-form class added here -->
+
+                    <form id="goalForm"
+                          class="goal-form">
+
+
+                        <!-- GOAL TITLE -->
+
+                        <div class="form-group">
+
+                            <label for="goalTitle">
+                                Goal Title
+                            </label>
+
+                            <input type="text"
+                                   id="goalTitle"
+                                   name="goalTitle"
+                                   placeholder="e.g. Complete COSC0281 Project"
+                                   required>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="form-group">
+
+                            <label for="goalDescription">
+                                Description
+                            </label>
+
+                            <textarea id="goalDescription"
+                                      name="goalDescription"
+                                      rows="4"
+                                      placeholder="Describe what you want to achieve..."></textarea>
+
+                        </div>
+
+
+                        <!-- DEADLINE -->
+
+                        <div class="form-group">
+
+                            <label for="goalDeadline">
+                                Deadline
+                            </label>
+
+                            <input type="date"
+                                   id="goalDeadline"
+                                   name="goalDeadline">
+
+                        </div>
+
+
+                        <!-- CURRENT VALUE -->
+
+                        <div class="form-group">
+
+                            <label for="goalCurrent">
+                                Current Progress
+                            </label>
+
+                            <input type="number"
+                                   id="goalCurrent"
+                                   name="goalCurrent"
+                                   value="0"
+                                   min="0">
+
+                        </div>
+
+
+                        <!-- TARGET VALUE -->
+
+                        <div class="form-group">
+
+                            <label for="goalTarget">
+                                Target Value
+                            </label>
+
+                            <input type="number"
+                                   id="goalTarget"
+                                   name="goalTarget"
+                                   value="100"
+                                   min="1">
+
+                        </div>
+
+
+                        <!-- UNIT -->
+
+                        <div class="form-group">
+
+                            <label for="goalUnit">
+                                Unit
+                            </label>
+
+                            <input type="text"
+                                   id="goalUnit"
+                                   name="goalUnit"
+                                   placeholder="e.g. percent, chapters, hours">
+
+                        </div>
+
+
+                        <!-- FORM ACTION -->
+
+                        <div class="form-actions">
+
+                            <button type="submit"
+                                    id="goalButton"
+                                    class="primary-button">
+
+                                Create Goal
+
+                            </button>
+
+                            <p id="goalMessage"
+                               class="form-message"></p>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     GOALS
+                     ================================================= -->
+
+                <section class="dashboard-panel goals-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                YOUR TARGETS
+                            </p>
+
+                            <h2>
+                                My Goals
+                            </h2>
+
+                            <p>
+                                Monitor and manage your current goals.
+                            </p>
+
+                        </div>
+
+                        <a href="/goals.html"
+                           class="panel-link">
+                            Manage Goals
+                        </a>
+
+                    </div>
+
+
+                    <div id="goalsContainer">
+
+                        <div class="empty-state">
+
+                            <p>
+                                Loading goals...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="dashboard-footer">
+
+        <p>
+            StudyTrack
+            —
+            Student Productivity System
+        </p>
+
+        <p>
+            Stay focused. Track progress. Achieve your goals.
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         DASHBOARD JAVASCRIPT
+         ===================================================== -->
 
     <script src="dashboard.js"></script>
 
