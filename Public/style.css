@@ -708,6 +708,13 @@ svg {
     text-align: center;
 }
 
+    .empty-state h3 {
+        margin-bottom: 6px;
+        color: var(--text-primary);
+        font-size: 15px;
+        line-height: 1.3;
+    }
+
     .empty-state p {
         color: var(--text-muted);
         font-size: 13px;
@@ -784,6 +791,7 @@ svg {
         }
 
 .form-help {
+    display: block;
     margin-top: 5px;
     color: var(--text-muted);
     font-size: 10px;
@@ -849,6 +857,11 @@ svg {
     .reminder-status-select:focus-visible {
         outline: 3px solid var(--focus-ring);
         outline-offset: 2px;
+    }
+
+    .primary-button:disabled,
+    .secondary-button:disabled {
+        opacity: 0.55;
     }
 
 
@@ -1268,28 +1281,36 @@ svg {
    ========================================================= */
 
 .dashboard-footer {
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    margin-left: 250px;
+    width: 100%;
+    min-height: 54px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
     border-top: 1px solid var(--border);
+    background: #ffffff;
 }
 
     .dashboard-footer p {
         min-height: 54px;
+        flex: 1;
         display: flex;
         align-items: center;
+        margin: 0;
         padding: 12px 24px;
+        background: #ffffff;
+        color: #17232b;
         font-size: 10px;
     }
 
         .dashboard-footer p:first-child {
-            background: #202b2f;
-            color: #b7c3c7;
+            justify-content: flex-start;
         }
 
         .dashboard-footer p:last-child {
-            background: var(--surface);
-            color: var(--text-muted);
+            justify-content: flex-end;
         }
 
 
@@ -1338,7 +1359,8 @@ body.night-mode {
     body.night-mode .goal-card-title h3,
     body.night-mode .task-card-title h3,
     body.night-mode .reminder-content h3,
-    body.night-mode .form-group label {
+    body.night-mode .form-group label,
+    body.night-mode .empty-state h3 {
         color: var(--text-primary);
     }
 
@@ -1533,17 +1555,13 @@ body.night-mode {
    ========================================================= */
 
     body.night-mode .dashboard-footer {
-        border-top-color: var(--border);
+        border-top-color: #303b3f;
+        background: #171e21;
     }
 
-        body.night-mode .dashboard-footer p:first-child {
-            background: #11191b;
-            color: var(--text-secondary);
-        }
-
-        body.night-mode .dashboard-footer p:last-child {
-            background: var(--surface);
-            color: var(--text-muted);
+        body.night-mode .dashboard-footer p {
+            background: #171e21;
+            color: #edf2f3;
         }
 
 
@@ -1675,7 +1693,148 @@ body.night-mode .empty-state p {
 
 
 /* =========================================================
-   40. RESPONSIVE - TABLET / SMALL DESKTOP
+   40. FOCUS PAGE
+   ========================================================= */
+
+/*
+   Focus uses the same panel system as Goals, Habits,
+   Tasks and Reminders.
+
+   The timer receives a larger visual treatment because
+   it is the main action on this page.
+*/
+
+.focus-panel {
+    overflow: hidden;
+}
+
+.focus-timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 42px 24px 38px;
+    text-align: center;
+}
+
+.focus-timer {
+    width: min(100%, 420px);
+    margin-bottom: 28px;
+    padding: 30px 24px;
+    border: 1px solid var(--accent-border);
+    border-radius: 16px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: clamp(56px, 8vw, 82px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+.focus-controls {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+    .focus-controls .primary-button,
+    .focus-controls .secondary-button {
+        min-width: 130px;
+    }
+
+.focus-panel .form-message {
+    width: min(100%, 600px);
+    margin: 20px 0 0;
+}
+
+
+/* =========================================================
+   41. FOCUS SESSION HISTORY
+   ========================================================= */
+
+.focus-history-panel {
+    overflow: hidden;
+}
+
+.focus-history {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 24px;
+}
+
+.focus-history-item {
+    min-width: 0;
+    padding: 20px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .focus-history-item:hover {
+        border-color: var(--accent-border);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .focus-history-item strong {
+        display: block;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+        font-size: 15px;
+        line-height: 1.3;
+    }
+
+    .focus-history-item p {
+        margin-top: 6px;
+        color: var(--text-secondary);
+        font-size: 11px;
+    }
+
+        .focus-history-item p:first-of-type {
+            margin-top: 0;
+        }
+
+.focus-history > .empty-state {
+    grid-column: 1 / -1;
+    padding: 30px 20px;
+}
+
+
+/* =========================================================
+   42. NIGHT MODE - FOCUS
+   ========================================================= */
+
+body.night-mode .focus-timer {
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+    color: var(--accent);
+}
+
+body.night-mode .focus-history-item {
+    background: var(--surface-soft);
+    border-color: var(--border);
+}
+
+    body.night-mode .focus-history-item:hover {
+        border-color: var(--accent-border);
+    }
+
+    body.night-mode .focus-history-item strong {
+        color: var(--text-primary);
+    }
+
+    body.night-mode .focus-history-item p {
+        color: var(--text-secondary);
+    }
+
+
+/* =========================================================
+   43. RESPONSIVE - TABLET / SMALL DESKTOP
    ========================================================= */
 
 @media (max-width: 1050px) {
@@ -1687,11 +1846,15 @@ body.night-mode .empty-state p {
     .dashboard-main {
         padding: 28px;
     }
+
+    .focus-history {
+        grid-template-columns: 1fr;
+    }
 }
 
 
 /* =========================================================
-   41. RESPONSIVE - TABLET
+   44. RESPONSIVE - TABLET
    ========================================================= */
 
 @media (max-width: 800px) {
@@ -1720,8 +1883,8 @@ body.night-mode .empty-state p {
     }
 
     .dashboard-footer {
-        grid-template-columns: 220px 1fr;
-        margin-left: 220px;
+        width: 100%;
+        margin-left: 0;
     }
 
     .summary-grid {
@@ -1738,11 +1901,24 @@ body.night-mode .empty-state p {
     .task-card-header {
         gap: 14px;
     }
+
+    .focus-timer-container {
+        padding: 34px 20px 32px;
+    }
+
+    .focus-timer {
+        max-width: 360px;
+    }
+
+    .focus-controls .primary-button,
+    .focus-controls .secondary-button {
+        min-width: 120px;
+    }
 }
 
 
 /* =========================================================
-   42. RESPONSIVE - MOBILE
+   45. RESPONSIVE - MOBILE
    ========================================================= */
 
 @media (max-width: 600px) {
@@ -1945,20 +2121,84 @@ body.night-mode .empty-state p {
         min-width: 125px;
     }
 
-    .dashboard-footer {
+
+    /* =====================================================
+       MOBILE FOCUS
+       ===================================================== */
+
+    .focus-timer-container {
+        padding: 28px 16px 26px;
+    }
+
+    .focus-timer {
+        width: 100%;
+        margin-bottom: 22px;
+        padding: 28px 16px;
+        border-radius: 14px;
+        font-size: clamp(48px, 16vw, 68px);
+    }
+
+    .focus-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+        .focus-controls .primary-button,
+        .focus-controls .secondary-button {
+            width: 100%;
+            min-width: 0;
+        }
+
+    .focus-panel .form-message {
+        width: 100%;
+        margin-top: 16px;
+    }
+
+    .focus-history {
         grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .focus-history-item {
+        padding: 16px;
+    }
+
+
+    /*
+       On mobile the footer becomes a vertical stack so that
+       the text remains readable on narrow screens.
+    */
+
+    .dashboard-footer {
+        width: 100%;
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
         margin-left: 0;
+        background: #ffffff;
     }
 
         .dashboard-footer p {
+            width: 100%;
             min-height: auto;
             padding: 11px 16px;
+            background: #ffffff;
+            color: #17232b;
         }
+
+            .dashboard-footer p:first-child,
+            .dashboard-footer p:last-child {
+                justify-content: flex-start;
+            }
 }
 
 
 /* =========================================================
-   43. RESPONSIVE - VERY SMALL MOBILE
+   46. RESPONSIVE - VERY SMALL MOBILE
    ========================================================= */
 
 @media (max-width: 420px) {
@@ -2044,14 +2284,44 @@ body.night-mode .empty-state p {
         width: 100%;
     }
 
-    .dashboard-footer p {
-        font-size: 9px;
+
+    /* =====================================================
+       VERY SMALL FOCUS
+       ===================================================== */
+
+    .focus-timer-container {
+        padding: 22px 12px 22px;
     }
+
+    .focus-timer {
+        padding: 25px 12px;
+        font-size: 46px;
+    }
+
+    .focus-history {
+        padding: 12px;
+    }
+
+    .focus-history-item {
+        padding: 14px;
+    }
+
+    .dashboard-footer {
+        width: 100%;
+        margin-left: 0;
+    }
+
+        .dashboard-footer p {
+            width: 100%;
+            font-size: 9px;
+            background: #ffffff;
+            color: #17232b;
+        }
 }
 
 
 /* =========================================================
-   44. REDUCED MOTION
+   47. REDUCED MOTION
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {

@@ -18,149 +18,663 @@
 
 <body>
 
-    <!-- ========================================
+    <!-- =====================================================
          PAGE HEADER
-         ======================================== -->
+         ===================================================== -->
 
-    <header>
+    <header class="dashboard-header">
 
-        <h1>StudyTrack</h1>
+        <div class="header-brand">
 
-        <h2>
-            Focus
-        </h2>
+            <div class="brand-icon">
+                ST
+            </div>
 
-        <p>
-            Use focused work sessions to stay
-            productive and reduce distractions.
-        </p>
+            <div class="brand-text">
 
-        <p>
-            Welcome,
-            <span id="userName">
-                User
-            </span>!
-        </p>
+                <h1>
+                    StudyTrack
+                </h1>
 
-        <p id="userEmail"></p>
+                <p>
+                    Student Productivity System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <!-- USER INFORMATION -->
+
+            <div class="header-user">
+
+                <span>
+                    Welcome,
+                    <strong id="userName">
+                        User
+                    </strong>
+                </span>
+
+                <p id="userEmail">
+                    Loading...
+                </p>
+
+            </div>
+
+
+            <!-- DAY / NIGHT SELECTOR -->
+
+            <div class="header-theme-control">
+
+                <div class="theme-switch"
+                     role="group"
+                     aria-label="Appearance">
+
+                    <button type="button"
+                            id="dayModeButton"
+                            class="theme-switch-button"
+                            aria-label="Switch to day mode"
+                            title="Day mode">
+
+                        <span class="theme-switch-icon"
+                              aria-hidden="true">
+
+                            ☀
+
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Day
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            id="nightModeButton"
+                            class="theme-switch-button"
+                            aria-label="Switch to night mode"
+                            title="Night mode">
+
+                        <span class="theme-switch-icon"
+                              aria-hidden="true">
+
+                            ☾
+
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Night
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </header>
 
 
-    <!-- ========================================
-         NAVIGATION
-         ======================================== -->
 
-    <nav>
+    <!-- =====================================================
+         PAGE LAYOUT
+         ===================================================== -->
 
-        <a href="/dashboard.html">
-            Dashboard
-        </a>
-
-        |
-
-        <a href="/habits.html">
-            Habits
-        </a>
-
-        |
-
-        <a href="/tasks.html">
-            Tasks
-        </a>
-
-        |
-
-        <a href="/reminders.html">
-            Reminders
-        </a>
-
-        |
-
-        <a href="/focus.html">
-            Focus
-        </a>
-
-    </nav>
+    <div class="dashboard-layout">
 
 
-    <!-- ========================================
-         FOCUS TIMER
-         ======================================== -->
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
 
-    <section>
+        <aside class="side-navigation">
 
-        <h2>
-            Focus Timer
-        </h2>
-
-
-        <div id="timer">
-            25:00
-        </div>
+            <nav class="sidebar-nav"
+                 aria-label="Main navigation">
 
 
-        <button id="startButton">
-            Start Focus
-        </button>
+                <!-- DASHBOARD -->
+
+                <a href="/dashboard.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <rect x="3"
+                                  y="3"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
+
+                            <rect x="14"
+                                  y="3"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
+
+                            <rect x="3"
+                                  y="14"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
+
+                            <rect x="14"
+                                  y="14"
+                                  width="7"
+                                  height="7"
+                                  rx="1">
+                            </rect>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
 
 
-        <button id="pauseButton"
-                disabled>
-            Pause
-        </button>
+                <!-- GOALS -->
+
+                <a href="/goals.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="8">
+                            </circle>
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="4">
+                            </circle>
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="1">
+                            </circle>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Goals
+                    </span>
+
+                </a>
 
 
-        <button id="completeButton"
-                disabled>
-            Complete Session
-        </button>
+                <!-- HABITS -->
+
+                <a href="/habits.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M20 7v5h-5">
+                            </path>
+
+                            <path d="M4 17v-5h5">
+                            </path>
+
+                            <path d="M6.1 9a7 7 0 0 1 11.6-2L20 7">
+                            </path>
+
+                            <path d="M17.9 15a7 7 0 0 1-11.6 2L4 17">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Habits
+                    </span>
+
+                </a>
 
 
-        <button id="resetButton">
-            Reset
-        </button>
+                <!-- TASKS -->
+
+                <a href="/tasks.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <rect x="4"
+                                  y="3"
+                                  width="16"
+                                  height="18"
+                                  rx="2">
+                            </rect>
+
+                            <path d="M8 8h8">
+                            </path>
+
+                            <path d="M8 12h8">
+                            </path>
+
+                            <path d="M8 16h5">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Tasks
+                    </span>
+
+                </a>
 
 
-        <p id="focusMessage"></p>
+                <!-- REMINDERS -->
 
-    </section>
+                <a href="/reminders.html"
+                   class="sidebar-nav-link">
 
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
-    <!-- ========================================
-         FOCUS SESSION HISTORY
-         ======================================== -->
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
-    <section>
+                            <path d="M18 8a6 6 0 0 0-12 0
+                                     c0 7-3 7-3 9h18c0-2-3-2-3-9">
+                            </path>
 
-        <h2>
-            Focus Session History
-        </h2>
+                            <path d="M10 21h4">
+                            </path>
 
+                        </svg>
 
-        <div id="focusHistory">
+                    </span>
 
-            <p>
-                Loading focus sessions...
-            </p>
+                    <span>
+                        Reminders
+                    </span>
 
-        </div>
-
-    </section>
-
-
-    <!-- ========================================
-         LOGOUT
-         ======================================== -->
-
-    <button id="logoutButton">
-        Logout
-    </button>
+                </a>
 
 
-    <!-- ========================================
+                <!-- FOCUS -->
+
+                <a href="/focus.html"
+                   class="sidebar-nav-link active"
+                   aria-current="page">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="8">
+                            </circle>
+
+                            <path d="M12 8v4l3 2">
+                            </path>
+
+                            <path d="M9 3h6">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Focus
+                    </span>
+
+                </a>
+
+
+                <!-- PROFILE -->
+
+                <a href="/profile.html"
+                   class="sidebar-nav-link">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <circle cx="12"
+                                    cy="8"
+                                    r="3.5">
+                            </circle>
+
+                            <path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- =================================================
+                 LOGOUT
+                 ================================================= -->
+
+            <div class="sidebar-bottom">
+
+                <button type="button"
+                        id="logoutButton"
+                        class="logout-button">
+
+                    <span class="nav-icon"
+                          aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M10 17l5-5-5-5">
+                            </path>
+
+                            <path d="M15 12H3">
+                            </path>
+
+                            <path d="M21 19V5">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </button>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             MAIN CONTENT
+             ================================================= -->
+
+        <main class="dashboard-main">
+
+            <div class="dashboard-container">
+
+
+                <!-- =================================================
+                     PAGE INTRODUCTION
+                     ================================================= -->
+
+                <section class="dashboard-intro page-intro">
+
+                    <p class="section-eyebrow">
+                        FOCUS SESSION
+                    </p>
+
+                    <h2>
+                        Focus on What Matters
+                    </h2>
+
+                    <p>
+                        Use focused work sessions to stay
+                        productive and reduce distractions.
+                    </p>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     FOCUS TIMER
+                     ================================================= -->
+
+                <section class="dashboard-panel focus-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                POMODORO TIMER
+                            </p>
+
+                            <h2>
+                                Focus Timer
+                            </h2>
+
+                            <p>
+                                Work with intention, take breaks,
+                                and keep building your productivity.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="focus-timer-container">
+
+
+                        <!-- TIMER -->
+
+                        <div id="timer"
+                             class="focus-timer">
+
+                            25:00
+
+                        </div>
+
+
+                        <!-- TIMER CONTROLS -->
+
+                        <div class="focus-controls">
+
+                            <button type="button"
+                                    id="startButton"
+                                    class="primary-button">
+
+                                Start Focus
+
+                            </button>
+
+
+                            <button type="button"
+                                    id="pauseButton"
+                                    class="secondary-button"
+                                    disabled>
+
+                                Pause
+
+                            </button>
+
+
+                            <button type="button"
+                                    id="completeButton"
+                                    class="secondary-button"
+                                    disabled>
+
+                                Complete Session
+
+                            </button>
+
+
+                            <button type="button"
+                                    id="resetButton"
+                                    class="secondary-button">
+
+                                Reset
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- FOCUS MESSAGE -->
+
+                        <p id="focusMessage"
+                           class="form-message"
+                           role="status"
+                           aria-live="polite">
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     FOCUS SESSION HISTORY
+                     ================================================= -->
+
+                <section class="dashboard-panel focus-history-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                SESSION HISTORY
+                            </p>
+
+                            <h2>
+                                Focus Session History
+                            </h2>
+
+                            <p>
+                                Review the focused work sessions
+                                you have completed.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="focusHistory"
+                         class="focus-history">
+
+                        <div class="empty-state">
+
+                            <h3>
+                                Loading focus sessions...
+                            </h3>
+
+                            <p>
+                                Please wait while your focus
+                                history is being loaded.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="dashboard-footer">
+
+        <p>
+            StudyTrack
+        </p>
+
+        <p>
+            Stay focused. Build consistency. Make progress.
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================================
          JAVASCRIPT
-         ======================================== -->
+         ===================================================== -->
 
     <script src="focus.js"></script>
 

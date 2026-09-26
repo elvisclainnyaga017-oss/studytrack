@@ -19,7 +19,7 @@
 <body>
 
     <!-- =====================================================
-         HEADER
+         PAGE HEADER
          ===================================================== -->
 
     <header class="dashboard-header">
@@ -47,27 +47,31 @@
 
         <div class="header-right">
 
-            <!-- USER -->
+            <!-- USER INFORMATION -->
 
             <div class="header-user">
 
-                <strong id="userName">
-                    User
-                </strong>
-
-                <span id="userEmail">
-                    Loading...
+                <span>
+                    Welcome,
+                    <strong id="userName">
+                        User
+                    </strong>
                 </span>
+
+                <p id="userEmail">
+                    Loading...
+                </p>
 
             </div>
 
 
-            <!-- DAY / NIGHT -->
+            <!-- DAY / NIGHT SELECTOR -->
 
             <div class="header-theme-control">
 
                 <div class="theme-switch"
-                     aria-label="Theme selector">
+                     role="group"
+                     aria-label="Appearance">
 
                     <button type="button"
                             id="dayModeButton"
@@ -78,28 +82,7 @@
                         <span class="theme-switch-icon"
                               aria-hidden="true">
 
-                            <svg viewBox="0 0 24 24"
-                                 width="14"
-                                 height="14"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.8">
-
-                                <circle cx="12"
-                                        cy="12"
-                                        r="4">
-                                </circle>
-
-                                <path d="M12 2v2"></path>
-                                <path d="M12 20v2"></path>
-                                <path d="M4.93 4.93l1.41 1.41"></path>
-                                <path d="M17.66 17.66l1.41 1.41"></path>
-                                <path d="M2 12h2"></path>
-                                <path d="M20 12h2"></path>
-                                <path d="M4.93 19.07l1.41-1.41"></path>
-                                <path d="M17.66 6.34l1.41-1.41"></path>
-
-                            </svg>
+                            ☀
 
                         </span>
 
@@ -119,18 +102,7 @@
                         <span class="theme-switch-icon"
                               aria-hidden="true">
 
-                            <svg viewBox="0 0 24 24"
-                                 width="14"
-                                 height="14"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.8">
-
-                                <path d="M21 12.79A9 9 0 1 1 11.21 3
-                                         7 7 0 0 0 21 12.79z">
-                                </path>
-
-                            </svg>
+                            ☾
 
                         </span>
 
@@ -147,6 +119,7 @@
         </div>
 
     </header>
+
 
 
     <!-- =====================================================
@@ -177,7 +150,9 @@
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8">
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
                             <rect x="3"
                                   y="3"
@@ -229,21 +204,23 @@
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8">
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
                             <circle cx="12"
                                     cy="12"
-                                    r="9">
+                                    r="8">
                             </circle>
 
                             <circle cx="12"
                                     cy="12"
-                                    r="5">
+                                    r="4">
                             </circle>
 
                             <circle cx="12"
                                     cy="12"
-                                    r="1.5">
+                                    r="1">
                             </circle>
 
                         </svg>
@@ -268,12 +245,20 @@
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8">
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
-                            <path d="M12 20s-7-4.35-7-10
-                                     a4 4 0 0 1 7-2.5
-                                     A4 4 0 0 1 19 10
-                                     c0 5.65-7 10-7 10z">
+                            <path d="M20 7v5h-5">
+                            </path>
+
+                            <path d="M4 17v-5h5">
+                            </path>
+
+                            <path d="M6.1 9a7 7 0 0 1 11.6-2L20 7">
+                            </path>
+
+                            <path d="M17.9 15a7 7 0 0 1-11.6 2L4 17">
                             </path>
 
                         </svg>
@@ -298,7 +283,9 @@
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8">
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
                             <rect x="4"
                                   y="3"
@@ -307,9 +294,14 @@
                                   rx="2">
                             </rect>
 
-                            <path d="M8 7h8"></path>
-                            <path d="M8 11h8"></path>
-                            <path d="M8 15h5"></path>
+                            <path d="M8 8h8">
+                            </path>
+
+                            <path d="M8 12h8">
+                            </path>
+
+                            <path d="M8 16h5">
+                            </path>
 
                         </svg>
 
@@ -325,7 +317,8 @@
                 <!-- REMINDERS -->
 
                 <a href="/reminders.html"
-                   class="sidebar-nav-link active">
+                   class="sidebar-nav-link active"
+                   aria-current="page">
 
                     <span class="nav-icon"
                           aria-hidden="true">
@@ -333,13 +326,16 @@
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8">
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
                             <path d="M18 8a6 6 0 0 0-12 0
                                      c0 7-3 7-3 9h18c0-2-3-2-3-9">
                             </path>
 
-                            <path d="M10 21h4"></path>
+                            <path d="M10 21h4">
+                            </path>
 
                         </svg>
 
@@ -363,14 +359,20 @@
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8">
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
                             <circle cx="12"
                                     cy="12"
-                                    r="9">
+                                    r="8">
                             </circle>
 
-                            <path d="M12 7v5l3 2"></path>
+                            <path d="M12 8v4l3 2">
+                            </path>
+
+                            <path d="M9 3h6">
+                            </path>
 
                         </svg>
 
@@ -394,16 +396,16 @@
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8">
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
                             <circle cx="12"
                                     cy="8"
-                                    r="4">
+                                    r="3.5">
                             </circle>
 
-                            <path d="M4 21
-                                     c0-4.42 3.58-8 8-8
-                                     s8 3.58 8 8">
+                            <path d="M5 20c.8-3.4 3.1-5 7-5s6.2 1.6 7 5">
                             </path>
 
                         </svg>
@@ -435,16 +437,18 @@
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8">
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
 
-                            <path d="M9 21H5
-                                     a2 2 0 0 1-2-2V5
-                                     a2 2 0 0 1 2-2h4">
+                            <path d="M10 17l5-5-5-5">
                             </path>
 
-                            <path d="M16 17l5-5-5-5"></path>
+                            <path d="M15 12H3">
+                            </path>
 
-                            <path d="M21 12H9"></path>
+                            <path d="M21 19V5">
+                            </path>
 
                         </svg>
 
@@ -461,6 +465,7 @@
         </aside>
 
 
+
         <!-- =================================================
              MAIN CONTENT
              ================================================= -->
@@ -471,7 +476,7 @@
 
 
                 <!-- =================================================
-                     PAGE INTRO
+                     PAGE INTRODUCTION
                      ================================================= -->
 
                 <section class="dashboard-intro page-intro">
@@ -493,11 +498,12 @@
                 </section>
 
 
+
                 <!-- =================================================
                      CREATE REMINDER
                      ================================================= -->
 
-                <section class="goal-form-panel">
+                <section class="dashboard-panel goal-form-panel">
 
                     <div class="panel-heading">
 
@@ -597,7 +603,7 @@
                         </div>
 
 
-                        <!-- ACTION -->
+                        <!-- FORM ACTIONS -->
 
                         <div class="form-actions">
 
@@ -612,7 +618,7 @@
                         </div>
 
 
-                        <!-- MESSAGE -->
+                        <!-- FORM MESSAGE -->
 
                         <p id="reminderMessage"
                            class="form-message"
@@ -625,11 +631,12 @@
                 </section>
 
 
+
                 <!-- =================================================
                      REMINDERS LIST
                      ================================================= -->
 
-                <section class="goals-panel reminders-panel">
+                <section class="dashboard-panel goals-panel">
 
                     <div class="panel-heading">
 
@@ -676,26 +683,24 @@
 
             </div>
 
-
-            <!-- =================================================
-                 FOOTER
-                 ================================================= -->
-
-            <footer class="dashboard-footer">
-
-                <p>
-                    StudyTrack
-                </p>
-
-                <p>
-                    StudyTrack &copy; 2026
-                </p>
-
-            </footer>
-
         </main>
 
     </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="dashboard-footer">
+
+        <p>
+            StudyTrack &copy; 2026
+        </p>
+
+    </footer>
+
 
 
     <!-- =====================================================

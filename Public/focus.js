@@ -54,6 +54,128 @@ const logoutButton =
 
 
 // ========================================
+// DAY / NIGHT MODE ELEMENTS
+// ========================================
+
+const dayModeButton =
+    document.getElementById("dayModeButton");
+
+const nightModeButton =
+    document.getElementById("nightModeButton");
+
+
+// ========================================
+// APPLY SAVED THEME
+// ========================================
+
+function applySavedTheme() {
+
+    const savedTheme =
+        localStorage.getItem("studytrack-theme");
+
+
+    if (savedTheme === "night") {
+
+        document.body.classList.add(
+            "night-mode"
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            "night-mode"
+        );
+    }
+
+
+    updateThemeButtons();
+}
+
+
+// ========================================
+// UPDATE THEME BUTTONS
+// ========================================
+
+function updateThemeButtons() {
+
+    const nightModeActive =
+        document.body.classList.contains(
+            "night-mode"
+        );
+
+
+    if (dayModeButton) {
+
+        dayModeButton.classList.toggle(
+            "active",
+            !nightModeActive
+        );
+
+        dayModeButton.setAttribute(
+            "aria-pressed",
+            String(!nightModeActive)
+        );
+    }
+
+
+    if (nightModeButton) {
+
+        nightModeButton.classList.toggle(
+            "active",
+            nightModeActive
+        );
+
+        nightModeButton.setAttribute(
+            "aria-pressed",
+            String(nightModeActive)
+        );
+    }
+}
+
+
+// ========================================
+// SWITCH TO DAY MODE
+// ========================================
+
+function enableDayMode() {
+
+    document.body.classList.remove(
+        "night-mode"
+    );
+
+
+    localStorage.setItem(
+        "studytrack-theme",
+        "day"
+    );
+
+
+    updateThemeButtons();
+}
+
+
+// ========================================
+// SWITCH TO NIGHT MODE
+// ========================================
+
+function enableNightMode() {
+
+    document.body.classList.add(
+        "night-mode"
+    );
+
+
+    localStorage.setItem(
+        "studytrack-theme",
+        "night"
+    );
+
+
+    updateThemeButtons();
+}
+
+
+// ========================================
 // FORMAT TIMER
 // ========================================
 
@@ -64,6 +186,7 @@ function updateTimerDisplay() {
 
     const seconds =
         timerSeconds % 60;
+
 
     timerDisplay.textContent =
         String(minutes).padStart(2, "0") +
@@ -166,6 +289,7 @@ async function startFocusSession() {
             "Start Focus error:",
             error
         );
+
 
         focusMessage.textContent =
             "Could not connect to the server.";
@@ -439,6 +563,7 @@ async function completeFocusSession() {
             error
         );
 
+
         focusMessage.textContent =
             "Could not connect to the server.";
     }
@@ -591,12 +716,6 @@ async function loadFocusHistory() {
             return;
         }
 
-
-        // The server returns:
-        //
-        // {
-        //     focus_sessions: [...]
-        // }
 
         const sessions =
             Array.isArray(
@@ -794,8 +913,32 @@ logoutButton.addEventListener(
 
 
 // ========================================
+// DAY / NIGHT BUTTON EVENTS
+// ========================================
+
+if (dayModeButton) {
+
+    dayModeButton.addEventListener(
+        "click",
+        enableDayMode
+    );
+}
+
+
+if (nightModeButton) {
+
+    nightModeButton.addEventListener(
+        "click",
+        enableNightMode
+    );
+}
+
+
+// ========================================
 // INITIAL PAGE LOAD
 // ========================================
+
+applySavedTheme();
 
 updateTimerDisplay();
 

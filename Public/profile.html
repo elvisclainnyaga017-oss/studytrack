@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Manage your StudyTrack student profile."
+    >
+
+    <title>Profile | StudyTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="dashboard-header">
+
+        <div class="header-brand">
+
+            <div
+                class="brand-icon"
+                aria-hidden="true"
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M12 3v18"></path>
+                    <path d="M3 12h18"></path>
+                </svg>
+            </div>
+
+            <div class="brand-text">
+
+                <h1>StudyTrack</h1>
+
+                <p>
+                    Student Productivity System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <div class="header-user">
+
+                <span>
+                    Welcome,
+                    <strong id="userName">
+                        User
+                    </strong>
+                </span>
+
+                <p id="userEmail">
+                    Loading...
+                </p>
+
+            </div>
+
+
+            <div class="header-theme-control">
+
+                <div
+                    class="theme-switch"
+                    role="group"
+                    aria-label="Appearance"
+                >
+
+                    <button
+                        type="button"
+                        id="dayModeButton"
+                        class="theme-switch-button"
+                        aria-label="Switch to day mode"
+                        title="Day mode"
+                    >
+                        <span
+                            class="theme-switch-icon"
+                            aria-hidden="true"
+                        >
+                            ☀
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Day
+                        </span>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="nightModeButton"
+                        class="theme-switch-button"
+                        aria-label="Switch to night mode"
+                        title="Night mode"
+                    >
+                        <span
+                            class="theme-switch-icon"
+                            aria-hidden="true"
+                        >
+                            ☾
+                        </span>
+
+                        <span class="theme-switch-text">
+                            Night
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         PAGE LAYOUT
+    ====================================================== -->
+
+    <div class="dashboard-layout">
+
+
+        <!-- =================================================
+             SIDE NAVIGATION
+        ================================================== -->
+
+        <aside class="side-navigation">
+
+            <nav
+                class="sidebar-nav"
+                aria-label="Main navigation"
+            >
+
+                <!-- Dashboard -->
+
+                <a
+                    href="dashboard.html"
+                    class="sidebar-nav-link"
+                >
+
+                    <span
+                        class="nav-icon"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect
+                                x="3"
+                                y="3"
+                                width="7"
+                                height="7"
+                                rx="1"
+                            ></rect>
+
+                            <rect
+                                x="14"
+                                y="3"
+                                width="7"
+                                height="7"
+                                rx="1"
+                            ></rect>
+
+                            <rect
+                                x="3"
+                                y="14"
+                                width="7"
+                                height="7"
+                                rx="1"
+                            ></rect>
+
+                            <rect
+                                x="14"
+                                y="14"
+                                width="7"
+                                height="7"
+                                rx="1"
+                            ></rect>
+                        </svg>
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- Goals -->
+
+                <a
+                    href="goals.html"
+                    class="sidebar-nav-link"
+                >
+
+                    <span
+                        class="nav-icon"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="9"
+                            ></circle>
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="5"
+                            ></circle>
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="1"
+                            ></circle>
+                        </svg>
+                    </span>
+
+                    <span>
+                        Goals
+                    </span>
+
+                </a>
+
+
+                <!-- Habits -->
+
+                <a
+                    href="habits.html"
+                    class="sidebar-nav-link"
+                >
+
+                    <span
+                        class="nav-icon"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M20 6L9 17l-5-5"
+                            ></path>
+                        </svg>
+                    </span>
+
+                    <span>
+                        Habits
+                    </span>
+
+                </a>
+
+
+                <!-- Tasks -->
+
+                <a
+                    href="tasks.html"
+                    class="sidebar-nav-link"
+                >
+
+                    <span
+                        class="nav-icon"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect
+                                x="4"
+                                y="3"
+                                width="16"
+                                height="18"
+                                rx="2"
+                            ></rect>
+
+                            <path
+                                d="M8 8h8"
+                            ></path>
+
+                            <path
+                                d="M8 12h8"
+                            ></path>
+
+                            <path
+                                d="M8 16h5"
+                            ></path>
+                        </svg>
+                    </span>
+
+                    <span>
+                        Tasks
+                    </span>
+
+                </a>
+
+
+                <!-- Reminders -->
+
+                <a
+                    href="reminders.html"
+                    class="sidebar-nav-link"
+                >
+
+                    <span
+                        class="nav-icon"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+                            ></path>
+
+                            <path
+                                d="M10 21h4"
+                            ></path>
+                        </svg>
+                    </span>
+
+                    <span>
+                        Reminders
+                    </span>
+
+                </a>
+
+
+                <!-- Focus -->
+
+                <a
+                    href="focus.html"
+                    class="sidebar-nav-link"
+                >
+
+                    <span
+                        class="nav-icon"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="9"
+                            ></circle>
+
+                            <path
+                                d="M12 7v5l3 2"
+                            ></path>
+                        </svg>
+                    </span>
+
+                    <span>
+                        Focus
+                    </span>
+
+                </a>
+
+
+                <!-- Profile -->
+
+                <a
+                    href="profile.html"
+                    class="sidebar-nav-link active"
+                    aria-current="page"
+                >
+
+                    <span
+                        class="nav-icon"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="4"
+                            ></circle>
+
+                            <path
+                                d="M4 21a8 8 0 0 1 16 0"
+                            ></path>
+                        </svg>
+                    </span>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="sidebar-bottom">
+
+                <button
+                    type="button"
+                    id="logoutButton"
+                    class="logout-button"
+                >
+
+                    <span
+                        class="nav-icon"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M10 17l5-5-5-5"
+                            ></path>
+
+                            <path
+                                d="M15 12H3"
+                            ></path>
+
+                            <path
+                                d="M21 19V5a2 2 0 0 0-2-2h-6"
+                            ></path>
+                        </svg>
+                    </span>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
+
+        <main class="dashboard-main">
+
+            <div class="dashboard-container">
+
+
+                <!-- Page introduction -->
+
+                <section class="dashboard-intro page-intro">
+
+                    <span class="section-eyebrow">
+                        Profile
+                    </span>
+
+                    <h2>
+                        Your Profile
+                    </h2>
+
+                    <p>
+                        Manage your personal and academic
+                        information in StudyTrack.
+                    </p>
+
+                </section>
+
+
+                <!-- Profile information -->
+
+                <section class="dashboard-panel goal-form-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <h2>
+                                Personal Information
+                            </h2>
+
+                            <p>
+                                Keep your StudyTrack account
+                                information up to date.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <form
+                        id="profileForm"
+                        class="goal-form"
+                    >
+
+                        <!-- Full name -->
+
+                        <div class="form-group">
+
+                            <label for="fullName">
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="fullName"
+                                name="full_name"
+                                placeholder="Enter your full name"
+                                maxlength="100"
+                                required
+                            >
+
+                            <span class="form-help">
+                                This name is used throughout
+                                your StudyTrack account.
+                            </span>
+
+                        </div>
+
+
+                        <!-- Email -->
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Your email address"
+                                readonly
+                            >
+
+                            <span class="form-help">
+                                Your account email cannot be
+                                changed from this page.
+                            </span>
+
+                        </div>
+
+
+                        <!-- University -->
+
+                        <div class="form-group">
+
+                            <label for="university">
+                                University
+                            </label>
+
+                            <input
+                                type="text"
+                                id="university"
+                                name="university"
+                                placeholder="Enter your university"
+                                maxlength="150"
+                            >
+
+                        </div>
+
+
+                        <!-- Course -->
+
+                        <div class="form-group">
+
+                            <label for="course">
+                                Course
+                            </label>
+
+                            <input
+                                type="text"
+                                id="course"
+                                name="course"
+                                placeholder="Enter your course"
+                                maxlength="150"
+                            >
+
+                        </div>
+
+
+                        <!-- Avatar URL -->
+
+                        <div class="form-group full-width">
+
+                            <label for="avatarUrl">
+                                Profile Picture URL
+                            </label>
+
+                            <input
+                                type="url"
+                                id="avatarUrl"
+                                name="avatar_url"
+                                placeholder="https://example.com/profile-picture.jpg"
+                                maxlength="255"
+                            >
+
+                            <span class="form-help">
+                                You can add an image URL for
+                                your profile picture. Image
+                                uploading will be added separately.
+                            </span>
+
+                        </div>
+
+
+                        <!-- Save buttons -->
+
+                        <div class="form-actions">
+
+                            <button
+                                type="submit"
+                                id="saveProfileButton"
+                                class="primary-button"
+                            >
+                                Save Changes
+                            </button>
+
+                            <button
+                                type="button"
+                                id="resetProfileButton"
+                                class="secondary-button"
+                            >
+                                Reset
+                            </button>
+
+                        </div>
+
+
+                        <!-- Form message -->
+
+                        <div
+                            id="profileMessage"
+                            class="form-message"
+                            role="status"
+                            aria-live="polite"
+                        ></div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- Account information -->
+
+                <section class="dashboard-panel">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="section-eyebrow">
+                                Account
+                            </p>
+
+                            <h2>
+                                Account Information
+                            </h2>
+
+                            <p>
+                                Basic information about your
+                                StudyTrack account.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="empty-state">
+
+                        <h3 id="accountStatus">
+                            Profile information loaded
+                        </h3>
+
+                        <p id="accountDates">
+                            Your profile dates will appear here.
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="dashboard-footer">
+
+        <p>
+            StudyTrack &copy; 2026
+        </p>
+
+        <p>
+            Student Productivity System
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+         PROFILE JAVASCRIPT
+    ====================================================== -->
+
+    <script src="profile.js"></script>
+
+</body>
+
+</html>
