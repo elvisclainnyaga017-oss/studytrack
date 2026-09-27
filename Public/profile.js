@@ -82,6 +82,8 @@ let selectedProfilePicture = null;
 
 let profilePictureWasRemoved = false;
 
+let temporaryPreviewUrl = null;
+
 
 /* =========================================================
    MESSAGE
@@ -110,6 +112,27 @@ function clearMessage() {
 
 
 /* =========================================================
+   TEMPORARY PREVIEW URL
+   ========================================================= */
+
+function revokeTemporaryPreviewUrl() {
+
+    if (!temporaryPreviewUrl) {
+
+        return;
+
+    }
+
+    URL.revokeObjectURL(
+        temporaryPreviewUrl
+    );
+
+    temporaryPreviewUrl = null;
+
+}
+
+
+/* =========================================================
    PROFILE PICTURE PREVIEW
    ========================================================= */
 
@@ -117,22 +140,44 @@ function showProfilePicture(url) {
 
     if (!url) {
 
-        profilePicturePreview.src =
-            '';
-
-        profilePicturePreview.hidden =
-            true;
-
-        profilePicturePlaceholder.hidden =
-            false;
+        clearProfilePicturePreview();
 
         return;
 
     }
 
 
+    /*
+        Set the image source first.
+
+        The image load handler below determines
+        whether the image can actually be displayed.
+    */
+
+    profilePicturePreview.hidden =
+        true;
+
+    profilePicturePlaceholder.hidden =
+        true;
+
     profilePicturePreview.src =
         url;
+
+}
+
+
+/* =========================================================
+   PROFILE PICTURE LOAD SUCCESS
+   ========================================================= */
+
+function handleProfilePictureLoad() {
+
+    /*
+        The image loaded successfully.
+
+        Show the image and make sure the
+        placeholder is hidden.
+    */
 
     profilePicturePreview.hidden =
         false;
@@ -143,13 +188,56 @@ function showProfilePicture(url) {
 }
 
 
-function clearProfilePicturePreview() {
+/* =========================================================
+   PROFILE PICTURE LOAD ERROR
+   ========================================================= */
 
-    profilePicturePreview.src =
-        '';
+function handleProfilePictureError() {
+
+    /*
+        This is important.
+
+        If the saved image URL is broken or the
+        image cannot be loaded, do NOT allow the
+        browser to display the alt text.
+
+        Instead, hide the broken image and show
+        the normal placeholder.
+    */
 
     profilePicturePreview.hidden =
         true;
+
+    profilePicturePreview.removeAttribute(
+        'src'
+    );
+
+    profilePicturePlaceholder.hidden =
+        false;
+
+    console.warn(
+        'StudyTrack could not load the profile picture.'
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR PROFILE PICTURE PREVIEW
+   ========================================================= */
+
+function clearProfilePicturePreview() {
+
+    revokeTemporaryPreviewUrl();
+
+
+    profilePicturePreview.hidden =
+        true;
+
+    profilePicturePreview.removeAttribute(
+        'src'
+    );
+
 
     profilePicturePlaceholder.hidden =
         false;
@@ -237,6 +325,9 @@ async function loadProfile() {
    ========================================================= */
 
 function displayProfile(profile) {
+
+    revokeTemporaryPreviewUrl();
+
 
     fullNameInput.value =
         profile.full_name || '';
@@ -442,12 +533,20 @@ function handleProfilePictureSelection() {
         `Selected: ${file.name}`;
 
 
-    const previewUrl =
+    /*
+        Remove the old temporary preview URL
+        before creating a new one.
+    */
+
+    revokeTemporaryPreviewUrl();
+
+
+    temporaryPreviewUrl =
         URL.createObjectURL(file);
 
 
     showProfilePicture(
-        previewUrl
+        temporaryPreviewUrl
     );
 
 
@@ -1035,6 +1134,26 @@ profilePictureInput.addEventListener(
 removeProfilePictureButton.addEventListener(
     'click',
     removeProfilePicture
+);
+
+
+/*
+    Detect a broken saved image.
+
+    This prevents the browser from displaying
+    "Profile picture preview" if the image URL
+    cannot be loaded.
+*/
+
+profilePicturePreview.addEventListener(
+    'load',
+    handleProfilePictureLoad
+);
+
+
+profilePicturePreview.addEventListener(
+    'error',
+    handleProfilePictureError
 );
 
 
