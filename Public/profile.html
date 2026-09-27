@@ -1,4 +1,6 @@
+```html
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -20,6 +22,7 @@
         rel="stylesheet"
         href="style.css"
     >
+
 </head>
 
 <body>
@@ -531,9 +534,11 @@
                 </section>
 
 
-                <!-- Profile information -->
+                <!-- =================================================
+                     PERSONAL INFORMATION
+                ================================================== -->
 
-                <section class="dashboard-panel goal-form-panel">
+                <section class="dashboard-panel goal-form-panel profile-panel">
 
                     <div class="panel-heading">
 
@@ -572,6 +577,7 @@
                                 name="full_name"
                                 placeholder="Enter your full name"
                                 maxlength="100"
+                                autocomplete="name"
                                 required
                             >
 
@@ -596,6 +602,7 @@
                                 id="email"
                                 name="email"
                                 placeholder="Your email address"
+                                autocomplete="email"
                                 readonly
                             >
 
@@ -621,6 +628,7 @@
                                 name="university"
                                 placeholder="Enter your university"
                                 maxlength="150"
+                                autocomplete="organization"
                             >
 
                         </div>
@@ -645,27 +653,119 @@
                         </div>
 
 
-                        <!-- Avatar URL -->
+                        <!-- =================================================
+                             PROFILE PICTURE
+                        ================================================== -->
 
                         <div class="form-group full-width">
 
-                            <label for="avatarUrl">
-                                Profile Picture URL
+                            <label>
+                                Profile Picture
                             </label>
 
-                            <input
-                                type="url"
-                                id="avatarUrl"
-                                name="avatar_url"
-                                placeholder="https://example.com/profile-picture.jpg"
-                                maxlength="255"
-                            >
 
-                            <span class="form-help">
-                                You can add an image URL for
-                                your profile picture. Image
-                                uploading will be added separately.
-                            </span>
+                            <div class="profile-picture-section">
+
+                                <div class="profile-picture-area">
+
+
+                                    <!-- Picture preview -->
+
+                                    <div
+                                        class="profile-picture-visual"
+                                    >
+
+                                        <img
+                                            id="profilePicturePreview"
+                                            class="profile-picture-preview"
+                                            src=""
+                                            alt="Profile picture preview"
+                                            hidden
+                                        >
+
+                                        <div
+                                            id="profilePicturePlaceholder"
+                                            class="profile-picture-placeholder"
+                                            hidden
+                                        >
+                                            <span
+                                                aria-hidden="true"
+                                            >
+                                                👤
+                                            </span>
+
+                                            <span>
+                                                No profile picture
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Picture controls -->
+
+                                    <div class="profile-picture-details">
+
+                                        <h3>
+                                            Profile photo
+                                        </h3>
+
+                                        <p>
+                                            Add a profile picture to
+                                            personalize your StudyTrack
+                                            account.
+                                        </p>
+
+
+                                        <div class="profile-picture-actions">
+
+                                            <label
+                                                for="profilePictureInput"
+                                                class="profile-picture-input-label"
+                                            >
+                                                Choose Image
+                                            </label>
+
+
+                                            <input
+                                                type="file"
+                                                id="profilePictureInput"
+                                                name="avatar"
+                                                class="profile-picture-input"
+                                                accept="image/jpeg,image/png,image/webp"
+                                            >
+
+
+                                            <button
+                                                type="button"
+                                                id="removeProfilePictureButton"
+                                                class="secondary-button profile-picture-remove"
+                                            >
+                                                Remove Picture
+                                            </button>
+
+                                        </div>
+
+
+                                        <span
+                                            class="profile-picture-filename"
+                                        >
+                                            <span
+                                                id="selectedImageName"
+                                            ></span>
+                                        </span>
+
+
+                                        <span class="form-help">
+                                            JPG, PNG and WebP images
+                                            up to 5 MB are allowed.
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
 
                         </div>
 
@@ -707,9 +807,13 @@
                 </section>
 
 
-                <!-- Account information -->
+                <!-- =================================================
+                     ACCOUNT INFORMATION
+                ================================================== -->
 
-                <section class="dashboard-panel">
+                <section
+                    class="dashboard-panel profile-account-panel"
+                >
 
                     <div class="panel-heading">
 
@@ -733,15 +837,42 @@
                     </div>
 
 
-                    <div class="empty-state">
+                    <div class="profile-account-content">
 
-                        <h3 id="accountStatus">
-                            Profile information loaded
-                        </h3>
+                        <div class="profile-account-row">
 
-                        <p id="accountDates">
-                            Your profile dates will appear here.
-                        </p>
+
+                            <!-- Account status -->
+
+                            <div class="profile-account-item">
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong id="accountStatus">
+                                    Profile information loaded
+                                </strong>
+
+                            </div>
+
+
+                            <!-- Account dates -->
+
+                            <div class="profile-account-item">
+
+                                <span>
+                                    Profile activity
+                                </span>
+
+                                <strong id="accountDates">
+                                    Your profile dates will
+                                    appear here.
+                                </strong>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
@@ -780,3 +911,4 @@
 </body>
 
 </html>
+```

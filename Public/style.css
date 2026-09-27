@@ -1,14 +1,12 @@
+css
 /* =========================================================
    STUDYTRACK - MAIN STYLESHEET
    Accessible Productivity Color System
    Responsive Desktop, Tablet and Mobile Layout
    ========================================================= */
-
-
 /* =========================================================
    1. DESIGN TOKENS
    ========================================================= */
-
 :root {
     --page-background: #f4f7f8;
     --surface: #ffffff;
@@ -85,6 +83,17 @@ a {
 img,
 svg {
     max-width: 100%;
+}
+
+
+/*
+   IMPORTANT:
+   Elements with the HTML hidden attribute must remain hidden
+   even when another CSS rule sets display:flex or display:block.
+*/
+
+[hidden] {
+    display: none !important;
 }
 
 
@@ -1315,7 +1324,189 @@ svg {
 
 
 /* =========================================================
-   23. NIGHT MODE - COLOR TOKENS
+   23. PROFILE PAGE
+   Profile picture and personal information styling.
+   ========================================================= */
+
+.profile-picture-section {
+    width: 100%;
+    margin-top: 2px;
+}
+
+    .profile-picture-section > label {
+        margin-bottom: 10px;
+    }
+
+
+/* ---------------------------------------------------------
+   Profile picture layout
+   --------------------------------------------------------- */
+
+.profile-picture-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-picture-controls {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    gap: 10px 12px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-soft);
+}
+
+.profile-picture-preview {
+    width: 112px;
+    height: 112px;
+    flex: 0 0 112px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid var(--accent-border);
+    border-radius: 50%;
+    background: var(--surface-muted);
+    box-shadow: 0 5px 16px rgba(23, 35, 43, 0.08);
+    margin-bottom: 12px;
+}
+
+    .profile-picture-preview img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 50%;
+    }
+
+.profile-picture-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+    .profile-picture-placeholder span:first-child {
+        font-size: 27px;
+        line-height: 1;
+    }
+
+    .profile-picture-placeholder span:last-child {
+        max-width: 70px;
+    }
+
+
+/* ---------------------------------------------------------
+   Profile picture controls
+   --------------------------------------------------------- */
+
+.profile-picture-select {
+    width: fit-content;
+    min-width: 130px;
+}
+
+#removeProfilePictureButton {
+    width: fit-content;
+    min-width: 130px;
+    border-color: var(--danger-border);
+    color: var(--danger);
+}
+
+    #removeProfilePictureButton:hover:not(:disabled) {
+        border-color: var(--danger);
+        background: var(--danger-soft);
+        color: var(--danger);
+    }
+
+    #removeProfilePictureButton:disabled {
+        opacity: 0.45;
+    }
+
+#selectedImageName {
+    grid-column: 1 / -1;
+    min-height: 15px;
+    margin-top: 0;
+    color: var(--text-secondary);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+
+/* ---------------------------------------------------------
+   File input accessibility
+   --------------------------------------------------------- */
+
+#profilePictureInput:focus-visible + .profile-picture-select {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+
+/* ---------------------------------------------------------
+   Profile form
+   --------------------------------------------------------- */
+
+.profile-information-form {
+    padding: 24px;
+}
+
+.profile-account-panel {
+    overflow: hidden;
+}
+
+.profile-account-content {
+    padding: 24px;
+}
+
+.profile-account-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.profile-account-item {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-soft);
+}
+
+    .profile-account-item span {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--text-muted);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .profile-account-item strong {
+        display: block;
+        color: var(--text-primary);
+        font-size: 13px;
+        line-height: 1.4;
+        word-break: break-word;
+    }
+
+
+/* =========================================================
+   24. NIGHT MODE - COLOR TOKENS
    ========================================================= */
 
 body.night-mode {
@@ -1349,7 +1540,7 @@ body.night-mode {
 
 
     /* =========================================================
-   24. NIGHT MODE - GENERAL
+   25. NIGHT MODE - GENERAL
    ========================================================= */
 
     body.night-mode .dashboard-intro h2,
@@ -1360,7 +1551,8 @@ body.night-mode {
     body.night-mode .task-card-title h3,
     body.night-mode .reminder-content h3,
     body.night-mode .form-group label,
-    body.night-mode .empty-state h3 {
+    body.night-mode .empty-state h3,
+    body.night-mode .profile-account-item strong {
         color: var(--text-primary);
     }
 
@@ -1375,7 +1567,7 @@ body.night-mode {
 
 
     /* =========================================================
-   25. NIGHT MODE - SUMMARY CARDS
+   26. NIGHT MODE - SUMMARY CARDS
    ========================================================= */
 
     body.night-mode .summary-card {
@@ -1403,7 +1595,7 @@ body.night-mode {
 
 
     /* =========================================================
-   26. NIGHT MODE - PANELS
+   27. NIGHT MODE - PANELS
    ========================================================= */
 
     body.night-mode .dashboard-panel,
@@ -1421,7 +1613,7 @@ body.night-mode {
 
 
     /* =========================================================
-   27. NIGHT MODE - REMINDERS
+   28. NIGHT MODE - REMINDERS
    ========================================================= */
 
     body.night-mode .reminder-card {
@@ -1440,7 +1632,7 @@ body.night-mode {
 
 
     /* =========================================================
-   28. NIGHT MODE - FORM CONTROLS
+   29. NIGHT MODE - FORM CONTROLS
    ========================================================= */
 
     body.night-mode .form-group input,
@@ -1468,7 +1660,7 @@ body.night-mode {
 
 
     /* =========================================================
-   29. NIGHT MODE - BUTTONS
+   30. NIGHT MODE - BUTTONS
    ========================================================= */
 
     body.night-mode .secondary-button,
@@ -1487,7 +1679,7 @@ body.night-mode {
 
 
     /* =========================================================
-   30. NIGHT MODE - GOALS / TASKS
+   31. NIGHT MODE - GOALS / TASKS
    ========================================================= */
 
     body.night-mode .goal-card,
@@ -1511,7 +1703,7 @@ body.night-mode {
 
 
     /* =========================================================
-   31. NIGHT MODE - TABLES
+   32. NIGHT MODE - TABLES
    ========================================================= */
 
     body.night-mode .data-table th {
@@ -1534,7 +1726,7 @@ body.night-mode {
 
 
     /* =========================================================
-   32. NIGHT MODE - ALERTS
+   33. NIGHT MODE - ALERTS
    ========================================================= */
 
     body.night-mode .form-message.success {
@@ -1551,7 +1743,7 @@ body.night-mode {
 
 
     /* =========================================================
-   33. NIGHT MODE - FOOTER
+   34. NIGHT MODE - FOOTER
    ========================================================= */
 
     body.night-mode .dashboard-footer {
@@ -1565,8 +1757,54 @@ body.night-mode {
         }
 
 
+    /* =========================================================
+   35. NIGHT MODE - PROFILE
+   ========================================================= */
+
+    body.night-mode .profile-picture-controls {
+        background: var(--surface-soft);
+        border-color: var(--border);
+    }
+
+    body.night-mode .profile-picture-preview {
+        background: var(--surface-muted);
+        border-color: var(--accent-border);
+        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.28);
+    }
+
+    body.night-mode .profile-picture-placeholder {
+        background: var(--accent-soft);
+        border-color: var(--accent-border);
+        color: var(--accent);
+    }
+
+    body.night-mode #removeProfilePictureButton {
+        border-color: var(--danger-border);
+        color: var(--danger);
+    }
+
+        body.night-mode #removeProfilePictureButton:hover:not(:disabled) {
+            background: var(--danger-soft);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+    body.night-mode #selectedImageName {
+        color: var(--text-secondary);
+    }
+
+    body.night-mode .profile-account-item {
+        background: var(--surface-soft);
+        border-color: var(--border);
+    }
+
+        body.night-mode .profile-account-item span {
+            color: var(--text-muted);
+        }
+
+
 /* =========================================================
-   34. PAGE INTRO BADGE
+   36. PAGE INTRO BADGE
    ========================================================= */
 
 .page-intro .section-eyebrow {
@@ -1586,7 +1824,7 @@ body.night-mode {
 
 
 /* =========================================================
-   35. GOAL FORM PANEL
+   37. GOAL FORM PANEL
    ========================================================= */
 
 .goal-form-panel {
@@ -1611,7 +1849,7 @@ body.night-mode {
 
 
 /* =========================================================
-   36. GOAL FORM
+   38. GOAL FORM
    ========================================================= */
 
 .goal-form {
@@ -1628,7 +1866,7 @@ body.night-mode {
 
 
     /* =========================================================
-   37. GOAL FORM INPUT POLISH
+   39. GOAL FORM INPUT POLISH
    ========================================================= */
 
     .goal-form input,
@@ -1659,7 +1897,7 @@ body.night-mode {
 
 
 /* =========================================================
-   38. GOALS CONTAINER
+   40. GOALS CONTAINER
    ========================================================= */
 
 .goals-container {
@@ -1673,7 +1911,7 @@ body.night-mode {
 
 
 /* =========================================================
-   39. NIGHT MODE POLISH
+   41. NIGHT MODE POLISH
    ========================================================= */
 
 body.night-mode .page-intro .section-eyebrow {
@@ -1687,342 +1925,219 @@ body.night-mode .goals-panel .panel-heading {
     border-bottom-color: var(--border-soft);
 }
 
-body.night-mode .empty-state p {
-    color: var(--text-muted);
+body.night-mode .empty-state {
+    color: var(--text-primary);
 }
 
 
 /* =========================================================
-   40. FOCUS PAGE
+   42. RESPONSIVE - LARGE TABLETS
    ========================================================= */
 
-/*
-   Focus uses the same panel system as Goals, Habits,
-   Tasks and Reminders.
-
-   The timer receives a larger visual treatment because
-   it is the main action on this page.
-*/
-
-.focus-panel {
-    overflow: hidden;
-}
-
-.focus-timer-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 42px 24px 38px;
-    text-align: center;
-}
-
-.focus-timer {
-    width: min(100%, 420px);
-    margin-bottom: 28px;
-    padding: 30px 24px;
-    border: 1px solid var(--accent-border);
-    border-radius: 16px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: clamp(56px, 8vw, 82px);
-    line-height: 1;
-    font-weight: 800;
-    letter-spacing: 0.03em;
-    font-variant-numeric: tabular-nums;
-}
-
-.focus-controls {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-    .focus-controls .primary-button,
-    .focus-controls .secondary-button {
-        min-width: 130px;
-    }
-
-.focus-panel .form-message {
-    width: min(100%, 600px);
-    margin: 20px 0 0;
-}
-
-
-/* =========================================================
-   41. FOCUS SESSION HISTORY
-   ========================================================= */
-
-.focus-history-panel {
-    overflow: hidden;
-}
-
-.focus-history {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-    padding: 24px;
-}
-
-.focus-history-item {
-    min-width: 0;
-    padding: 20px;
-    background: var(--surface-soft);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-    .focus-history-item:hover {
-        border-color: var(--accent-border);
-        box-shadow: var(--shadow-soft);
-    }
-
-    .focus-history-item strong {
-        display: block;
-        margin-bottom: 12px;
-        color: var(--text-primary);
-        font-size: 15px;
-        line-height: 1.3;
-    }
-
-    .focus-history-item p {
-        margin-top: 6px;
-        color: var(--text-secondary);
-        font-size: 11px;
-    }
-
-        .focus-history-item p:first-of-type {
-            margin-top: 0;
-        }
-
-.focus-history > .empty-state {
-    grid-column: 1 / -1;
-    padding: 30px 20px;
-}
-
-
-/* =========================================================
-   42. NIGHT MODE - FOCUS
-   ========================================================= */
-
-body.night-mode .focus-timer {
-    background: var(--accent-soft);
-    border-color: var(--accent-border);
-    color: var(--accent);
-}
-
-body.night-mode .focus-history-item {
-    background: var(--surface-soft);
-    border-color: var(--border);
-}
-
-    body.night-mode .focus-history-item:hover {
-        border-color: var(--accent-border);
-    }
-
-    body.night-mode .focus-history-item strong {
-        color: var(--text-primary);
-    }
-
-    body.night-mode .focus-history-item p {
-        color: var(--text-secondary);
-    }
-
-
-/* =========================================================
-   43. RESPONSIVE - TABLET / SMALL DESKTOP
-   ========================================================= */
-
-@media (max-width: 1050px) {
-
+@media (max-width: 1200px) {
     .summary-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .dashboard-main {
-        padding: 28px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+
+/* =========================================================
+   43. RESPONSIVE - TABLETS
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .dashboard-header {
+        padding: 0 18px;
     }
 
-    .focus-history {
+    .side-navigation {
+        width: 210px;
+    }
+
+    .dashboard-main {
+        margin-left: 210px;
+        padding: 32px 24px 42px;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .goal-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .profile-account-row {
         grid-template-columns: 1fr;
     }
 }
 
 
 /* =========================================================
-   44. RESPONSIVE - TABLET
+   44. RESPONSIVE - SMALL TABLETS / LARGE PHONES
    ========================================================= */
 
-@media (max-width: 800px) {
-
+@media (max-width: 720px) {
     .dashboard-header {
-        min-height: 68px;
-        padding: 0 18px;
-    }
-
-    .header-user {
-        display: none;
-    }
-
-    .side-navigation {
-        width: 220px;
-        top: 68px;
-    }
-
-    .dashboard-layout {
-        padding-top: 68px;
-    }
-
-    .dashboard-main {
-        margin-left: 220px;
-        padding: 26px 22px 40px;
-    }
-
-    .dashboard-footer {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .summary-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .goal-card,
-    .task-card,
-    .reminder-card {
-        padding: 20px;
-    }
-
-    .goal-card-header,
-    .task-card-header {
-        gap: 14px;
-    }
-
-    .focus-timer-container {
-        padding: 34px 20px 32px;
-    }
-
-    .focus-timer {
-        max-width: 360px;
-    }
-
-    .focus-controls .primary-button,
-    .focus-controls .secondary-button {
-        min-width: 120px;
-    }
-}
-
-
-/* =========================================================
-   45. RESPONSIVE - MOBILE
-   ========================================================= */
-
-@media (max-width: 600px) {
-
-    .dashboard-header {
-        position: fixed;
         min-height: 64px;
-        padding: 0 12px;
+        padding: 0 14px;
     }
 
     .dashboard-layout {
         padding-top: 64px;
     }
 
-    .header-brand {
-        gap: 8px;
+    .side-navigation {
+        top: 64px;
+        width: 68px;
     }
 
-    .brand-icon {
-        width: 34px;
-        height: 34px;
-        border-radius: 9px;
+    .sidebar-nav {
+        padding: 16px 9px;
     }
 
-        .brand-icon svg {
-            width: 18px;
-            height: 18px;
+    .sidebar-nav-link {
+        justify-content: center;
+        padding: 10px 8px;
+    }
+
+        .sidebar-nav-link span:not(.nav-icon) {
+            display: none;
         }
+
+        .sidebar-nav-link .nav-icon {
+            margin: 0;
+        }
+
+    .logout-button {
+        justify-content: center;
+        padding: 10px 8px;
+    }
+
+        .logout-button span:not(.nav-icon) {
+            display: none;
+        }
+
+    .dashboard-main {
+        margin-left: 68px;
+        padding: 28px 18px 38px;
+    }
+
+    .header-user {
+        display: none;
+    }
+
+    .header-theme-control {
+        padding: 3px;
+    }
+
+    .theme-switch-button {
+        min-height: 30px;
+        padding: 5px 8px;
+    }
+
+    .dashboard-intro h2 {
+        font-size: 25px;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .panel-heading {
+        padding: 20px;
+    }
+
+    .goal-card,
+    .task-card,
+    .reminder-card {
+        margin-left: 16px;
+        margin-right: 16px;
+        padding: 18px;
+    }
+
+    .profile-information-form,
+    .profile-account-content {
+        padding: 18px;
+    }
+
+    .profile-picture-controls {
+        grid-template-columns: 1fr;
+    }
+
+    #selectedImageName {
+        grid-column: auto;
+    }
+
+    .dashboard-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+
+        .dashboard-footer p {
+            justify-content: center !important;
+            min-height: 42px;
+            padding: 10px 16px;
+        }
+}
+
+
+/* =========================================================
+   45. RESPONSIVE - PHONES
+   ========================================================= */
+
+@media (max-width: 520px) {
+    body {
+        font-size: 13px;
+    }
+
+    .dashboard-header {
+        min-height: 60px;
+    }
+
+    .dashboard-layout {
+        padding-top: 60px;
+    }
+
+    .side-navigation {
+        top: 60px;
+    }
+
+    .dashboard-main {
+        margin-left: 68px;
+        padding: 24px 12px 32px;
+    }
+
+    .brand-text p {
+        display: none;
+    }
 
     .header-brand h1 {
         font-size: 15px;
     }
 
-    .header-brand p {
-        font-size: 9px;
-    }
-
-    .header-theme-control {
-        gap: 2px;
-        padding: 3px;
-    }
-
-    .theme-switch-button {
-        min-height: 29px;
-        padding: 5px 7px;
+    .brand-icon {
+        width: 34px;
+        height: 34px;
     }
 
     .theme-switch-text {
         display: none;
     }
 
-    .side-navigation {
-        position: static;
-        width: 100%;
-        height: auto;
-        display: block;
-        border-right: 0;
-        border-bottom: 1px solid #2f3b3f;
-        overflow: visible;
-    }
-
-    .sidebar-nav {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 5px;
-        padding: 10px;
-    }
-
-    .sidebar-nav-link {
-        min-height: 42px;
-        justify-content: center;
-        flex-direction: column;
-        gap: 3px;
-        margin-bottom: 0;
-        padding: 6px;
-        font-size: 9px;
-        text-align: center;
-    }
-
-    .nav-icon {
-        width: 18px;
-        height: 18px;
-    }
-
-        .nav-icon svg {
-            width: 16px;
-            height: 16px;
-        }
-
-    .sidebar-bottom {
-        padding: 8px 10px;
-        border-top: 1px solid #2f3b3f;
-    }
-
-    .logout-button {
-        min-height: 38px;
-        justify-content: center;
-        padding: 7px;
-        font-size: 10px;
-    }
-
-    .dashboard-main {
-        margin-left: 0;
-        padding: 24px 14px 34px;
+    .theme-switch-button {
+        width: 34px;
+        padding: 5px;
     }
 
     .dashboard-intro {
@@ -2030,211 +2145,15 @@ body.night-mode .focus-history-item {
     }
 
         .dashboard-intro h2 {
-            font-size: 25px;
+            font-size: 22px;
         }
 
         .dashboard-intro p:last-child {
-            font-size: 13px;
+            font-size: 12px;
         }
-
-    .summary-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
 
     .summary-card {
-        padding: 17px;
-    }
-
-    .dashboard-panel,
-    .goal-form-panel,
-    .goals-panel {
-        border-radius: 10px;
-        margin-bottom: 18px;
-    }
-
-    .panel-heading {
-        padding: 19px;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .goal-form {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 19px;
-    }
-
-    .form-group.full-width {
-        grid-column: auto;
-    }
-
-    .form-actions {
-        grid-column: auto;
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .primary-button,
-    .secondary-button {
-        width: 100%;
-    }
-
-    .goal-card,
-    .task-card {
-        margin: 0 12px 12px;
-        padding: 17px;
-    }
-
-    .reminder-card {
-        margin: 0 12px 12px;
-        padding: 17px;
-        gap: 12px;
-    }
-
-    .goal-card-header,
-    .task-card-header {
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-
-    .goal-status {
-        align-self: flex-start;
-    }
-
-    .goal-meta,
-    .task-meta {
-        gap: 8px 12px;
-    }
-
-    .goal-actions,
-    .task-actions {
-        gap: 7px;
-    }
-
-    .goal-action-button {
-        flex: 1 1 auto;
-    }
-
-    .reminder-status-select {
-        min-width: 125px;
-    }
-
-
-    /* =====================================================
-       MOBILE FOCUS
-       ===================================================== */
-
-    .focus-timer-container {
-        padding: 28px 16px 26px;
-    }
-
-    .focus-timer {
-        width: 100%;
-        margin-bottom: 22px;
-        padding: 28px 16px;
-        border-radius: 14px;
-        font-size: clamp(48px, 16vw, 68px);
-    }
-
-    .focus-controls {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-    }
-
-        .focus-controls .primary-button,
-        .focus-controls .secondary-button {
-            width: 100%;
-            min-width: 0;
-        }
-
-    .focus-panel .form-message {
-        width: 100%;
-        margin-top: 16px;
-    }
-
-    .focus-history {
-        grid-template-columns: 1fr;
-        gap: 10px;
         padding: 16px;
-    }
-
-    .focus-history-item {
-        padding: 16px;
-    }
-
-
-    /*
-       On mobile the footer becomes a vertical stack so that
-       the text remains readable on narrow screens.
-    */
-
-    .dashboard-footer {
-        width: 100%;
-        min-height: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
-        margin-left: 0;
-        background: #ffffff;
-    }
-
-        .dashboard-footer p {
-            width: 100%;
-            min-height: auto;
-            padding: 11px 16px;
-            background: #ffffff;
-            color: #17232b;
-        }
-
-            .dashboard-footer p:first-child,
-            .dashboard-footer p:last-child {
-                justify-content: flex-start;
-            }
-}
-
-
-/* =========================================================
-   46. RESPONSIVE - VERY SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 420px) {
-
-    .dashboard-header {
-        padding: 0 9px;
-    }
-
-    .header-brand p,
-    .brand-icon {
-        display: none;
-    }
-
-    .header-brand h1 {
-        font-size: 14px;
-    }
-
-    .sidebar-nav {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .dashboard-main {
-        padding: 20px 10px 28px;
-    }
-
-    .dashboard-intro h2 {
-        font-size: 22px;
-    }
-
-    .summary-card {
-        padding: 15px;
-    }
-
-    .summary-card-icon {
-        width: 37px;
-        height: 37px;
     }
 
     .summary-card-content strong {
@@ -2242,36 +2161,46 @@ body.night-mode .focus-history-item {
     }
 
     .panel-heading {
-        padding: 16px;
+        padding: 17px;
     }
 
+        .panel-heading h2,
+        .panel-heading h3 {
+            font-size: 17px;
+        }
+
     .goal-form {
-        padding: 16px;
+        padding: 17px;
+        gap: 16px;
     }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+        .form-actions .primary-button,
+        .form-actions .secondary-button {
+            width: 100%;
+        }
 
     .goal-card,
     .task-card,
     .reminder-card {
-        margin-left: 9px;
-        margin-right: 9px;
-        padding: 15px;
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 16px;
     }
 
-    .reminder-card {
+    .goal-card-header,
+    .task-card-header {
         flex-direction: column;
+        gap: 12px;
     }
 
-    .reminder-icon {
-        width: 36px;
-        height: 36px;
-    }
-
-    .reminder-date {
-        line-height: 1.6;
-    }
-
-    .goal-action-button {
-        width: 100%;
+    .goal-status,
+    .task-badges {
+        align-self: flex-start;
     }
 
     .task-status-control {
@@ -2284,48 +2213,24 @@ body.night-mode .focus-history-item {
         width: 100%;
     }
 
-
-    /* =====================================================
-       VERY SMALL FOCUS
-       ===================================================== */
-
-    .focus-timer-container {
-        padding: 22px 12px 22px;
+    .profile-picture-preview {
+        width: 100px;
+        height: 100px;
+        flex-basis: 100px;
     }
 
-    .focus-timer {
-        padding: 25px 12px;
-        font-size: 46px;
-    }
-
-    .focus-history {
-        padding: 12px;
-    }
-
-    .focus-history-item {
-        padding: 14px;
-    }
-
-    .dashboard-footer {
+    .profile-picture-select,
+    #removeProfilePictureButton {
         width: 100%;
-        margin-left: 0;
     }
-
-        .dashboard-footer p {
-            width: 100%;
-            font-size: 9px;
-            background: #ffffff;
-            color: #17232b;
-        }
 }
 
 
 /* =========================================================
-   47. REDUCED MOTION
+   46. REDUCED MOTION
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-
     html {
         scroll-behavior: auto;
     }
@@ -2338,3 +2243,5 @@ body.night-mode .focus-history-item {
         animation-iteration-count: 1 !important;
     }
 }
+
+

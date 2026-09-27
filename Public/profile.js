@@ -22,14 +22,30 @@ const universityInput =
 const courseInput =
     document.getElementById('course');
 
-const avatarUrlInput =
-    document.getElementById('avatarUrl');
+const profilePictureInput =
+    document.getElementById('profilePictureInput');
+
+const profilePicturePreview =
+    document.getElementById('profilePicturePreview');
+
+const profilePicturePlaceholder =
+    document.getElementById('profilePicturePlaceholder');
+
+const selectedImageName =
+    document.getElementById('selectedImageName');
+
+const removeProfilePictureButton =
+    document.getElementById(
+        'removeProfilePictureButton'
+    );
 
 const saveProfileButton =
     document.getElementById('saveProfileButton');
 
 const resetProfileButton =
-    document.getElementById('resetProfileButton');
+    document.getElementById(
+        'resetProfileButton'
+    );
 
 const profileMessage =
     document.getElementById('profileMessage');
@@ -62,6 +78,10 @@ const accountDates =
 
 let originalProfile = null;
 
+let selectedProfilePicture = null;
+
+let profilePictureWasRemoved = false;
+
 
 /* =========================================================
    MESSAGE
@@ -69,7 +89,8 @@ let originalProfile = null;
 
 function showMessage(message, type) {
 
-    profileMessage.textContent = message;
+    profileMessage.textContent =
+        message;
 
     profileMessage.className =
         `form-message show ${type}`;
@@ -79,10 +100,59 @@ function showMessage(message, type) {
 
 function clearMessage() {
 
-    profileMessage.textContent = '';
+    profileMessage.textContent =
+        '';
 
     profileMessage.className =
         'form-message';
+
+}
+
+
+/* =========================================================
+   PROFILE PICTURE PREVIEW
+   ========================================================= */
+
+function showProfilePicture(url) {
+
+    if (!url) {
+
+        profilePicturePreview.src =
+            '';
+
+        profilePicturePreview.hidden =
+            true;
+
+        profilePicturePlaceholder.hidden =
+            false;
+
+        return;
+
+    }
+
+
+    profilePicturePreview.src =
+        url;
+
+    profilePicturePreview.hidden =
+        false;
+
+    profilePicturePlaceholder.hidden =
+        true;
+
+}
+
+
+function clearProfilePicturePreview() {
+
+    profilePicturePreview.src =
+        '';
+
+    profilePicturePreview.hidden =
+        true;
+
+    profilePicturePlaceholder.hidden =
+        false;
 
 }
 
@@ -100,6 +170,7 @@ async function loadProfile() {
         const response =
             await fetch('/api/profile');
 
+
         const data =
             await response.json();
 
@@ -114,6 +185,7 @@ async function loadProfile() {
                 return;
 
             }
+
 
             throw new Error(
                 data.message ||
@@ -148,6 +220,7 @@ async function loadProfile() {
             error
         );
 
+
         showMessage(
             error.message ||
             'Unable to load profile.',
@@ -177,15 +250,44 @@ function displayProfile(profile) {
     courseInput.value =
         profile.course || '';
 
-    avatarUrlInput.value =
-        profile.avatar_url || '';
-
 
     userName.textContent =
         profile.full_name || 'User';
 
     userEmail.textContent =
         profile.email || '';
+
+
+    if (profile.avatar_url) {
+
+        showProfilePicture(
+            profile.avatar_url
+        );
+
+    } else {
+
+        clearProfilePicturePreview();
+
+    }
+
+
+    selectedProfilePicture =
+        null;
+
+    profilePictureWasRemoved =
+        false;
+
+
+    profilePictureInput.value =
+        '';
+
+    selectedImageName.textContent =
+        '';
+
+
+    updateRemoveButton(
+        Boolean(profile.avatar_url)
+    );
 
 
     updateAccountInformation(
@@ -236,6 +338,284 @@ function updateAccountInformation(profile) {
 
 
 /* =========================================================
+   UPDATE REMOVE BUTTON
+   ========================================================= */
+
+function updateRemoveButton(hasPicture) {
+
+    removeProfilePictureButton.disabled =
+        !hasPicture &&
+        !selectedProfilePicture;
+
+}
+
+
+/* =========================================================
+   SELECT PROFILE PICTURE
+   ========================================================= */
+
+function handleProfilePictureSelection() {
+
+    const file =
+        profilePictureInput.files[0];
+
+
+    if (!file) {
+
+        selectedProfilePicture =
+            null;
+
+        selectedImageName.textContent =
+            '';
+
+        updateRemoveButton(
+            Boolean(
+                originalProfile &&
+                originalProfile.avatar_url
+            )
+        );
+
+        return;
+
+    }
+
+
+    const allowedTypes = [
+        'image/jpeg',
+        'image/png',
+        'image/webp'
+    ];
+
+
+    if (
+        !allowedTypes.includes(
+            file.type
+        )
+    ) {
+
+        profilePictureInput.value =
+            '';
+
+        selectedProfilePicture =
+            null;
+
+        showMessage(
+            'Please choose a JPG, PNG or WebP image.',
+            'error'
+        );
+
+        return;
+
+    }
+
+
+    const maximumSize =
+        5 * 1024 * 1024;
+
+
+    if (file.size > maximumSize) {
+
+        profilePictureInput.value =
+            '';
+
+        selectedProfilePicture =
+            null;
+
+        showMessage(
+            'Profile picture must be 5 MB or smaller.',
+            'error'
+        );
+
+        return;
+
+    }
+
+
+    selectedProfilePicture =
+        file;
+
+    profilePictureWasRemoved =
+        false;
+
+
+    selectedImageName.textContent =
+        `Selected: ${file.name}`;
+
+
+    const previewUrl =
+        URL.createObjectURL(file);
+
+
+    showProfilePicture(
+        previewUrl
+    );
+
+
+    updateRemoveButton(
+        true
+    );
+
+
+    clearMessage();
+
+}
+
+
+/* =========================================================
+   UPLOAD PROFILE PICTURE
+   ========================================================= */
+
+async function uploadProfilePicture() {
+
+    if (!selectedProfilePicture) {
+
+        return null;
+
+    }
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        'avatar',
+        selectedProfilePicture
+    );
+
+
+    const response =
+        await fetch(
+            '/api/profile/avatar',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+
+    const data =
+        await response.json();
+
+
+    if (!response.ok) {
+
+        if (response.status === 401) {
+
+            window.location.href =
+                'login.html';
+
+            return null;
+
+        }
+
+
+        throw new Error(
+            data.message ||
+            'Failed to upload profile picture'
+        );
+
+    }
+
+
+    return data.avatar_url;
+
+}
+
+
+/* =========================================================
+   REMOVE PROFILE PICTURE
+   ========================================================= */
+
+async function removeProfilePicture() {
+
+    const hasSavedPicture =
+        Boolean(
+            originalProfile &&
+            originalProfile.avatar_url
+        );
+
+
+    const hasNewPicture =
+        Boolean(
+            selectedProfilePicture
+        );
+
+
+    if (
+        !hasSavedPicture &&
+        !hasNewPicture
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+        If the user has only selected a new image
+        and it has not been uploaded yet, simply
+        cancel the selection.
+    */
+
+    if (
+        !hasSavedPicture &&
+        hasNewPicture
+    ) {
+
+        selectedProfilePicture =
+            null;
+
+        profilePictureInput.value =
+            '';
+
+        selectedImageName.textContent =
+            '';
+
+        clearProfilePicturePreview();
+
+        updateRemoveButton(
+            false
+        );
+
+        return;
+
+    }
+
+
+    /*
+        If the picture is already saved, mark it
+        for deletion. The actual deletion happens
+        when the user saves the profile.
+    */
+
+    selectedProfilePicture =
+        null;
+
+    profilePictureInput.value =
+        '';
+
+    selectedImageName.textContent =
+        '';
+
+    profilePictureWasRemoved =
+        true;
+
+    clearProfilePicturePreview();
+
+    updateRemoveButton(
+        false
+    );
+
+    showMessage(
+        'Profile picture will be removed when you save your changes.',
+        'success'
+    );
+
+}
+
+
+/* =========================================================
    SAVE PROFILE
    ========================================================= */
 
@@ -255,9 +635,6 @@ async function saveProfile(event) {
     const course =
         courseInput.value.trim();
 
-    const avatarUrl =
-        avatarUrlInput.value.trim();
-
 
     if (!fullName) {
 
@@ -276,13 +653,20 @@ async function saveProfile(event) {
     saveProfileButton.disabled =
         true;
 
+    resetProfileButton.disabled =
+        true;
+
     saveProfileButton.textContent =
         'Saving...';
 
 
     try {
 
-        const response =
+        /*
+            First save the normal profile information.
+        */
+
+        const profileResponse =
             await fetch(
                 '/api/profile',
                 {
@@ -301,22 +685,22 @@ async function saveProfile(event) {
                             university,
 
                         course:
-                            course,
-
-                        avatar_url:
-                            avatarUrl
+                            course
                     })
                 }
             );
 
 
-        const data =
-            await response.json();
+        const profileData =
+            await profileResponse.json();
 
 
-        if (!response.ok) {
+        if (!profileResponse.ok) {
 
-            if (response.status === 401) {
+            if (
+                profileResponse.status ===
+                401
+            ) {
 
                 window.location.href =
                     'login.html';
@@ -325,29 +709,91 @@ async function saveProfile(event) {
 
             }
 
+
             throw new Error(
-                data.message ||
+                profileData.message ||
                 'Failed to update profile'
             );
 
         }
 
 
-        if (!data.profile) {
+        /*
+            If the user selected a new picture,
+            upload it now.
+        */
+
+        if (selectedProfilePicture) {
+
+            await uploadProfilePicture();
+
+        }
+
+
+        /*
+            If the user asked to remove the
+            existing picture, remove it now.
+        */
+
+        if (profilePictureWasRemoved) {
+
+            const removeResponse =
+                await fetch(
+                    '/api/profile/avatar',
+                    {
+                        method: 'DELETE'
+                    }
+                );
+
+
+            const removeData =
+                await removeResponse.json();
+
+
+            if (!removeResponse.ok) {
+
+                throw new Error(
+                    removeData.message ||
+                    'Failed to remove profile picture'
+                );
+
+            }
+
+        }
+
+
+        /*
+            Reload the profile so that the
+            database values become the new
+            original values.
+        */
+
+        const updatedResponse =
+            await fetch(
+                '/api/profile'
+            );
+
+
+        const updatedData =
+            await updatedResponse.json();
+
+
+        if (!updatedResponse.ok) {
 
             throw new Error(
-                'Updated profile was not returned'
+                updatedData.message ||
+                'Profile was saved but could not be reloaded'
             );
 
         }
 
 
         originalProfile =
-            data.profile;
+            updatedData.profile;
 
 
         displayProfile(
-            data.profile
+            updatedData.profile
         );
 
 
@@ -364,6 +810,7 @@ async function saveProfile(event) {
             error
         );
 
+
         showMessage(
             error.message ||
             'Unable to update profile.',
@@ -374,6 +821,9 @@ async function saveProfile(event) {
     } finally {
 
         saveProfileButton.disabled =
+            false;
+
+        resetProfileButton.disabled =
             false;
 
         saveProfileButton.textContent =
@@ -531,6 +981,7 @@ async function logout() {
             error
         );
 
+
         showMessage(
             'Unable to log out. Please try again.',
             'error'
@@ -572,6 +1023,18 @@ dayModeButton.addEventListener(
 nightModeButton.addEventListener(
     'click',
     enableNightMode
+);
+
+
+profilePictureInput.addEventListener(
+    'change',
+    handleProfilePictureSelection
+);
+
+
+removeProfilePictureButton.addEventListener(
+    'click',
+    removeProfilePicture
 );
 
 
