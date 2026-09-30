@@ -1,83 +1,100 @@
-// =========================================================
-// STUDYTRACK - HABITS PAGE
-// =========================================================
+/* =========================================================
+   STUDYTRACK - HABITS PAGE
+   ========================================================= */
 
+/* =========================================================
+   PAGE ELEMENTS
+   ========================================================= */
 
-// =========================================================
-// PAGE ELEMENTS
-// =========================================================
+const habitForm = document.getElementById('habitForm');
+const habitMessage = document.getElementById('habitMessage');
+const habitsContainer = document.getElementById('habitsContainer');
+const logoutButton = document.getElementById('logoutButton');
+const userName = document.getElementById('userName');
+const userEmail = document.getElementById('userEmail');
+const dayModeButton = document.getElementById('dayModeButton');
+const nightModeButton = document.getElementById('nightModeButton');
+const habitStartDate = document.getElementById('habitStartDate');
 
-const habitForm =
-    document.getElementById('habitForm');
+/* =========================================================
+   NAVIGATION ELEMENTS
+   ========================================================= */
 
-const habitMessage =
-    document.getElementById('habitMessage');
+var mobileMenuButton = document.getElementById('mobileMenuButton');
+var studyTrackSidebar = document.getElementById('studyTrackSidebar');
+var mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
 
-const habitsContainer =
-    document.getElementById('habitsContainer');
+/* =========================================================
+   DESKTOP SIDEBAR COLLAPSE
+   ========================================================= */
 
-const logoutButton =
-    document.getElementById('logoutButton');
+function setDesktopSidebarCollapsed(collapsed) {
 
-const userName =
-    document.getElementById('userName');
+    if (!studyTrackSidebar) {
+        return;
+    }
 
-const userEmail =
-    document.getElementById('userEmail');
+    if (window.innerWidth <= 720) {
+        return;
+    }
 
-const dayModeButton =
-    document.getElementById('dayModeButton');
+    document.body.classList.toggle(
+        'desktop-sidebar-collapsed',
+        collapsed
+    );
 
-const nightModeButton =
-    document.getElementById('nightModeButton');
+    if (mobileMenuButton) {
 
-const habitStartDate =
-    document.getElementById('habitStartDate');
+        mobileMenuButton.classList.toggle(
+            'menu-open',
+            !collapsed
+        );
 
+        mobileMenuButton.setAttribute(
+            'aria-expanded',
+            String(!collapsed)
+        );
 
-// =========================================================
-// MOBILE HAMBURGER MENU
-// =========================================================
+        mobileMenuButton.setAttribute(
+            'aria-label',
+            collapsed
+                ? 'Expand navigation menu'
+                : 'Collapse navigation menu'
+        );
 
-const mobileMenuButton =
-    document.getElementById('mobileMenuButton');
+        mobileMenuButton.setAttribute(
+            'title',
+            collapsed
+                ? 'Expand navigation menu'
+                : 'Collapse navigation menu'
+        );
+    }
+}
 
-const studyTrackSidebar =
-    document.getElementById('studyTrackSidebar');
-
-const mobileMenuOverlay =
-    document.getElementById('mobileMenuOverlay');
-
+/* =========================================================
+   MOBILE SIDEBAR MENU
+   ========================================================= */
 
 function setMobileMenu(open) {
 
-    if (
-        !mobileMenuButton ||
-        !studyTrackSidebar
-    ) {
-
+    if (!mobileMenuButton || !studyTrackSidebar) {
         return;
-
     }
-
 
     studyTrackSidebar.classList.toggle(
         'mobile-menu-open',
         open
     );
 
-
     mobileMenuButton.classList.toggle(
         'menu-open',
         open
     );
 
-
     mobileMenuButton.setAttribute(
         'aria-expanded',
         String(open)
     );
-
 
     mobileMenuButton.setAttribute(
         'aria-label',
@@ -86,14 +103,12 @@ function setMobileMenu(open) {
             : 'Open navigation menu'
     );
 
-
     mobileMenuButton.setAttribute(
         'title',
         open
             ? 'Close navigation menu'
             : 'Open navigation menu'
     );
-
 
     if (mobileMenuOverlay) {
 
@@ -102,22 +117,21 @@ function setMobileMenu(open) {
             open
         );
 
-
         mobileMenuOverlay.setAttribute(
             'aria-hidden',
             String(!open)
         );
-
     }
-
 
     document.body.classList.toggle(
         'mobile-menu-active',
         open
     );
-
 }
 
+/* =========================================================
+   HAMBURGER BUTTON
+   ========================================================= */
 
 if (mobileMenuButton) {
 
@@ -125,42 +139,50 @@ if (mobileMenuButton) {
         'click',
         function () {
 
-            const isOpen =
-                mobileMenuButton.classList.contains(
-                    'menu-open'
+            if (window.innerWidth <= 720) {
+
+                const isOpen =
+                    mobileMenuButton.classList.contains(
+                        'menu-open'
+                    );
+
+                setMobileMenu(!isOpen);
+
+                return;
+            }
+
+            const isCollapsed =
+                document.body.classList.contains(
+                    'desktop-sidebar-collapsed'
                 );
 
-
-            setMobileMenu(
-                !isOpen
+            setDesktopSidebarCollapsed(
+                !isCollapsed
             );
-
         }
     );
-
 }
 
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
 
 if (mobileMenuOverlay) {
 
     mobileMenuOverlay.addEventListener(
         'click',
         function () {
-
-            setMobileMenu(
-                false
-            );
-
+            setMobileMenu(false);
         }
     );
-
 }
 
+/* =========================================================
+   CLOSE MOBILE MENU WHEN NAVIGATING
+   ========================================================= */
 
 document
-    .querySelectorAll(
-        '.sidebar-nav-link'
-    )
+    .querySelectorAll('.sidebar-nav-link')
     .forEach(
         function (link) {
 
@@ -168,56 +190,45 @@ document
                 'click',
                 function () {
 
-                    setMobileMenu(
-                        false
-                    );
-
+                    if (window.innerWidth <= 720) {
+                        setMobileMenu(false);
+                    }
                 }
             );
-
         }
     );
 
+/* =========================================================
+   ESCAPE KEY
+   ========================================================= */
 
 document.addEventListener(
     'keydown',
     function (event) {
 
-        if (
-            event.key === 'Escape'
-        ) {
-
-            setMobileMenu(
-                false
-            );
-
+        if (event.key === 'Escape') {
+            setMobileMenu(false);
         }
-
     }
 );
 
+/* =========================================================
+   WINDOW RESIZE
+   ========================================================= */
 
 window.addEventListener(
     'resize',
     function () {
 
-        if (
-            window.innerWidth > 720
-        ) {
-
-            setMobileMenu(
-                false
-            );
-
+        if (window.innerWidth > 720) {
+            setMobileMenu(false);
         }
-
     }
 );
 
-
-// =========================================================
-// DEFAULT START DATE
-// =========================================================
+/* =========================================================
+   DEFAULT START DATE
+   ========================================================= */
 
 function setDefaultStartDate() {
 
@@ -225,33 +236,28 @@ function setDefaultStartDate() {
         return;
     }
 
-
-    const today =
-        new Date();
-
+    const today = new Date();
 
     const year =
         today.getFullYear();
 
-
     const month =
-        String(today.getMonth() + 1)
-            .padStart(2, '0');
-
+        String(
+            today.getMonth() + 1
+        ).padStart(2, '0');
 
     const day =
-        String(today.getDate())
-            .padStart(2, '0');
-
+        String(
+            today.getDate()
+        ).padStart(2, '0');
 
     habitStartDate.value =
         `${year}-${month}-${day}`;
 }
 
-
-// =========================================================
-// THEME MANAGEMENT
-// =========================================================
+/* =========================================================
+   THEME MANAGEMENT
+   ========================================================= */
 
 function applyTheme(theme) {
 
@@ -266,13 +272,10 @@ function applyTheme(theme) {
         document.body.classList.remove(
             'night-mode'
         );
-
     }
-
 
     updateThemeButtons();
 }
-
 
 function updateThemeButtons() {
 
@@ -280,37 +283,31 @@ function updateThemeButtons() {
         return;
     }
 
-
     const isNightMode =
         document.body.classList.contains(
             'night-mode'
         );
-
 
     dayModeButton.classList.toggle(
         'active',
         !isNightMode
     );
 
-
     nightModeButton.classList.toggle(
         'active',
         isNightMode
     );
-
 
     dayModeButton.setAttribute(
         'aria-pressed',
         String(!isNightMode)
     );
 
-
     nightModeButton.setAttribute(
         'aria-pressed',
         String(isNightMode)
     );
 }
-
 
 function setTheme(theme) {
 
@@ -319,10 +316,8 @@ function setTheme(theme) {
         theme
     );
 
-
     applyTheme(theme);
 }
-
 
 function loadSavedTheme() {
 
@@ -331,7 +326,6 @@ function loadSavedTheme() {
             'studytrack-theme'
         );
 
-
     if (savedTheme === 'night') {
 
         applyTheme('night');
@@ -339,44 +333,34 @@ function loadSavedTheme() {
     } else {
 
         applyTheme('day');
-
     }
 }
-
 
 if (dayModeButton) {
 
     dayModeButton.addEventListener(
         'click',
-        () => {
-
+        function () {
             setTheme('day');
-
         }
     );
 }
-
 
 if (nightModeButton) {
 
     nightModeButton.addEventListener(
         'click',
-        () => {
-
+        function () {
             setTheme('night');
-
         }
     );
 }
 
-
-// Apply saved theme immediately.
 loadSavedTheme();
 
-
-// =========================================================
-// LOAD USER
-// =========================================================
+/* =========================================================
+   LOAD USER
+   ========================================================= */
 
 async function loadUser() {
 
@@ -390,20 +374,16 @@ async function loadUser() {
                 }
             );
 
-
         if (!response.ok) {
 
             window.location.href =
                 '/login.html';
 
             return;
-
         }
-
 
         const data =
             await response.json();
-
 
         if (data.user) {
 
@@ -412,20 +392,15 @@ async function loadUser() {
                 userName.textContent =
                     data.user.full_name ||
                     'User';
-
             }
-
 
             if (userEmail) {
 
                 userEmail.textContent =
                     data.user.email ||
                     '';
-
             }
-
         }
-
 
     } catch (error) {
 
@@ -434,18 +409,14 @@ async function loadUser() {
             error
         );
 
-
         window.location.href =
             '/login.html';
-
     }
-
 }
 
-
-// =========================================================
-// FORM MESSAGE
-// =========================================================
+/* =========================================================
+   FORM MESSAGE
+   ========================================================= */
 
 function showHabitMessage(
     message,
@@ -456,58 +427,48 @@ function showHabitMessage(
         return;
     }
 
-
     habitMessage.textContent =
         message;
-
 
     habitMessage.classList.add(
         'show'
     );
 
-
     habitMessage.dataset.type =
         type;
-
 }
 
-
-// =========================================================
-// CREATE HABIT
-// =========================================================
+/* =========================================================
+   CREATE HABIT
+   ========================================================= */
 
 if (habitForm) {
 
     habitForm.addEventListener(
         'submit',
-        async (event) => {
+        async function (event) {
 
             event.preventDefault();
-
 
             const name =
                 document.getElementById(
                     'habitName'
                 ).value.trim();
 
-
             const description =
                 document.getElementById(
                     'habitDescription'
                 ).value.trim();
-
 
             const frequency =
                 document.getElementById(
                     'habitFrequency'
                 ).value;
 
-
             const startDate =
                 document.getElementById(
                     'habitStartDate'
                 ).value;
-
 
             if (name === '') {
 
@@ -516,9 +477,7 @@ if (habitForm) {
                 );
 
                 return;
-
             }
-
 
             if (startDate === '') {
 
@@ -527,28 +486,20 @@ if (habitForm) {
                 );
 
                 return;
-
             }
-
 
             showHabitMessage(
                 'Creating habit...'
             );
-
 
             const habitButton =
                 document.getElementById(
                     'habitButton'
                 );
 
-
             if (habitButton) {
-
-                habitButton.disabled =
-                    true;
-
+                habitButton.disabled = true;
             }
-
 
             try {
 
@@ -566,40 +517,27 @@ if (habitForm) {
                             credentials: 'include',
 
                             body: JSON.stringify({
-
-                                name:
-                                    name,
-
-                                description:
-                                    description,
-
-                                frequency:
-                                    frequency,
-
-                                start_date:
-                                    startDate
-
+                                name: name,
+                                description: description,
+                                frequency: frequency,
+                                start_date: startDate
                             })
                         }
                     );
 
-
                 const data =
                     await response.json();
-
 
                 if (response.ok) {
 
                     showHabitMessage(
-                        'Habit created successfully!'
+                        'Habit created successfully!',
+                        'success'
                     );
-
 
                     habitForm.reset();
 
-
                     setDefaultStartDate();
-
 
                     await loadHabits();
 
@@ -607,11 +545,10 @@ if (habitForm) {
 
                     showHabitMessage(
                         data.message ||
-                        'Could not create habit.'
+                        'Could not create habit.',
+                        'error'
                     );
-
                 }
-
 
             } catch (error) {
 
@@ -620,39 +557,30 @@ if (habitForm) {
                     error
                 );
 
-
                 showHabitMessage(
-                    'Could not connect to the server.'
+                    'Could not connect to the server.',
+                    'error'
                 );
-
 
             } finally {
 
                 if (habitButton) {
-
-                    habitButton.disabled =
-                        false;
-
+                    habitButton.disabled = false;
                 }
-
             }
-
         }
     );
-
 }
 
-
-// =========================================================
-// LOAD HABITS
-// =========================================================
+/* =========================================================
+   LOAD HABITS
+   ========================================================= */
 
 async function loadHabits() {
 
     if (!habitsContainer) {
         return;
     }
-
 
     try {
 
@@ -664,35 +592,27 @@ async function loadHabits() {
                 }
             );
 
-
         if (response.status === 401) {
 
             window.location.href =
                 '/login.html';
 
             return;
-
         }
-
 
         if (!response.ok) {
 
             habitsContainer.innerHTML = `
                 <div class="empty-state">
-                    <p>
-                        Could not load your habits.
-                    </p>
+                    <p>Could not load your habits.</p>
                 </div>
             `;
 
             return;
-
         }
-
 
         const data =
             await response.json();
-
 
         if (
             !data.habits ||
@@ -701,37 +621,30 @@ async function loadHabits() {
 
             habitsContainer.innerHTML = `
                 <div class="empty-state">
+                    <h3>No habits yet</h3>
 
                     <p>
-                        You have no habits yet.
                         Create your first habit above
                         to start building consistency.
                     </p>
-
                 </div>
             `;
 
             return;
-
         }
 
-
-        habitsContainer.innerHTML =
-            '';
-
+        habitsContainer.innerHTML = '';
 
         data.habits.forEach(
-            (habit) => {
+            function (habit) {
 
                 const habitElement =
                     document.createElement(
                         'article'
                     );
 
-
                 habitElement.className =
                     'goal-card';
-
 
                 const startDate =
                     habit.start_date
@@ -740,29 +653,24 @@ async function loadHabits() {
                         ).substring(0, 10)
                         : 'No start date';
 
-
                 const description =
                     habit.description &&
                         habit.description.trim() !== ''
                         ? habit.description
                         : 'No description provided.';
 
-
                 const frequency =
                     habit.frequency ||
                     'Daily';
-
 
                 const status =
                     habit.status ||
                     'Active';
 
-
                 habitElement.innerHTML = `
-
                     <div class="goal-card-header">
 
-                        <div class="goal-card-title">
+                        <div>
 
                             <h3>
                                 ${escapeHtml(
@@ -778,75 +686,65 @@ async function loadHabits() {
 
                         </div>
 
-
-                        <span class="goal-status">
-
-                            ${escapeHtml(
-                    status
-                )}
-
-                        </span>
-
                     </div>
 
+                    <div class="goal-progress">
 
-                    <div class="goal-meta">
+                        <div class="goal-progress-text">
 
-                        <span>
                             Frequency:
                             <strong>
                                 ${escapeHtml(
                     frequency
                 )}
                             </strong>
-                        </span>
 
+                            &nbsp;&nbsp;•&nbsp;&nbsp;
 
-                        <span>
                             Start Date:
                             <strong>
                                 ${escapeHtml(
                     startDate
                 )}
                             </strong>
-                        </span>
+
+                            &nbsp;&nbsp;•&nbsp;&nbsp;
+
+                            Status:
+                            <strong>
+                                ${escapeHtml(
+                    status
+                )}
+                            </strong>
+
+                        </div>
 
                     </div>
 
-
-                    <div class="goal-actions">
+                    <div class="form-actions">
 
                         <button
                             type="button"
-                            class="goal-action-button primary"
+                            class="button button-primary"
                             onclick="editHabit(${habit.id})">
-
                             Edit Habit
-
                         </button>
-
 
                         <button
                             type="button"
-                            class="goal-action-button danger"
+                            class="button button-danger"
                             onclick="deleteHabit(${habit.id})">
-
                             Delete Habit
-
                         </button>
 
                     </div>
-
                 `;
-
 
                 habitsContainer.appendChild(
                     habitElement
                 );
-
             }
         );
-
 
     } catch (error) {
 
@@ -855,23 +753,17 @@ async function loadHabits() {
             error
         );
 
-
         habitsContainer.innerHTML = `
             <div class="empty-state">
-                <p>
-                    Could not connect to the server.
-                </p>
+                <p>Could not connect to the server.</p>
             </div>
         `;
-
     }
-
 }
 
-
-// =========================================================
-// ESCAPE HTML
-// =========================================================
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
 
 function escapeHtml(value) {
 
@@ -880,18 +772,15 @@ function escapeHtml(value) {
             'div'
         );
 
-
     div.textContent =
         value ?? '';
-
 
     return div.innerHTML;
 }
 
-
-// =========================================================
-// EDIT HABIT
-// =========================================================
+/* =========================================================
+   EDIT HABIT
+   ========================================================= */
 
 async function editHabit(habitId) {
 
@@ -905,16 +794,13 @@ async function editHabit(habitId) {
                 }
             );
 
-
         if (response.status === 401) {
 
             window.location.href =
                 '/login.html';
 
             return;
-
         }
-
 
         if (!response.ok) {
 
@@ -923,20 +809,17 @@ async function editHabit(habitId) {
             );
 
             return;
-
         }
-
 
         const data =
             await response.json();
 
-
         const habit =
             data.habits.find(
-                (item) =>
-                    item.id === habitId
+                function (item) {
+                    return item.id === habitId;
+                }
             );
-
 
         if (!habit) {
 
@@ -945,13 +828,7 @@ async function editHabit(habitId) {
             );
 
             return;
-
         }
-
-
-        // -----------------------------------------------------
-        // HABIT NAME
-        // -----------------------------------------------------
 
         const newName =
             prompt(
@@ -959,11 +836,9 @@ async function editHabit(habitId) {
                 habit.name
             );
 
-
         if (newName === null) {
             return;
         }
-
 
         if (newName.trim() === '') {
 
@@ -972,13 +847,7 @@ async function editHabit(habitId) {
             );
 
             return;
-
         }
-
-
-        // -----------------------------------------------------
-        // DESCRIPTION
-        // -----------------------------------------------------
 
         const newDescription =
             prompt(
@@ -986,15 +855,9 @@ async function editHabit(habitId) {
                 habit.description || ''
             );
 
-
         if (newDescription === null) {
             return;
         }
-
-
-        // -----------------------------------------------------
-        // FREQUENCY
-        // -----------------------------------------------------
 
         const newFrequency =
             prompt(
@@ -1002,11 +865,9 @@ async function editHabit(habitId) {
                 habit.frequency || 'Daily'
             );
 
-
         if (newFrequency === null) {
             return;
         }
-
 
         if (newFrequency.trim() === '') {
 
@@ -1015,13 +876,7 @@ async function editHabit(habitId) {
             );
 
             return;
-
         }
-
-
-        // -----------------------------------------------------
-        // START DATE
-        // -----------------------------------------------------
 
         const currentStartDate =
             habit.start_date
@@ -1030,18 +885,15 @@ async function editHabit(habitId) {
                 ).substring(0, 10)
                 : '';
 
-
         const newStartDate =
             prompt(
                 'Enter the start date (YYYY-MM-DD):',
                 currentStartDate
             );
 
-
         if (newStartDate === null) {
             return;
         }
-
 
         if (newStartDate.trim() === '') {
 
@@ -1050,13 +902,7 @@ async function editHabit(habitId) {
             );
 
             return;
-
         }
-
-
-        // -----------------------------------------------------
-        // STATUS
-        // -----------------------------------------------------
 
         const newStatus =
             prompt(
@@ -1064,11 +910,9 @@ async function editHabit(habitId) {
                 habit.status || 'Active'
             );
 
-
         if (newStatus === null) {
             return;
         }
-
 
         if (newStatus.trim() === '') {
 
@@ -1077,13 +921,7 @@ async function editHabit(habitId) {
             );
 
             return;
-
         }
-
-
-        // -----------------------------------------------------
-        // UPDATE HABIT
-        // -----------------------------------------------------
 
         const updateResponse =
             await fetch(
@@ -1099,37 +937,27 @@ async function editHabit(habitId) {
                     credentials: 'include',
 
                     body: JSON.stringify({
-
-                        name:
-                            newName.trim(),
-
+                        name: newName.trim(),
                         description:
                             newDescription.trim(),
-
                         frequency:
                             newFrequency.trim(),
-
                         start_date:
                             newStartDate.trim(),
-
                         status:
                             newStatus.trim()
-
                     })
                 }
             );
 
-
         const updateData =
             await updateResponse.json();
-
 
         if (updateResponse.ok) {
 
             alert(
                 'Habit updated successfully!'
             );
-
 
             await loadHabits();
 
@@ -1139,9 +967,7 @@ async function editHabit(habitId) {
                 updateData.message ||
                 'Could not update habit.'
             );
-
         }
-
 
     } catch (error) {
 
@@ -1150,19 +976,15 @@ async function editHabit(habitId) {
             error
         );
 
-
         alert(
             'Could not connect to the server.'
         );
-
     }
-
 }
 
-
-// =========================================================
-// DELETE HABIT
-// =========================================================
+/* =========================================================
+   DELETE HABIT
+   ========================================================= */
 
 async function deleteHabit(habitId) {
 
@@ -1171,11 +993,9 @@ async function deleteHabit(habitId) {
             'Are you sure you want to delete this habit?'
         );
 
-
     if (!confirmed) {
         return;
     }
-
 
     try {
 
@@ -1184,11 +1004,9 @@ async function deleteHabit(habitId) {
                 `/api/habits/${habitId}`,
                 {
                     method: 'DELETE',
-
                     credentials: 'include'
                 }
             );
-
 
         if (response.status === 401) {
 
@@ -1196,13 +1014,10 @@ async function deleteHabit(habitId) {
                 '/login.html';
 
             return;
-
         }
-
 
         const data =
             await response.json();
-
 
         if (response.ok) {
 
@@ -1214,9 +1029,7 @@ async function deleteHabit(habitId) {
                 data.message ||
                 'Could not delete habit.'
             );
-
         }
-
 
     } catch (error) {
 
@@ -1225,25 +1038,21 @@ async function deleteHabit(habitId) {
             error
         );
 
-
         alert(
             'Could not connect to the server.'
         );
-
     }
-
 }
 
-
-// =========================================================
-// LOGOUT
-// =========================================================
+/* =========================================================
+   LOGOUT
+   ========================================================= */
 
 if (logoutButton) {
 
     logoutButton.addEventListener(
         'click',
-        async () => {
+        async function () {
 
             try {
 
@@ -1252,11 +1061,9 @@ if (logoutButton) {
                         '/api/logout',
                         {
                             method: 'POST',
-
                             credentials: 'include'
                         }
                     );
-
 
                 if (response.ok) {
 
@@ -1268,9 +1075,7 @@ if (logoutButton) {
                     alert(
                         'Could not log out.'
                     );
-
                 }
-
 
             } catch (error) {
 
@@ -1279,25 +1084,29 @@ if (logoutButton) {
                     error
                 );
 
-
                 alert(
                     'Could not connect to the server.'
                 );
-
             }
-
         }
     );
-
 }
 
-
-// =========================================================
-// START PAGE
-// =========================================================
+/* =========================================================
+   START PAGE
+   ========================================================= */
 
 setDefaultStartDate();
 
 loadUser();
 
 loadHabits();
+
+/* =========================================================
+   INITIAL DESKTOP SIDEBAR STATE
+   ========================================================= */
+
+if (window.innerWidth > 720) {
+
+    setDesktopSidebarCollapsed(false);
+}

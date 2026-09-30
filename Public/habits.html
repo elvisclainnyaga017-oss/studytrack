@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
+    ```
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -12,12 +14,13 @@
 
     <link rel="stylesheet"
           href="style.css">
+    ```
 
 </head>
 
-
 <body>
 
+    ```
     <!-- =====================================================
          PAGE HEADER
          ===================================================== -->
@@ -205,7 +208,6 @@
                 </a>
 
 
-
                 <!-- Goals -->
 
                 <a href="/goals.html"
@@ -245,7 +247,6 @@
                     </span>
 
                 </a>
-
 
 
                 <!-- Habits -->
@@ -293,7 +294,6 @@
                 </a>
 
 
-
                 <!-- Tasks -->
 
                 <a href="/tasks.html"
@@ -336,7 +336,6 @@
                 </a>
 
 
-
                 <!-- Reminders -->
 
                 <a href="/reminders.html"
@@ -367,7 +366,6 @@
                     </span>
 
                 </a>
-
 
 
                 <!-- Focus -->
@@ -407,7 +405,6 @@
                 </a>
 
 
-
                 <!-- Profile -->
 
                 <a href="/profile.html"
@@ -442,7 +439,6 @@
                 </a>
 
             </nav>
-
 
 
             <!-- =================================================
@@ -489,7 +485,6 @@
         </aside>
 
 
-
         <!-- =================================================
              MOBILE SIDEBAR OVERLAY
              ================================================= -->
@@ -500,25 +495,20 @@
         </div>
 
 
-
         <!-- =================================================
              MAIN CONTENT
              ================================================= -->
 
         <main class="dashboard-main">
 
-            <div class="dashboard-container">
+            <div>
 
 
                 <!-- =================================================
                      PAGE INTRODUCTION
                      ================================================= -->
 
-                <section class="dashboard-intro page-intro">
-
-                    <p class="section-eyebrow">
-                        HABIT MANAGEMENT
-                    </p>
+                <section class="page-intro">
 
                     <h2>
                         Your Habits
@@ -533,24 +523,19 @@
                 </section>
 
 
-
                 <!-- =================================================
                      CREATE HABIT
                      ================================================= -->
 
-                <section class="dashboard-panel goal-form-panel">
+                <section class="panel">
 
-                    <div class="panel-heading">
+                    <div class="panel-header">
 
                         <div>
 
-                            <p class="section-eyebrow">
-                                BUILD A ROUTINE
-                            </p>
-
-                            <h2>
+                            <h3>
                                 Create a New Habit
-                            </h2>
+                            </h3>
 
                             <p>
                                 Add a habit that you want to
@@ -562,103 +547,101 @@
                     </div>
 
 
+                    <form id="habitForm">
 
-                    <form id="habitForm"
-                          class="goal-form">
+                        <div class="form-grid">
 
 
-                        <!-- Habit Name -->
+                            <!-- Habit Name -->
 
-                        <div class="form-group">
+                            <div class="form-group">
 
-                            <label for="habitName">
-                                Habit Name
-                            </label>
+                                <label for="habitName">
+                                    Habit Name
+                                </label>
 
-                            <input type="text"
-                                   id="habitName"
-                                   name="habitName"
-                                   placeholder="e.g. Read for 30 minutes"
-                                   required>
+                                <input type="text"
+                                       id="habitName"
+                                       name="habitName"
+                                       placeholder="e.g. Read for 30 minutes"
+                                       required>
 
-                            <span class="form-help">
-                                Give your habit a clear and
-                                specific name.
-                            </span>
+                                <span class="form-help">
+                                    Give your habit a clear and
+                                    specific name.
+                                </span>
+
+                            </div>
+
+
+                            <!-- Frequency -->
+
+                            <div class="form-group">
+
+                                <label for="habitFrequency">
+                                    Frequency
+                                </label>
+
+                                <select id="habitFrequency"
+                                        name="habitFrequency">
+
+                                    <option value="Daily">
+                                        Daily
+                                    </option>
+
+                                    <option value="Weekly">
+                                        Weekly
+                                    </option>
+
+                                    <option value="Monthly">
+                                        Monthly
+                                    </option>
+
+                                </select>
+
+                                <span class="form-help">
+                                    Choose how often you want
+                                    to practise this habit.
+                                </span>
+
+                            </div>
+
+
+                            <!-- Description -->
+
+                            <div class="form-group full-width">
+
+                                <label for="habitDescription">
+                                    Description
+                                </label>
+
+                                <textarea id="habitDescription"
+                                          name="habitDescription"
+                                          placeholder="Describe what this habit involves and why it matters to you."></textarea>
+
+                            </div>
+
+
+                            <!-- Start Date -->
+
+                            <div class="form-group">
+
+                                <label for="habitStartDate">
+                                    Start Date
+                                </label>
+
+                                <input type="date"
+                                       id="habitStartDate"
+                                       name="habitStartDate">
+
+                                <span class="form-help">
+                                    The date you want to begin
+                                    tracking this habit.
+                                </span>
+
+                            </div>
 
                         </div>
-
-
-
-                        <!-- Frequency -->
-
-                        <div class="form-group">
-
-                            <label for="habitFrequency">
-                                Frequency
-                            </label>
-
-                            <select id="habitFrequency"
-                                    name="habitFrequency">
-
-                                <option value="Daily">
-                                    Daily
-                                </option>
-
-                                <option value="Weekly">
-                                    Weekly
-                                </option>
-
-                                <option value="Monthly">
-                                    Monthly
-                                </option>
-
-                            </select>
-
-                            <span class="form-help">
-                                Choose how often you want
-                                to practise this habit.
-                            </span>
-
-                        </div>
-
-
-
-                        <!-- Description -->
-
-                        <div class="form-group full-width">
-
-                            <label for="habitDescription">
-                                Description
-                            </label>
-
-                            <textarea id="habitDescription"
-                                      name="habitDescription"
-                                      placeholder="Describe what this habit involves and why it matters to you."></textarea>
-
-                        </div>
-
-
-
-                        <!-- Start Date -->
-
-                        <div class="form-group">
-
-                            <label for="habitStartDate">
-                                Start Date
-                            </label>
-
-                            <input type="date"
-                                   id="habitStartDate"
-                                   name="habitStartDate">
-
-                            <span class="form-help">
-                                The date you want to begin
-                                tracking this habit.
-                            </span>
-
-                        </div>
-
 
 
                         <!-- Form Actions -->
@@ -667,14 +650,13 @@
 
                             <button type="submit"
                                     id="habitButton"
-                                    class="primary-button">
+                                    class="button button-primary">
 
                                 Create Habit
 
                             </button>
 
                         </div>
-
 
 
                         <!-- Form Message -->
@@ -684,30 +666,24 @@
                            aria-live="polite">
                         </p>
 
-
                     </form>
 
                 </section>
-
 
 
                 <!-- =================================================
                      MY HABITS
                      ================================================= -->
 
-                <section class="dashboard-panel goals-panel">
+                <section class="panel">
 
-                    <div class="panel-heading">
+                    <div class="panel-header">
 
                         <div>
 
-                            <p class="section-eyebrow">
-                                CONSISTENCY
-                            </p>
-
-                            <h2>
+                            <h3>
                                 My Habits
-                            </h2>
+                            </h3>
 
                             <p>
                                 Review and manage the routines
@@ -719,9 +695,7 @@
                     </div>
 
 
-
-                    <div id="habitsContainer"
-                         class="goals-container">
+                    <div id="habitsContainer">
 
                         <div class="empty-state">
 
@@ -733,7 +707,6 @@
 
                     </div>
 
-
                 </section>
 
 
@@ -742,7 +715,6 @@
         </main>
 
     </div>
-
 
 
     <!-- =====================================================
@@ -762,12 +734,12 @@
     </footer>
 
 
-
     <!-- =====================================================
          JAVASCRIPT
          ===================================================== -->
 
     <script src="habits.js"></script>
+    ```
 
 </body>
 

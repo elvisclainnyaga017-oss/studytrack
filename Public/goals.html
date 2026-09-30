@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Goals | StudyTrack</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="style.css">
+
 </head>
 
+
 <body>
+
 
     <!-- =====================================================
          HEADER
@@ -17,49 +25,72 @@
 
     <header class="dashboard-header">
 
+
         <div class="header-brand">
 
-            <div class="brand-icon">
+
+            <div class="brand-icon"
+                 aria-hidden="true">
                 ST
             </div>
 
+
             <div class="brand-text">
-                <h1>StudyTrack</h1>
-                <p>Student Productivity System</p>
+
+                <h1>
+                    StudyTrack
+                </h1>
+
+                <p>
+                    Student Productivity System
+                </p>
+
             </div>
+
+
+            <!-- =================================================
+                 NAVIGATION MENU BUTTON
+                 ================================================= -->
+
+            <button type="button"
+                    id="mobileMenuButton"
+                    class="mobile-menu-button"
+                    aria-label="Toggle navigation menu"
+                    aria-expanded="false"
+                    aria-controls="studyTrackSidebar"
+                    title="Toggle navigation menu">
+
+                <span class="hamburger-line"></span>
+
+                <span class="hamburger-line"></span>
+
+                <span class="hamburger-line"></span>
+
+            </button>
+
 
         </div>
 
 
-        <!-- =================================================
-             HAMBURGER / SIDEBAR TOGGLE
-             ================================================= -->
-
-        <button type="button"
-                id="mobileMenuButton"
-                class="mobile-menu-button"
-                aria-label="Collapse navigation menu"
-                aria-expanded="true"
-                aria-controls="studyTrackSidebar"
-                title="Collapse navigation menu">
-
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-
-        </button>
-
-
         <div class="header-right">
+
 
             <div class="header-user">
 
                 <span>
+
                     Welcome,
-                    <strong id="userName">Student</strong>
+
+                    <strong id="userName">
+                        Student
+                    </strong>
+
                 </span>
 
-                <p id="userEmail">student@example.com</p>
+
+                <p id="userEmail">
+                    student@example.com
+                </p>
 
             </div>
 
@@ -72,15 +103,18 @@
                      role="group"
                      aria-label="Appearance mode">
 
+
                     <button type="button"
                             id="dayModeButton"
                             class="theme-switch-button active"
                             aria-label="Switch to day mode"
                             title="Day mode">
 
-                        <span class="theme-switch-icon" aria-hidden="true">
+                        <span class="theme-switch-icon"
+                              aria-hidden="true">
                             ☀
                         </span>
+
 
                         <span class="theme-switch-text">
                             Day
@@ -95,9 +129,11 @@
                             aria-label="Switch to night mode"
                             title="Night mode">
 
-                        <span class="theme-switch-icon" aria-hidden="true">
+                        <span class="theme-switch-icon"
+                              aria-hidden="true">
                             ☾
                         </span>
+
 
                         <span class="theme-switch-text">
                             Night
@@ -105,13 +141,25 @@
 
                     </button>
 
+
                 </div>
 
             </div>
 
+
         </div>
 
     </header>
+
+
+
+    <!-- =====================================================
+         MOBILE MENU OVERLAY
+         ===================================================== -->
+
+    <div id="mobileMenuOverlay"
+         class="mobile-menu-overlay"
+         aria-hidden="true"></div>
 
 
 
@@ -129,6 +177,7 @@
         <aside id="studyTrackSidebar"
                class="side-navigation">
 
+
             <nav class="sidebar-nav"
                  aria-label="Main navigation">
 
@@ -138,7 +187,8 @@
                 <a href="/dashboard.html"
                    class="sidebar-nav-link">
 
-                    <span class="nav-icon" aria-hidden="true">
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -175,9 +225,13 @@
 
                     </span>
 
-                    <span>Dashboard</span>
+
+                    <span>
+                        Dashboard
+                    </span>
 
                 </a>
+
 
 
                 <!-- Goals -->
@@ -186,7 +240,8 @@
                    class="sidebar-nav-link active"
                    aria-current="page">
 
-                    <span class="nav-icon" aria-hidden="true">
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -211,9 +266,13 @@
 
                     </span>
 
-                    <span>Goals</span>
+
+                    <span>
+                        Goals
+                    </span>
 
                 </a>
+
 
 
                 <!-- Habits -->
@@ -221,7 +280,8 @@
                 <a href="/habits.html"
                    class="sidebar-nav-link">
 
-                    <span class="nav-icon" aria-hidden="true">
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -231,17 +291,24 @@
                              stroke-linejoin="round">
 
                             <path d="M20 7v5h-5"></path>
+
                             <path d="M4 17v-5h5"></path>
+
                             <path d="M6.1 9a7 7 0 0 1 11.6-2L20 7"></path>
+
                             <path d="M17.9 15a7 7 0 0 1-11.6 2L4 17"></path>
 
                         </svg>
 
                     </span>
 
-                    <span>Habits</span>
+
+                    <span>
+                        Habits
+                    </span>
 
                 </a>
+
 
 
                 <!-- Tasks -->
@@ -249,7 +316,8 @@
                 <a href="/tasks.html"
                    class="sidebar-nav-link">
 
-                    <span class="nav-icon" aria-hidden="true">
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -265,21 +333,28 @@
                                   rx="2"></rect>
 
                             <path d="M8 8h.01"></path>
+
                             <path d="M11 8h5"></path>
 
                             <path d="M8 12h.01"></path>
+
                             <path d="M11 12h5"></path>
 
                             <path d="M8 16h.01"></path>
+
                             <path d="M11 16h5"></path>
 
                         </svg>
 
                     </span>
 
-                    <span>Tasks</span>
+
+                    <span>
+                        Tasks
+                    </span>
 
                 </a>
+
 
 
                 <!-- Reminders -->
@@ -287,7 +362,8 @@
                 <a href="/reminders.html"
                    class="sidebar-nav-link">
 
-                    <span class="nav-icon" aria-hidden="true">
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -304,9 +380,13 @@
 
                     </span>
 
-                    <span>Reminders</span>
+
+                    <span>
+                        Reminders
+                    </span>
 
                 </a>
+
 
 
                 <!-- Focus -->
@@ -314,7 +394,8 @@
                 <a href="/focus.html"
                    class="sidebar-nav-link">
 
-                    <span class="nav-icon" aria-hidden="true">
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -328,15 +409,20 @@
                                     r="8"></circle>
 
                             <path d="M12 8v4l3 2"></path>
+
                             <path d="M9 3h6"></path>
 
                         </svg>
 
                     </span>
 
-                    <span>Focus</span>
+
+                    <span>
+                        Focus
+                    </span>
 
                 </a>
+
 
 
                 <!-- Profile -->
@@ -344,7 +430,8 @@
                 <a href="/profile.html"
                    class="sidebar-nav-link">
 
-                    <span class="nav-icon" aria-hidden="true">
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -363,22 +450,29 @@
 
                     </span>
 
-                    <span>Profile</span>
+
+                    <span>
+                        Profile
+                    </span>
 
                 </a>
 
+
             </nav>
+
 
 
             <!-- Logout -->
 
             <div class="sidebar-bottom">
 
+
                 <button type="button"
                         id="logoutButton"
                         class="logout-button">
 
-                    <span class="nav-icon" aria-hidden="true">
+                    <span class="nav-icon"
+                          aria-hidden="true">
 
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -388,30 +482,28 @@
                              stroke-linejoin="round">
 
                             <path d="M10 17l5-5-5-5"></path>
+
                             <path d="M15 12H3"></path>
+
                             <path d="M19 4h2v16h-2"></path>
 
                         </svg>
 
                     </span>
 
-                    <span>Logout</span>
+
+                    <span>
+                        Logout
+                    </span>
 
                 </button>
 
+
             </div>
+
 
         </aside>
 
-
-        <!-- =================================================
-             MOBILE SIDEBAR OVERLAY
-             ================================================= -->
-
-        <div id="mobileMenuOverlay"
-             class="mobile-menu-overlay"
-             aria-hidden="true">
-        </div>
 
 
         <!-- =================================================
@@ -420,63 +512,86 @@
 
         <main class="dashboard-main">
 
+
             <div class="dashboard-container">
 
 
-                <!-- PAGE INTRO -->
+                <!-- =========================================
+                     PAGE INTRO
+                     ========================================= -->
 
                 <section class="dashboard-intro page-intro">
+
 
                     <p class="section-eyebrow">
                         GOAL MANAGEMENT
                     </p>
 
+
                     <h2>
                         Your Goals
                     </h2>
+
 
                     <p>
                         Set clear targets, track your progress, and stay
                         focused on the things you want to accomplish.
                     </p>
 
+
                 </section>
 
 
-                <!-- CREATE GOAL -->
+
+                <!-- =========================================
+                     CREATE GOAL
+                     ========================================= -->
 
                 <section class="dashboard-panel goal-form-panel">
 
+
                     <div class="panel-heading">
 
+
                         <div>
+
 
                             <p class="section-eyebrow">
                                 PLAN
                             </p>
 
+
                             <h2>
                                 Create a New Goal
                             </h2>
+
 
                             <p>
                                 Define what you want to achieve and set a
                                 measurable target.
                             </p>
 
+
                         </div>
 
+
                     </div>
+
 
 
                     <form id="goalForm"
                           class="goal-form">
 
+
+                        <!-- Goal title -->
+
                         <div class="form-group">
+
 
                             <label for="goalTitle">
                                 Goal Title
                             </label>
+
 
                             <input type="text"
                                    id="goalTitle"
@@ -484,40 +599,58 @@
                                    placeholder="e.g. Complete JavaScript course"
                                    required>
 
+
                         </div>
 
 
+
+                        <!-- Deadline -->
+
                         <div class="form-group">
+
 
                             <label for="goalDeadline">
                                 Deadline
                             </label>
 
+
                             <input type="date"
                                    id="goalDeadline"
                                    name="deadline">
 
+
                         </div>
 
 
+
+                        <!-- Description -->
+
                         <div class="form-group full-width">
+
 
                             <label for="goalDescription">
                                 Description
                             </label>
 
+
                             <textarea id="goalDescription"
                                       name="description"
                                       placeholder="Describe what you want to accomplish..."></textarea>
 
+
                         </div>
 
 
+
+                        <!-- Current value -->
+
                         <div class="form-group">
+
 
                             <label for="goalCurrent">
                                 Current Progress
                             </label>
+
 
                             <input type="number"
                                    id="goalCurrent"
@@ -526,18 +659,25 @@
                                    value="0"
                                    placeholder="0">
 
+
                             <span class="form-help">
                                 Your starting progress.
                             </span>
 
+
                         </div>
 
 
+
+                        <!-- Target value -->
+
                         <div class="form-group">
+
 
                             <label for="goalTarget">
                                 Target
                             </label>
+
 
                             <input type="number"
                                    id="goalTarget"
@@ -547,96 +687,129 @@
                                    placeholder="100"
                                    required>
 
+
                             <span class="form-help">
                                 The total amount you want to reach.
                             </span>
 
+
                         </div>
 
 
+
+                        <!-- Unit -->
+
                         <div class="form-group">
+
 
                             <label for="goalUnit">
                                 Unit
                             </label>
+
 
                             <input type="text"
                                    id="goalUnit"
                                    name="unit"
                                    placeholder="e.g. pages, hours, tasks">
 
+
                         </div>
 
+
+
+                        <!-- Message -->
 
                         <div id="goalMessage"
                              class="form-message"
                              role="status"
-                             aria-live="polite">
-                        </div>
+                             aria-live="polite"></div>
 
+
+
+                        <!-- Actions -->
 
                         <div class="form-actions">
+
 
                             <button type="submit"
                                     id="goalButton"
                                     class="primary-button">
-
                                 Create Goal
-
                             </button>
+
 
                         </div>
 
+
                     </form>
+
 
                 </section>
 
 
-                <!-- GOALS LIST -->
+
+                <!-- =========================================
+                     GOALS LIST
+                     ========================================= -->
 
                 <section class="dashboard-panel goals-panel">
 
+
                     <div class="panel-heading">
 
+
                         <div>
+
 
                             <p class="section-eyebrow">
                                 PROGRESS
                             </p>
 
+
                             <h2>
                                 My Goals
                             </h2>
+
 
                             <p>
                                 Review your active goals and update your
                                 progress as you move forward.
                             </p>
 
+
                         </div>
 
+
                     </div>
+
 
 
                     <div id="goalsContainer"
                          class="goals-container">
 
+
                         <div class="empty-state">
+
 
                             <p>
                                 Loading your goals...
                             </p>
 
+
                         </div>
 
+
                     </div>
+
 
                 </section>
 
 
             </div>
 
+
         </main>
+
 
     </div>
 
@@ -648,13 +821,16 @@
 
     <footer class="dashboard-footer">
 
+
         <p>
             StudyTrack
         </p>
 
+
         <p>
             Student Productivity System
         </p>
+
 
     </footer>
 
@@ -666,5 +842,7 @@
 
     <script src="goals.js"></script>
 
+
 </body>
+
 </html>

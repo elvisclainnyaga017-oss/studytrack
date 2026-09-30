@@ -9,7 +9,6 @@
 <body>
 
     <header class="dashboard-header">
-
         <div class="header-brand">
             <div class="brand-icon" aria-hidden="true">ST</div>
 
@@ -17,22 +16,21 @@
                 <h1>StudyTrack</h1>
                 <p>Student Productivity System</p>
             </div>
+
+            <button type="button"
+                    id="mobileMenuButton"
+                    class="mobile-menu-button"
+                    aria-label="Expand navigation sidebar"
+                    aria-expanded="false"
+                    aria-controls="studyTrackSidebar"
+                    title="Expand navigation sidebar">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
         </div>
 
-        <button type="button"
-                id="mobileMenuButton"
-                class="mobile-menu-button"
-                aria-label="Collapse navigation menu"
-                aria-expanded="true"
-                aria-controls="studyTrackSidebar"
-                title="Collapse navigation menu">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-        </button>
-
         <div class="header-right">
-
             <div class="header-user">
                 <span>Welcome, <strong id="userName">User</strong>!</span>
                 <p id="userEmail">user@example.com</p>
@@ -40,7 +38,6 @@
 
             <div class="header-theme-control">
                 <div class="theme-switch" role="group" aria-label="Choose appearance">
-
                     <button type="button"
                             id="dayModeButton"
                             class="theme-switch-button active"
@@ -56,14 +53,10 @@
                         <span class="theme-switch-icon" aria-hidden="true">☾</span>
                         <span class="theme-switch-text">Night</span>
                     </button>
-
                 </div>
             </div>
-
         </div>
-
     </header>
-
 
     <div class="dashboard-layout">
 
@@ -73,7 +66,8 @@
 
                 <a href="dashboard.html"
                    class="sidebar-nav-link active"
-                   aria-current="page">
+                   aria-current="page"
+                   data-tooltip="Dashboard">
                     <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -91,7 +85,8 @@
                 </a>
 
                 <a href="goals.html"
-                   class="sidebar-nav-link">
+                   class="sidebar-nav-link"
+                   data-tooltip="Goals">
                     <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -108,7 +103,8 @@
                 </a>
 
                 <a href="habits.html"
-                   class="sidebar-nav-link">
+                   class="sidebar-nav-link"
+                   data-tooltip="Habits">
                     <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -123,7 +119,8 @@
                 </a>
 
                 <a href="tasks.html"
-                   class="sidebar-nav-link">
+                   class="sidebar-nav-link"
+                   data-tooltip="Tasks">
                     <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -141,7 +138,8 @@
                 </a>
 
                 <a href="reminders.html"
-                   class="sidebar-nav-link">
+                   class="sidebar-nav-link"
+                   data-tooltip="Reminders">
                     <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -157,7 +155,8 @@
                 </a>
 
                 <a href="focus.html"
-                   class="sidebar-nav-link">
+                   class="sidebar-nav-link"
+                   data-tooltip="Focus">
                     <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -173,7 +172,8 @@
                 </a>
 
                 <a href="profile.html"
-                   class="sidebar-nav-link">
+                   class="sidebar-nav-link"
+                   data-tooltip="Profile">
                     <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -191,10 +191,10 @@
             </nav>
 
             <div class="sidebar-bottom">
-
                 <button type="button"
                         id="logoutButton"
-                        class="logout-button">
+                        class="logout-button"
+                        data-tooltip="Logout">
                     <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -209,73 +209,49 @@
                     </span>
                     <span>Logout</span>
                 </button>
-
             </div>
 
         </aside>
 
-
         <div id="mobileMenuOverlay"
              class="mobile-menu-overlay"
              aria-hidden="true"></div>
-
 
         <main class="dashboard-main">
 
             <div class="dashboard-container">
 
                 <section class="dashboard-intro page-intro">
-
-                    <span class="section-eyebrow">
-                        YOUR PRODUCTIVITY
-                    </span>
-
+                    <span class="section-eyebrow">YOUR PRODUCTIVITY</span>
                     <h2>Dashboard</h2>
-
                     <p>
-                        Keep track of your goals, tasks, habits, reminders
-                        and focus sessions in one place.
+                        Keep track of your goals, tasks, habits, reminders and
+                        focus sessions in one place.
                     </p>
-
                 </section>
-
 
                 <section class="summary-section">
 
                     <div class="panel-heading">
-
                         <div>
-                            <p class="section-eyebrow">
-                                OVERVIEW
-                            </p>
-
-                            <h2>
-                                Productivity Summary
-                            </h2>
+                            <p class="section-eyebrow">OVERVIEW</p>
+                            <h2>Productivity Summary</h2>
                         </div>
-
                     </div>
-
 
                     <div class="summary-grid">
 
                         <article class="summary-card">
-
-                            <div class="summary-card-icon"
-                                 aria-hidden="true">
+                            <div class="summary-card-icon" aria-hidden="true">
                                 <span>◎</span>
                             </div>
-
                             <h3>Goals</h3>
 
                             <div class="summary-card-content">
-
                                 <strong id="totalGoals">0</strong>
-
                                 <p>Total goals</p>
 
                                 <div class="summary-card-details">
-
                                     <span>
                                         Completed:
                                         <strong id="completedGoals">0</strong>
@@ -285,31 +261,21 @@
                                         In Progress:
                                         <strong id="inProgressGoals">0</strong>
                                     </span>
-
                                 </div>
-
                             </div>
-
                         </article>
 
-
                         <article class="summary-card">
-
-                            <div class="summary-card-icon"
-                                 aria-hidden="true">
+                            <div class="summary-card-icon" aria-hidden="true">
                                 <span>✓</span>
                             </div>
-
                             <h3>Tasks</h3>
 
                             <div class="summary-card-content">
-
                                 <strong id="totalTasks">0</strong>
-
                                 <p>Total tasks</p>
 
                                 <div class="summary-card-details">
-
                                     <span>
                                         Pending:
                                         <strong id="pendingTasks">0</strong>
@@ -319,298 +285,182 @@
                                         Completed:
                                         <strong id="completedTasks">0</strong>
                                     </span>
-
                                 </div>
-
                             </div>
-
                         </article>
 
-
                         <article class="summary-card">
-
-                            <div class="summary-card-icon"
-                                 aria-hidden="true">
+                            <div class="summary-card-icon" aria-hidden="true">
                                 <span>↗</span>
                             </div>
-
                             <h3>Habits</h3>
 
                             <div class="summary-card-content">
-
                                 <strong id="totalHabits">0</strong>
-
-                                <p>Total habits</p>
+                                <p>Active habits</p>
 
                                 <div class="summary-card-details">
-
                                     <span>
                                         Active:
                                         <strong id="activeHabits">0</strong>
                                     </span>
-
                                 </div>
-
                             </div>
-
                         </article>
 
-
                         <article class="summary-card">
-
-                            <div class="summary-card-icon"
-                                 aria-hidden="true">
+                            <div class="summary-card-icon" aria-hidden="true">
                                 <span>◷</span>
                             </div>
-
                             <h3>Focus</h3>
 
                             <div class="summary-card-content">
-
                                 <strong id="completedFocusSessions">0</strong>
-
                                 <p>Completed sessions</p>
 
                                 <div class="summary-card-details">
-
                                     <span>
                                         Focus Minutes:
                                         <strong id="focusMinutes">0</strong>
                                     </span>
-
                                 </div>
-
                             </div>
-
                         </article>
 
                     </div>
-
                 </section>
-
 
                 <section class="dashboard-panel reminders-panel">
 
                     <div class="panel-heading">
-
                         <div>
-
-                            <p class="section-eyebrow">
-                                STAY ON TRACK
-                            </p>
-
-                            <h2>
-                                Upcoming Reminders
-                            </h2>
-
+                            <p class="section-eyebrow">STAY ON TRACK</p>
+                            <h2>Upcoming Reminders</h2>
                         </div>
 
-                        <a href="reminders.html"
-                           class="panel-link">
+                        <a href="reminders.html" class="panel-link">
                             View All
                         </a>
-
                     </div>
 
                     <div id="upcomingReminders">
-
                         <div class="empty-state">
                             <p>Loading reminders...</p>
                         </div>
-
                     </div>
 
                 </section>
 
-
                 <section class="dashboard-panel goal-form-panel">
 
                     <div class="panel-heading">
-
                         <div>
-
-                            <p class="section-eyebrow">
-                                PLAN AHEAD
-                            </p>
-
-                            <h2>
-                                Create a Goal
-                            </h2>
-
+                            <p class="section-eyebrow">PLAN AHEAD</p>
+                            <h2>Create a Goal</h2>
                             <p>
-                                Add a measurable goal and track your
-                                progress over time.
+                                Add a measurable goal and track your progress
+                                over time.
                             </p>
-
                         </div>
-
                     </div>
 
-
-                    <form id="goalForm"
-                          class="goal-form">
+                    <form id="goalForm" class="goal-form">
 
                         <div class="form-group">
-
-                            <label for="goalTitle">
-                                Goal Title
-                            </label>
-
+                            <label for="goalTitle">Goal Title</label>
                             <input type="text"
                                    id="goalTitle"
                                    name="goalTitle"
                                    placeholder="e.g. Complete COSC0281 Project"
                                    required>
-
                         </div>
 
-
                         <div class="form-group">
-
-                            <label for="goalDescription">
-                                Description
-                            </label>
-
+                            <label for="goalDescription">Description</label>
                             <textarea id="goalDescription"
                                       name="goalDescription"
                                       rows="4"
                                       placeholder="Describe what you want to achieve..."></textarea>
-
                         </div>
 
-
                         <div class="form-group">
-
-                            <label for="goalDeadline">
-                                Deadline
-                            </label>
-
+                            <label for="goalDeadline">Deadline</label>
                             <input type="date"
                                    id="goalDeadline"
                                    name="goalDeadline">
-
                         </div>
 
-
                         <div class="form-group">
-
-                            <label for="goalCurrent">
-                                Current Progress
-                            </label>
-
+                            <label for="goalCurrent">Current Progress</label>
                             <input type="number"
                                    id="goalCurrent"
                                    name="goalCurrent"
                                    value="0"
                                    min="0">
-
                         </div>
 
-
                         <div class="form-group">
-
-                            <label for="goalTarget">
-                                Target Value
-                            </label>
-
+                            <label for="goalTarget">Target Value</label>
                             <input type="number"
                                    id="goalTarget"
                                    name="goalTarget"
                                    value="100"
                                    min="1">
-
                         </div>
 
-
                         <div class="form-group">
-
-                            <label for="goalUnit">
-                                Unit
-                            </label>
-
+                            <label for="goalUnit">Unit</label>
                             <input type="text"
                                    id="goalUnit"
                                    name="goalUnit"
                                    placeholder="e.g. percent, chapters, hours">
-
                         </div>
 
-
                         <div class="form-actions">
-
                             <button type="submit"
                                     id="goalButton"
                                     class="primary-button">
                                 Create Goal
                             </button>
 
-                            <p id="goalMessage"
-                               class="form-message"></p>
-
+                            <p id="goalMessage" class="form-message"></p>
                         </div>
 
                     </form>
-
                 </section>
-
 
                 <section class="dashboard-panel goals-panel">
 
                     <div class="panel-heading">
-
                         <div>
-
-                            <p class="section-eyebrow">
-                                YOUR TARGETS
-                            </p>
-
-                            <h2>
-                                My Goals
-                            </h2>
-
+                            <p class="section-eyebrow">YOUR TARGETS</p>
+                            <h2>My Goals</h2>
                             <p>
                                 Monitor and manage your current goals.
                             </p>
-
                         </div>
 
-                        <a href="goals.html"
-                           class="panel-link">
+                        <a href="goals.html" class="panel-link">
                             Manage Goals
                         </a>
-
                     </div>
 
-
                     <div id="goalsContainer">
-
                         <div class="empty-state">
                             <p>Loading goals...</p>
                         </div>
-
                     </div>
 
                 </section>
 
             </div>
-
         </main>
-
     </div>
 
-
     <footer class="dashboard-footer">
-
-        <p>
-            StudyTrack — Student Productivity System
-        </p>
-
-        <p>
-            Stay focused. Track progress. Achieve your goals.
-        </p>
-
+        <p>StudyTrack — Student Productivity System</p>
+        <p>Stay focused. Track progress. Achieve your goals.</p>
     </footer>
-
 
     <script src="dashboard.js"></script>
 

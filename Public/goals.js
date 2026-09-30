@@ -1,33 +1,16 @@
-javascript
 let goals = [];
 
 
-// ========================================
+// =========================================================
 // GET PAGE ELEMENTS
-// ========================================
+// =========================================================
 
-const userName =
-    document.getElementById('userName');
-
-const userEmail =
-    document.getElementById('userEmail');
-
-const goalForm =
-    document.getElementById('goalForm');
-
-const goalMessage =
-    document.getElementById('goalMessage');
-
-const goalsContainer =
-    document.getElementById('goalsContainer');
-
-const logoutButton =
-    document.getElementById('logoutButton');
-
-
-// ========================================
-// NAVIGATION ELEMENTS
-// ========================================
+const userName = document.getElementById('userName');
+const userEmail = document.getElementById('userEmail');
+const goalForm = document.getElementById('goalForm');
+const goalMessage = document.getElementById('goalMessage');
+const goalsContainer = document.getElementById('goalsContainer');
+const logoutButton = document.getElementById('logoutButton');
 
 const mobileMenuButton =
     document.getElementById('mobileMenuButton');
@@ -35,66 +18,116 @@ const mobileMenuButton =
 const studyTrackSidebar =
     document.getElementById('studyTrackSidebar');
 
-const mobileMenuOverlay =
-    document.getElementById('mobileMenuOverlay');
+const sidebarOverlay =
+    document.getElementById('sidebarOverlay');
+
+const dayModeButton =
+    document.getElementById('dayModeButton');
+
+const nightModeButton =
+    document.getElementById('nightModeButton');
 
 
-// ========================================
-// SCREEN SIZE
-// ========================================
+// =========================================================
+// DAY / NIGHT THEME
+// =========================================================
 
-function isMobileScreen() {
+function updateThemeSelector(theme) {
 
-    return window.matchMedia(
-        '(max-width: 720px)'
-    ).matches;
+    if (dayModeButton) {
+
+        dayModeButton.classList.toggle(
+            'active',
+            theme === 'day'
+        );
+
+        dayModeButton.setAttribute(
+            'aria-pressed',
+            theme === 'day'
+                ? 'true'
+                : 'false'
+        );
+
+    }
+
+
+    if (nightModeButton) {
+
+        nightModeButton.classList.toggle(
+            'active',
+            theme === 'night'
+        );
+
+        nightModeButton.setAttribute(
+            'aria-pressed',
+            theme === 'night'
+                ? 'true'
+                : 'false'
+        );
+
+    }
 
 }
 
 
-// ========================================
-// SIDEBAR LABELS
-// ========================================
+function applySavedTheme() {
 
-function setupSidebarLabels() {
-
-    const navigationItems =
-        document.querySelectorAll(
-            '.sidebar-nav-link, .logout-button'
+    const savedTheme =
+        localStorage.getItem(
+            'studytrack-theme'
         );
 
-
-    navigationItems.forEach(
-        function (item) {
-
-            const textElement =
-                item.querySelector(
-                    'span:not(.nav-icon)'
-                );
+    const theme =
+        savedTheme === 'night'
+            ? 'night'
+            : 'day';
 
 
-            if (!textElement) {
-
-                return;
-
-            }
-
-
-            const label =
-                textElement.textContent.trim();
+    document.body.classList.toggle(
+        'night-mode',
+        theme === 'night'
+    );
 
 
-            if (!label) {
+    updateThemeSelector(theme);
 
-                return;
-
-            }
+}
 
 
-            item.setAttribute(
-                'data-tooltip',
-                label
-            );
+function setTheme(theme) {
+
+    const selectedTheme =
+        theme === 'night'
+            ? 'night'
+            : 'day';
+
+
+    document.body.classList.toggle(
+        'night-mode',
+        selectedTheme === 'night'
+    );
+
+
+    localStorage.setItem(
+        'studytrack-theme',
+        selectedTheme
+    );
+
+
+    updateThemeSelector(
+        selectedTheme
+    );
+
+}
+
+
+if (dayModeButton) {
+
+    dayModeButton.addEventListener(
+        'click',
+        function () {
+
+            setTheme('day');
 
         }
     );
@@ -102,143 +135,50 @@ function setupSidebarLabels() {
 }
 
 
-// ========================================
-// UPDATE NAVIGATION BUTTON
-// ========================================
+if (nightModeButton) {
 
-function updateNavigationButton() {
+    nightModeButton.addEventListener(
+        'click',
+        function () {
 
-    if (!mobileMenuButton) {
+            setTheme('night');
 
-        return;
-
-    }
-
-
-    if (isMobileScreen()) {
-
-        const mobileOpen =
-            document.body.classList.contains(
-                'mobile-menu-open'
-            );
-
-
-        mobileMenuButton.classList.toggle(
-            'menu-open',
-            mobileOpen
-        );
-
-
-        mobileMenuButton.setAttribute(
-            'aria-expanded',
-            String(mobileOpen)
-        );
-
-
-        mobileMenuButton.setAttribute(
-            'aria-label',
-            mobileOpen
-                ? 'Close navigation menu'
-                : 'Open navigation menu'
-        );
-
-
-        mobileMenuButton.setAttribute(
-            'title',
-            mobileOpen
-                ? 'Close navigation menu'
-                : 'Open navigation menu'
-        );
-
-
-        return;
-
-    }
-
-
-    const desktopCollapsed =
-        document.body.classList.contains(
-            'desktop-sidebar-collapsed'
-        );
-
-
-    mobileMenuButton.classList.toggle(
-        'menu-open',
-        !desktopCollapsed
-    );
-
-
-    mobileMenuButton.setAttribute(
-        'aria-expanded',
-        String(!desktopCollapsed)
-    );
-
-
-    mobileMenuButton.setAttribute(
-        'aria-label',
-        desktopCollapsed
-            ? 'Expand navigation menu'
-            : 'Collapse navigation menu'
-    );
-
-
-    mobileMenuButton.setAttribute(
-        'title',
-        desktopCollapsed
-            ? 'Expand navigation menu'
-            : 'Collapse navigation menu'
+        }
     );
 
 }
 
 
-// ========================================
-// CLOSE MOBILE MENU
-// ========================================
+// =========================================================
+// SIDEBAR
+// =========================================================
+
+function isMobileView() {
+
+    return window.innerWidth <= 720;
+
+}
+
 
 function closeMobileMenu() {
-
-    if (studyTrackSidebar) {
-
-        studyTrackSidebar.classList.remove(
-            'mobile-menu-open'
-        );
-
-    }
-
 
     document.body.classList.remove(
         'mobile-menu-open'
     );
 
+}
 
-    document.body.classList.remove(
-        'mobile-menu-active'
+
+function openMobileMenu() {
+
+    document.body.classList.add(
+        'mobile-menu-open'
     );
 
-
-    if (mobileMenuOverlay) {
-
-        mobileMenuOverlay.classList.remove(
-            'active'
-        );
-
-
-        mobileMenuOverlay.setAttribute(
-            'aria-hidden',
-            'true'
-        );
-
-    }
-
 }
 
 
-// ========================================
-// OPEN / CLOSE MOBILE MENU
-// ========================================
-
-function setMobileMenu(open) {
+function applySavedSidebarState() {
 
     if (!studyTrackSidebar) {
 
@@ -247,154 +187,26 @@ function setMobileMenu(open) {
     }
 
 
-    if (open) {
-
-        studyTrackSidebar.classList.add(
-            'mobile-menu-open'
-        );
-
-
-        document.body.classList.add(
-            'mobile-menu-open'
-        );
-
+    if (isMobileView()) {
 
         document.body.classList.remove(
             'desktop-sidebar-collapsed'
         );
 
-    } else {
-
-        studyTrackSidebar.classList.remove(
-            'mobile-menu-open'
-        );
-
-
-        document.body.classList.remove(
-            'mobile-menu-open'
-        );
-
-
-        document.body.classList.remove(
-            'mobile-menu-active'
-        );
-
-    }
-
-
-    if (mobileMenuOverlay) {
-
-        mobileMenuOverlay.classList.toggle(
-            'active',
-            open
-        );
-
-
-        mobileMenuOverlay.setAttribute(
-            'aria-hidden',
-            String(!open)
-        );
-
-    }
-
-
-    updateNavigationButton();
-
-}
-
-
-// ========================================
-// DESKTOP SIDEBAR COLLAPSE
-// ========================================
-
-function setDesktopSidebarCollapsed(
-    collapsed
-) {
-
-    if (!studyTrackSidebar) {
+        closeMobileMenu();
 
         return;
 
     }
 
 
-    if (isMobileScreen()) {
-
-        return;
-
-    }
-
-
-    closeMobileMenu();
-
-
-    if (collapsed) {
-
-        document.body.classList.add(
-            'desktop-sidebar-collapsed'
-        );
-
-    } else {
-
-        document.body.classList.remove(
-            'desktop-sidebar-collapsed'
-        );
-
-    }
-
-
-    localStorage.setItem(
-        'studytrack-sidebar-collapsed',
-        String(collapsed)
-    );
-
-
-    updateNavigationButton();
-
-}
-
-
-// ========================================
-// INITIALIZE NAVIGATION
-// ========================================
-
-function initializeNavigation() {
-
-    if (!studyTrackSidebar) {
-
-        return;
-
-    }
-
-
-    setupSidebarLabels();
-
-
-    if (isMobileScreen()) {
-
-        document.body.classList.remove(
-            'desktop-sidebar-collapsed'
-        );
-
-
-        setMobileMenu(false);
-
-        return;
-
-    }
-
-
-    const savedCollapsedState =
+    const savedState =
         localStorage.getItem(
             'studytrack-sidebar-collapsed'
         );
 
 
-    const collapsed =
-        savedCollapsedState === 'true';
-
-
-    if (collapsed) {
+    if (savedState === 'true') {
 
         document.body.classList.add(
             'desktop-sidebar-collapsed'
@@ -408,15 +220,8 @@ function initializeNavigation() {
 
     }
 
-
-    updateNavigationButton();
-
 }
 
-
-// ========================================
-// HAMBURGER BUTTON
-// ========================================
 
 if (mobileMenuButton) {
 
@@ -424,32 +229,36 @@ if (mobileMenuButton) {
         'click',
         function () {
 
-            if (isMobileScreen()) {
+            if (isMobileView()) {
 
-                const currentlyOpen =
+                if (
                     document.body.classList.contains(
                         'mobile-menu-open'
-                    );
+                    )
+                ) {
 
+                    closeMobileMenu();
 
-                setMobileMenu(
-                    !currentlyOpen
-                );
+                } else {
 
+                    openMobileMenu();
+
+                }
 
                 return;
 
             }
 
 
-            const currentlyCollapsed =
-                document.body.classList.contains(
+            const isCollapsed =
+                document.body.classList.toggle(
                     'desktop-sidebar-collapsed'
                 );
 
 
-            setDesktopSidebarCollapsed(
-                !currentlyCollapsed
+            localStorage.setItem(
+                'studytrack-sidebar-collapsed',
+                String(isCollapsed)
             );
 
         }
@@ -458,42 +267,58 @@ if (mobileMenuButton) {
 }
 
 
-// ========================================
-// MOBILE OVERLAY
-// ========================================
+if (sidebarOverlay) {
 
-if (mobileMenuOverlay) {
-
-    mobileMenuOverlay.addEventListener(
+    sidebarOverlay.addEventListener(
         'click',
-        function () {
-
-            setMobileMenu(false);
-
-        }
+        closeMobileMenu
     );
 
 }
 
 
-// ========================================
-// SIDEBAR LINKS
-// ========================================
+document.addEventListener(
+    'keydown',
+    function (event) {
 
-document
-    .querySelectorAll(
-        '.sidebar-nav-link'
-    )
-    .forEach(
+        if (event.key === 'Escape') {
+
+            closeMobileMenu();
+
+        }
+
+    }
+);
+
+
+window.addEventListener(
+    'resize',
+    function () {
+
+        applySavedSidebarState();
+
+    }
+);
+
+
+if (studyTrackSidebar) {
+
+    const sidebarLinks =
+        studyTrackSidebar.querySelectorAll(
+            'a'
+        );
+
+
+    sidebarLinks.forEach(
         function (link) {
 
             link.addEventListener(
                 'click',
                 function () {
 
-                    if (isMobileScreen()) {
+                    if (isMobileView()) {
 
-                        setMobileMenu(false);
+                        closeMobileMenu();
 
                     }
 
@@ -503,243 +328,12 @@ document
         }
     );
 
-
-// ========================================
-// ESCAPE KEY
-// ========================================
-
-document.addEventListener(
-    'keydown',
-    function (event) {
-
-        if (event.key !== 'Escape') {
-
-            return;
-
-        }
-
-
-        if (isMobileScreen()) {
-
-            setMobileMenu(false);
-
-        }
-
-    }
-);
-
-
-// ========================================
-// WINDOW RESIZE
-// ========================================
-
-window.addEventListener(
-    'resize',
-    function () {
-
-        if (isMobileScreen()) {
-
-            document.body.classList.remove(
-                'desktop-sidebar-collapsed'
-            );
-
-
-            setMobileMenu(false);
-
-
-            return;
-
-        }
-
-
-        closeMobileMenu();
-
-
-        const savedCollapsedState =
-            localStorage.getItem(
-                'studytrack-sidebar-collapsed'
-            );
-
-
-        if (
-            savedCollapsedState === 'true'
-        ) {
-
-            document.body.classList.add(
-                'desktop-sidebar-collapsed'
-            );
-
-        } else {
-
-            document.body.classList.remove(
-                'desktop-sidebar-collapsed'
-            );
-
-        }
-
-
-        updateNavigationButton();
-
-    }
-);
-
-
-// ========================================
-// DAY / NIGHT THEME
-// ========================================
-
-const dayModeButton =
-    document.getElementById('dayModeButton');
-
-const nightModeButton =
-    document.getElementById('nightModeButton');
-
-
-function applyTheme(theme) {
-
-    if (theme === 'night') {
-
-        document.body.classList.add(
-            'night-mode'
-        );
-
-
-        if (dayModeButton) {
-
-            dayModeButton.classList.remove(
-                'active'
-            );
-
-
-            dayModeButton.setAttribute(
-                'aria-pressed',
-                'false'
-            );
-
-        }
-
-
-        if (nightModeButton) {
-
-            nightModeButton.classList.add(
-                'active'
-            );
-
-
-            nightModeButton.setAttribute(
-                'aria-pressed',
-                'true'
-            );
-
-        }
-
-    } else {
-
-        document.body.classList.remove(
-            'night-mode'
-        );
-
-
-        if (nightModeButton) {
-
-            nightModeButton.classList.remove(
-                'active'
-            );
-
-
-            nightModeButton.setAttribute(
-                'aria-pressed',
-                'false'
-            );
-
-        }
-
-
-        if (dayModeButton) {
-
-            dayModeButton.classList.add(
-                'active'
-            );
-
-
-            dayModeButton.setAttribute(
-                'aria-pressed',
-                'true'
-            );
-
-        }
-
-    }
-
-
-    localStorage.setItem(
-        'studytrack-theme',
-        theme
-    );
-
 }
 
 
-// ========================================
-// DAY MODE
-// ========================================
-
-if (dayModeButton) {
-
-    dayModeButton.addEventListener(
-        'click',
-        function () {
-
-            applyTheme('day');
-
-        }
-    );
-
-}
-
-
-// ========================================
-// NIGHT MODE
-// ========================================
-
-if (nightModeButton) {
-
-    nightModeButton.addEventListener(
-        'click',
-        function () {
-
-            applyTheme('night');
-
-        }
-    );
-
-}
-
-
-// ========================================
-// LOAD SAVED THEME
-// ========================================
-
-const savedTheme =
-    localStorage.getItem(
-        'studytrack-theme'
-    );
-
-
-if (savedTheme === 'night') {
-
-    applyTheme('night');
-
-} else {
-
-    applyTheme('day');
-
-}
-
-
-// ========================================
+// =========================================================
 // LOAD CURRENT USER
-// ========================================
+// =========================================================
 
 async function loadUser() {
 
@@ -768,17 +362,24 @@ async function loadUser() {
             await response.json();
 
 
-        if (
-            data.user &&
-            userName &&
-            userEmail
-        ) {
+        const user =
+            data.user || data;
+
+
+        if (userName) {
 
             userName.textContent =
-                data.user.full_name;
+                user.full_name ||
+                'Student';
+
+        }
+
+
+        if (userEmail) {
 
             userEmail.textContent =
-                data.user.email;
+                user.email ||
+                '';
 
         }
 
@@ -798,30 +399,37 @@ async function loadUser() {
 }
 
 
-// ========================================
-// FORMAT DATE
-// ========================================
+// =========================================================
+// GOAL MESSAGE
+// =========================================================
 
-function formatDate(dateValue) {
+function showGoalMessage(
+    message,
+    isError
+) {
 
-    if (!dateValue) {
+    if (!goalMessage) {
 
-        return 'No deadline';
+        return;
 
     }
 
 
-    return String(dateValue).substring(
-        0,
-        10
+    goalMessage.textContent =
+        message;
+
+
+    goalMessage.classList.toggle(
+        'error',
+        Boolean(isError)
     );
 
 }
 
 
-// ========================================
+// =========================================================
 // CREATE GOAL
-// ========================================
+// =========================================================
 
 if (goalForm) {
 
@@ -832,48 +440,87 @@ if (goalForm) {
             event.preventDefault();
 
 
-            const goalTitleElement =
+            const titleInput =
                 document.getElementById(
                     'goalTitle'
                 );
 
-            const goalDescriptionElement =
+
+            const descriptionInput =
                 document.getElementById(
                     'goalDescription'
                 );
 
-            const goalDeadlineElement =
+
+            const deadlineInput =
                 document.getElementById(
                     'goalDeadline'
                 );
 
-            const goalCurrentElement =
+
+            const currentInput =
                 document.getElementById(
                     'goalCurrent'
                 );
 
-            const goalTargetElement =
+
+            const targetInput =
                 document.getElementById(
                     'goalTarget'
                 );
 
-            const goalUnitElement =
+
+            const unitInput =
                 document.getElementById(
                     'goalUnit'
                 );
 
 
-            if (
-                !goalTitleElement ||
-                !goalDescriptionElement ||
-                !goalDeadlineElement ||
-                !goalCurrentElement ||
-                !goalTargetElement ||
-                !goalUnitElement
-            ) {
+            const title =
+                titleInput
+                    ? titleInput.value.trim()
+                    : '';
 
-                console.error(
-                    'One or more goal form fields are missing.'
+
+            const description =
+                descriptionInput
+                    ? descriptionInput.value.trim()
+                    : '';
+
+
+            const deadline =
+                deadlineInput
+                    ? deadlineInput.value
+                    : '';
+
+
+            const currentValue =
+                currentInput
+                    ? Number(
+                        currentInput.value || 0
+                    )
+                    : 0;
+
+
+            const targetValue =
+                targetInput
+                    ? Number(
+                        targetInput.value || 100
+                    )
+                    : 100;
+
+
+            const unit =
+                unitInput
+                    ? unitInput.value.trim()
+                    : '';
+
+
+            if (!title) {
+
+                showGoalMessage(
+                    'Goal title is required.',
+                    true
                 );
 
                 return;
@@ -881,33 +528,34 @@ if (goalForm) {
             }
 
 
-            const title =
-                goalTitleElement.value.trim();
+            if (
+                !Number.isFinite(
+                    currentValue
+                ) ||
+                currentValue < 0
+            ) {
 
-            const description =
-                goalDescriptionElement.value.trim();
+                showGoalMessage(
+                    'Current progress must be 0 or greater.',
+                    true
+                );
 
-            const deadline =
-                goalDeadlineElement.value;
+                return;
 
-            const currentValue =
-                goalCurrentElement.value;
-
-            const targetValue =
-                goalTargetElement.value;
-
-            const unit =
-                goalUnitElement.value.trim();
+            }
 
 
-            if (!title) {
+            if (
+                !Number.isFinite(
+                    targetValue
+                ) ||
+                targetValue <= 0
+            ) {
 
-                if (goalMessage) {
-
-                    goalMessage.textContent =
-                        'Goal title is required.';
-
-                }
+                showGoalMessage(
+                    'Target value must be greater than 0.',
+                    true
+                );
 
                 return;
 
@@ -920,7 +568,6 @@ if (goalForm) {
                     await fetch(
                         '/api/goals',
                         {
-
                             method: 'POST',
 
                             headers: {
@@ -942,14 +589,10 @@ if (goalForm) {
                                     deadline,
 
                                 current_value:
-                                    Number(
-                                        currentValue || 0
-                                    ),
+                                    currentValue,
 
                                 target_value:
-                                    Number(
-                                        targetValue || 100
-                                    ),
+                                    targetValue,
 
                                 unit:
                                     unit
@@ -966,40 +609,43 @@ if (goalForm) {
 
                 if (!response.ok) {
 
-                    if (goalMessage) {
-
-                        goalMessage.textContent =
-                            data.message ||
-                            'Could not create goal.';
-
-                    }
+                    showGoalMessage(
+                        data.message ||
+                        'Could not create goal.',
+                        true
+                    );
 
                     return;
 
                 }
 
 
-                if (goalMessage) {
-
-                    goalMessage.textContent =
-                        'Goal created successfully.';
-
-                }
+                showGoalMessage(
+                    'Goal created successfully.',
+                    false
+                );
 
 
                 goalForm.reset();
 
 
-                goalCurrentElement.value =
-                    0;
+                if (currentInput) {
+
+                    currentInput.value =
+                        '0';
+
+                }
 
 
-                goalTargetElement.value =
-                    100;
+                if (targetInput) {
+
+                    targetInput.value =
+                        '100';
+
+                }
 
 
                 await loadGoals();
-
 
             } catch (error) {
 
@@ -1009,12 +655,10 @@ if (goalForm) {
                 );
 
 
-                if (goalMessage) {
-
-                    goalMessage.textContent =
-                        'Could not connect to the server.';
-
-                }
+                showGoalMessage(
+                    'Could not connect to the server.',
+                    true
+                );
 
             }
 
@@ -1024,31 +668,153 @@ if (goalForm) {
 }
 
 
-// ========================================
+// =========================================================
+// FORMAT DATE
+// =========================================================
+
+function formatDate(dateValue) {
+
+    if (!dateValue) {
+
+        return 'No deadline';
+
+    }
+
+
+    return String(dateValue).substring(
+        0,
+        10
+    );
+
+}
+
+
+// =========================================================
+// FORMAT NUMBER
+// =========================================================
+
+function formatNumber(value) {
+
+    const number =
+        Number(value || 0);
+
+
+    if (!Number.isFinite(number)) {
+
+        return '0';
+
+    }
+
+
+    if (Number.isInteger(number)) {
+
+        return String(number);
+
+    }
+
+
+    return number.toFixed(2);
+
+}
+
+
+// =========================================================
 // UPDATE GOAL PROGRESS
-// ========================================
+// =========================================================
 
 async function updateGoalProgress(
     goalId,
-    currentValue
+    targetValue
 ) {
 
-    const numericValue =
-        Number(currentValue);
+    const currentGoal =
+        goals.find(
+            function (goal) {
+
+                return Number(goal.id) ===
+                    Number(goalId);
+
+            }
+        );
+
+
+    const currentValue =
+        currentGoal
+            ? Number(
+                currentGoal.current_value || 0
+            )
+            : 0;
+
+
+    const target =
+        Number(
+            targetValue ||
+            (
+                currentGoal
+                    ? currentGoal.target_value
+                    : 0
+            )
+        );
 
 
     if (
-        Number.isNaN(numericValue) ||
-        numericValue < 0
+        !Number.isFinite(target) ||
+        target <= 0
     ) {
 
         alert(
-            'Please enter a valid progress value.'
+            'This goal has an invalid target value.'
         );
 
         return;
 
     }
+
+
+    const enteredValue =
+        prompt(
+            'Enter the new progress value:',
+            formatNumber(currentValue)
+        );
+
+
+    if (enteredValue === null) {
+
+        return;
+
+    }
+
+
+    const newValue =
+        Number(enteredValue);
+
+
+    if (
+        !Number.isFinite(newValue) ||
+        newValue < 0
+    ) {
+
+        alert(
+            'Please enter a valid number that is 0 or greater.'
+        );
+
+        return;
+
+    }
+
+
+    const progress =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                (
+                    newValue /
+                    target
+                ) *
+                100
+            )
+        );
 
 
     try {
@@ -1059,7 +825,6 @@ async function updateGoalProgress(
                 goalId +
                 '/progress',
                 {
-
                     method: 'PUT',
 
                     headers: {
@@ -1071,8 +836,8 @@ async function updateGoalProgress(
 
                     body: JSON.stringify({
 
-                        current_value:
-                            numericValue
+                        progress:
+                            progress
 
                     })
 
@@ -1098,7 +863,6 @@ async function updateGoalProgress(
 
         await loadGoals();
 
-
     } catch (error) {
 
         console.error(
@@ -1116,16 +880,16 @@ async function updateGoalProgress(
 }
 
 
-// ========================================
+// =========================================================
 // EDIT GOAL
-// ========================================
+// =========================================================
 
 async function editGoal(goal) {
 
     const newTitle =
         prompt(
             'Enter the new goal title:',
-            goal.title
+            goal.title || ''
         );
 
 
@@ -1161,10 +925,18 @@ async function editGoal(goal) {
     }
 
 
+    const existingDeadline =
+        formatDate(
+            goal.deadline
+        );
+
+
     const newDeadline =
         prompt(
             'Enter the deadline (YYYY-MM-DD):',
-            formatDate(goal.deadline)
+            existingDeadline === 'No deadline'
+                ? ''
+                : existingDeadline
         );
 
 
@@ -1178,7 +950,9 @@ async function editGoal(goal) {
     const newTarget =
         prompt(
             'Enter the target value:',
-            goal.target_value
+            formatNumber(
+                goal.target_value
+            )
         );
 
 
@@ -1189,15 +963,19 @@ async function editGoal(goal) {
     }
 
 
+    const targetValue =
+        Number(newTarget);
+
+
     if (
-        Number.isNaN(
-            Number(newTarget)
+        !Number.isFinite(
+            targetValue
         ) ||
-        Number(newTarget) <= 0
+        targetValue <= 0
     ) {
 
         alert(
-            'Target value must be greater than zero.'
+            'Target value must be greater than 0.'
         );
 
         return;
@@ -1226,7 +1004,6 @@ async function editGoal(goal) {
                 '/api/goals/' +
                 goal.id,
                 {
-
                     method: 'PUT',
 
                     headers: {
@@ -1247,8 +1024,13 @@ async function editGoal(goal) {
                         deadline:
                             newDeadline,
 
+                        current_value:
+                            Number(
+                                goal.current_value || 0
+                            ),
+
                         target_value:
-                            Number(newTarget),
+                            targetValue,
 
                         unit:
                             newUnit.trim()
@@ -1277,7 +1059,6 @@ async function editGoal(goal) {
 
         await loadGoals();
 
-
     } catch (error) {
 
         console.error(
@@ -1295,9 +1076,9 @@ async function editGoal(goal) {
 }
 
 
-// ========================================
+// =========================================================
 // DELETE GOAL
-// ========================================
+// =========================================================
 
 async function deleteGoal(goalId) {
 
@@ -1321,11 +1102,9 @@ async function deleteGoal(goalId) {
                 '/api/goals/' +
                 goalId,
                 {
-
                     method: 'DELETE',
 
                     credentials: 'include'
-
                 }
             );
 
@@ -1348,7 +1127,6 @@ async function deleteGoal(goalId) {
 
         await loadGoals();
 
-
     } catch (error) {
 
         console.error(
@@ -1366,9 +1144,475 @@ async function deleteGoal(goalId) {
 }
 
 
-// ========================================
+// =========================================================
+// CREATE GOAL CARD
+// =========================================================
+
+function createGoalCard(goal) {
+
+    const goalItem =
+        document.createElement(
+            'article'
+        );
+
+
+    goalItem.className =
+        'goal-card';
+
+
+    // -----------------------------------------------------
+    // HEADER
+    // -----------------------------------------------------
+
+    const goalHeader =
+        document.createElement(
+            'div'
+        );
+
+
+    goalHeader.className =
+        'goal-card-header';
+
+
+    const titleArea =
+        document.createElement(
+            'div'
+        );
+
+
+    titleArea.className =
+        'goal-card-title';
+
+
+    const title =
+        document.createElement(
+            'h3'
+        );
+
+
+    title.textContent =
+        goal.title ||
+        'Untitled Goal';
+
+
+    const description =
+        document.createElement(
+            'p'
+        );
+
+
+    description.textContent =
+        goal.description ||
+        'No description provided.';
+
+
+    titleArea.appendChild(
+        title
+    );
+
+
+    titleArea.appendChild(
+        description
+    );
+
+
+    const status =
+        document.createElement(
+            'span'
+        );
+
+
+    status.className =
+        'goal-status';
+
+
+    status.textContent =
+        goal.status ||
+        'Not Started';
+
+
+    goalHeader.appendChild(
+        titleArea
+    );
+
+
+    goalHeader.appendChild(
+        status
+    );
+
+
+    goalItem.appendChild(
+        goalHeader
+    );
+
+
+    // -----------------------------------------------------
+    // PROGRESS VALUES
+    // -----------------------------------------------------
+
+    const currentValue =
+        Number(
+            goal.current_value || 0
+        );
+
+
+    const targetValue =
+        Number(
+            goal.target_value || 0
+        );
+
+
+    let progressPercentage =
+        0;
+
+
+    if (targetValue > 0) {
+
+        progressPercentage =
+            (
+                currentValue /
+                targetValue
+            ) *
+            100;
+
+    }
+
+
+    progressPercentage =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                progressPercentage
+            )
+        );
+
+
+    // -----------------------------------------------------
+    // PROGRESS AREA
+    // -----------------------------------------------------
+
+    const progressArea =
+        document.createElement(
+            'div'
+        );
+
+
+    progressArea.className =
+        'goal-progress-area';
+
+
+    const progressHeader =
+        document.createElement(
+            'div'
+        );
+
+
+    progressHeader.className =
+        'goal-progress-header';
+
+
+    const progressLabel =
+        document.createElement(
+            'span'
+        );
+
+
+    progressLabel.textContent =
+        'Progress';
+
+
+    const progressValue =
+        document.createElement(
+            'strong'
+        );
+
+
+    progressValue.textContent =
+        formatNumber(
+            currentValue
+        ) +
+        ' / ' +
+        formatNumber(
+            targetValue
+        ) +
+        ' ' +
+        (
+            goal.unit ||
+            ''
+        );
+
+
+    progressHeader.appendChild(
+        progressLabel
+    );
+
+
+    progressHeader.appendChild(
+        progressValue
+    );
+
+
+    const progressBar =
+        document.createElement(
+            'div'
+        );
+
+
+    progressBar.className =
+        'goal-progress-bar';
+
+
+    const progressFill =
+        document.createElement(
+            'div'
+        );
+
+
+    progressFill.className =
+        'goal-progress-fill';
+
+
+    progressFill.style.width =
+        progressPercentage +
+        '%';
+
+
+    progressBar.appendChild(
+        progressFill
+    );
+
+
+    progressArea.appendChild(
+        progressHeader
+    );
+
+
+    progressArea.appendChild(
+        progressBar
+    );
+
+
+    goalItem.appendChild(
+        progressArea
+    );
+
+
+    // -----------------------------------------------------
+    // GOAL META
+    // -----------------------------------------------------
+
+    const goalMeta =
+        document.createElement(
+            'div'
+        );
+
+
+    goalMeta.className =
+        'goal-meta';
+
+
+    const deadline =
+        document.createElement(
+            'span'
+        );
+
+
+    deadline.innerHTML =
+        'Deadline: <strong>' +
+        formatDate(
+            goal.deadline
+        ) +
+        '</strong>';
+
+
+    const currentMeta =
+        document.createElement(
+            'span'
+        );
+
+
+    currentMeta.innerHTML =
+        'Current: <strong>' +
+        formatNumber(
+            currentValue
+        ) +
+        '</strong>';
+
+
+    const targetMeta =
+        document.createElement(
+            'span'
+        );
+
+
+    targetMeta.innerHTML =
+        'Target: <strong>' +
+        formatNumber(
+            targetValue
+        ) +
+        '</strong>';
+
+
+    goalMeta.appendChild(
+        deadline
+    );
+
+
+    goalMeta.appendChild(
+        currentMeta
+    );
+
+
+    goalMeta.appendChild(
+        targetMeta
+    );
+
+
+    goalItem.appendChild(
+        goalMeta
+    );
+
+
+    // -----------------------------------------------------
+    // GOAL ACTIONS
+    // -----------------------------------------------------
+
+    const goalActions =
+        document.createElement(
+            'div'
+        );
+
+
+    goalActions.className =
+        'goal-actions';
+
+
+    // UPDATE PROGRESS
+
+    const progressButton =
+        document.createElement(
+            'button'
+        );
+
+
+    progressButton.type =
+        'button';
+
+
+    progressButton.className =
+        'goal-action-button primary';
+
+
+    progressButton.textContent =
+        'Update Progress';
+
+
+    progressButton.addEventListener(
+        'click',
+        function () {
+
+            updateGoalProgress(
+                goal.id,
+                targetValue
+            );
+
+        }
+    );
+
+
+    // EDIT GOAL
+
+    const editButton =
+        document.createElement(
+            'button'
+        );
+
+
+    editButton.type =
+        'button';
+
+
+    editButton.className =
+        'goal-action-button';
+
+
+    editButton.textContent =
+        'Edit Goal';
+
+
+    editButton.addEventListener(
+        'click',
+        function () {
+
+            editGoal(goal);
+
+        }
+    );
+
+
+    // DELETE GOAL
+
+    const deleteButton =
+        document.createElement(
+            'button'
+        );
+
+
+    deleteButton.type =
+        'button';
+
+
+    deleteButton.className =
+        'goal-action-button danger';
+
+
+    deleteButton.textContent =
+        'Delete Goal';
+
+
+    deleteButton.addEventListener(
+        'click',
+        function () {
+
+            deleteGoal(
+                goal.id
+            );
+
+        }
+    );
+
+
+    // ADD BUTTONS
+
+    goalActions.appendChild(
+        progressButton
+    );
+
+
+    goalActions.appendChild(
+        editButton
+    );
+
+
+    goalActions.appendChild(
+        deleteButton
+    );
+
+
+    goalItem.appendChild(
+        goalActions
+    );
+
+
+    return goalItem;
+
+}
+
+
+// =========================================================
 // DISPLAY GOALS
-// ========================================
+// =========================================================
 
 function displayGoals() {
 
@@ -1379,460 +1623,52 @@ function displayGoals() {
     }
 
 
-    if (
-        !goals ||
-        goals.length === 0
-    ) {
+    goalsContainer.innerHTML =
+        '';
 
-        goalsContainer.innerHTML =
-            '<div class="empty-state">' +
-            '<p>You have no goals yet.</p>' +
-            '<p>Create your first goal above to get started.</p>' +
-            '</div>';
+
+    if (goals.length === 0) {
+
+        const emptyState =
+            document.createElement(
+                'div'
+            );
+
+
+        emptyState.className =
+            'empty-state';
+
+
+        const message =
+            document.createElement(
+                'p'
+            );
+
+
+        message.textContent =
+            'No goals yet. Create your first goal above.';
+
+
+        emptyState.appendChild(
+            message
+        );
+
+
+        goalsContainer.appendChild(
+            emptyState
+        );
+
 
         return;
 
     }
 
 
-    goalsContainer.innerHTML = '';
-
-
     goals.forEach(
         function (goal) {
 
-            const goalItem =
-                document.createElement(
-                    'div'
-                );
-
-
-            goalItem.className =
-                'goal-card';
-
-
-            const goalHeader =
-                document.createElement(
-                    'div'
-                );
-
-
-            goalHeader.className =
-                'goal-card-header';
-
-
-            const titleArea =
-                document.createElement(
-                    'div'
-                );
-
-
-            titleArea.className =
-                'goal-card-title';
-
-
-            const title =
-                document.createElement(
-                    'h3'
-                );
-
-
-            title.textContent =
-                goal.title;
-
-
-            const description =
-                document.createElement(
-                    'p'
-                );
-
-
-            description.textContent =
-                goal.description || '';
-
-
-            titleArea.appendChild(
-                title
-            );
-
-
-            titleArea.appendChild(
-                description
-            );
-
-
-            const status =
-                document.createElement(
-                    'span'
-                );
-
-
-            status.className =
-                'goal-status';
-
-
-            status.textContent =
-                goal.status;
-
-
-            goalHeader.appendChild(
-                titleArea
-            );
-
-
-            goalHeader.appendChild(
-                status
-            );
-
-
-            goalItem.appendChild(
-                goalHeader
-            );
-
-
-            const progressArea =
-                document.createElement(
-                    'div'
-                );
-
-
-            progressArea.className =
-                'goal-progress-area';
-
-
-            const progressHeader =
-                document.createElement(
-                    'div'
-                );
-
-
-            progressHeader.className =
-                'goal-progress-header';
-
-
-            const progressLabel =
-                document.createElement(
-                    'span'
-                );
-
-
-            progressLabel.textContent =
-                'Progress';
-
-
-            const progressValue =
-                document.createElement(
-                    'strong'
-                );
-
-
-            const currentValue =
-                Number(
-                    goal.current_value || 0
-                );
-
-
-            const targetValue =
-                Number(
-                    goal.target_value || 0
-                );
-
-
-            progressValue.textContent =
-                currentValue +
-                ' / ' +
-                targetValue +
-                ' ' +
-                (
-                    goal.unit || ''
-                );
-
-
-            progressHeader.appendChild(
-                progressLabel
-            );
-
-
-            progressHeader.appendChild(
-                progressValue
-            );
-
-
-            let progressPercentage = 0;
-
-
-            if (targetValue > 0) {
-
-                progressPercentage =
-                    (
-                        currentValue /
-                        targetValue
-                    ) *
-                    100;
-
-            }
-
-
-            progressPercentage =
-                Math.max(
-                    0,
-                    Math.min(
-                        100,
-                        progressPercentage
-                    )
-                );
-
-
-            const progressBar =
-                document.createElement(
-                    'div'
-                );
-
-
-            progressBar.className =
-                'goal-progress-bar';
-
-
-            const progressFill =
-                document.createElement(
-                    'div'
-                );
-
-
-            progressFill.className =
-                'goal-progress-fill';
-
-
-            progressFill.style.width =
-                progressPercentage +
-                '%';
-
-
-            progressBar.appendChild(
-                progressFill
-            );
-
-
-            progressArea.appendChild(
-                progressHeader
-            );
-
-
-            progressArea.appendChild(
-                progressBar
-            );
-
-
-            goalItem.appendChild(
-                progressArea
-            );
-
-
-            const goalMeta =
-                document.createElement(
-                    'div'
-                );
-
-
-            goalMeta.className =
-                'goal-meta';
-
-
-            const deadline =
-                document.createElement(
-                    'span'
-                );
-
-
-            deadline.innerHTML =
-                'Deadline: <strong>' +
-                formatDate(
-                    goal.deadline
-                ) +
-                '</strong>';
-
-
-            const currentMeta =
-                document.createElement(
-                    'span'
-                );
-
-
-            currentMeta.innerHTML =
-                'Current: <strong>' +
-                currentValue +
-                '</strong>';
-
-
-            const targetMeta =
-                document.createElement(
-                    'span'
-                );
-
-
-            targetMeta.innerHTML =
-                'Target: <strong>' +
-                targetValue +
-                '</strong>';
-
-
-            goalMeta.appendChild(
-                deadline
-            );
-
-
-            goalMeta.appendChild(
-                currentMeta
-            );
-
-
-            goalMeta.appendChild(
-                targetMeta
-            );
-
-
-            goalItem.appendChild(
-                goalMeta
-            );
-
-
-            const goalActions =
-                document.createElement(
-                    'div'
-                );
-
-
-            goalActions.className =
-                'goal-actions';
-
-
-            const progressButton =
-                document.createElement(
-                    'button'
-                );
-
-
-            progressButton.type =
-                'button';
-
-
-            progressButton.className =
-                'goal-action-button primary';
-
-
-            progressButton.textContent =
-                'Update Progress';
-
-
-            progressButton.addEventListener(
-                'click',
-                function () {
-
-                    const newProgress =
-                        prompt(
-                            'Enter the new progress value:',
-                            goal.current_value
-                        );
-
-
-                    if (
-                        newProgress === null
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    updateGoalProgress(
-                        goal.id,
-                        newProgress
-                    );
-
-                }
-            );
-
-
-            const editButton =
-                document.createElement(
-                    'button'
-                );
-
-
-            editButton.type =
-                'button';
-
-
-            editButton.className =
-                'goal-action-button';
-
-
-            editButton.textContent =
-                'Edit Goal';
-
-
-            editButton.addEventListener(
-                'click',
-                function () {
-
-                    editGoal(goal);
-
-                }
-            );
-
-
-            const deleteButton =
-                document.createElement(
-                    'button'
-                );
-
-
-            deleteButton.type =
-                'button';
-
-
-            deleteButton.className =
-                'goal-action-button danger';
-
-
-            deleteButton.textContent =
-                'Delete Goal';
-
-
-            deleteButton.addEventListener(
-                'click',
-                function () {
-
-                    deleteGoal(
-                        goal.id
-                    );
-
-                }
-            );
-
-
-            goalActions.appendChild(
-                progressButton
-            );
-
-
-            goalActions.appendChild(
-                editButton
-            );
-
-
-            goalActions.appendChild(
-                deleteButton
-            );
-
-
-            goalItem.appendChild(
-                goalActions
-            );
-
-
             goalsContainer.appendChild(
-                goalItem
+                createGoalCard(goal)
             );
 
         }
@@ -1841,9 +1677,9 @@ function displayGoals() {
 }
 
 
-// ========================================
+// =========================================================
 // LOAD GOALS
-// ========================================
+// =========================================================
 
 async function loadGoals() {
 
@@ -1892,6 +1728,7 @@ async function loadGoals() {
                 '<p>Could not load goals.</p>' +
                 '</div>';
 
+
             return;
 
         }
@@ -1916,19 +1753,41 @@ async function loadGoals() {
                 '</p>' +
                 '</div>';
 
+
             return;
 
         }
 
 
-        goals =
+        // The StudyTrack API returns the goals
+        // directly as an array.
+        if (Array.isArray(data)) {
+
+            goals = data;
+
+        } else if (
+            data &&
             Array.isArray(data.goals)
-                ? data.goals
-                : [];
+        ) {
+
+            // This also supports an object response
+            // containing a goals array.
+            goals = data.goals;
+
+        } else {
+
+            goals = [];
+
+        }
+
+
+        console.log(
+            'Goals loaded successfully:',
+            goals
+        );
 
 
         displayGoals();
-
 
     } catch (error) {
 
@@ -1948,59 +1807,54 @@ async function loadGoals() {
 }
 
 
-// ========================================
+// =========================================================
 // LOGOUT
-// ========================================
-
-async function logout() {
-
-    try {
-
-        await fetch(
-            '/api/logout',
-            {
-                method: 'POST',
-                credentials: 'include'
-            }
-        );
-
-    } catch (error) {
-
-        console.error(
-            'Logout error:',
-            error
-        );
-
-    }
-
-
-    window.location.href =
-        '/login.html';
-
-}
-
-
-// ========================================
-// LOGOUT BUTTON
-// ========================================
+// =========================================================
 
 if (logoutButton) {
 
     logoutButton.addEventListener(
         'click',
-        logout
+        async function () {
+
+            try {
+
+                await fetch(
+                    '/api/logout',
+                    {
+                        method: 'POST',
+                        credentials: 'include'
+                    }
+                );
+
+            } catch (error) {
+
+                console.error(
+                    'Logout error:',
+                    error
+                );
+
+            } finally {
+
+                window.location.href =
+                    '/login.html';
+
+            }
+
+        }
     );
 
 }
 
 
-// ========================================
-// INITIAL PAGE LOAD
-// ========================================
+// =========================================================
+// START GOALS PAGE
+// =========================================================
 
-initializeNavigation();
+applySavedTheme();
+
+applySavedSidebarState();
 
 loadUser();
 
 loadGoals();
-

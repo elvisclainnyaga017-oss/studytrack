@@ -22,7 +22,7 @@ const nightModeButton = document.getElementById("nightModeButton");
 
 
 // ------------------------------------------------------------
-// MOBILE MENU ELEMENTS
+// SIDEBAR / MOBILE MENU ELEMENTS
 // ------------------------------------------------------------
 
 const mobileMenuButton =
@@ -36,7 +36,55 @@ const mobileMenuOverlay =
 
 
 // ------------------------------------------------------------
-// MOBILE MENU MANAGEMENT
+// DESKTOP SIDEBAR COLLAPSE
+// ------------------------------------------------------------
+
+function setDesktopSidebarCollapsed(collapsed) {
+
+    if (!studyTrackSidebar) {
+        return;
+    }
+
+    if (window.innerWidth <= 720) {
+        return;
+    }
+
+    document.body.classList.toggle(
+        "desktop-sidebar-collapsed",
+        collapsed
+    );
+
+    if (mobileMenuButton) {
+
+        mobileMenuButton.classList.toggle(
+            "menu-open",
+            !collapsed
+        );
+
+        mobileMenuButton.setAttribute(
+            "aria-expanded",
+            String(!collapsed)
+        );
+
+        mobileMenuButton.setAttribute(
+            "aria-label",
+            collapsed
+                ? "Expand navigation menu"
+                : "Collapse navigation menu"
+        );
+
+        mobileMenuButton.setAttribute(
+            "title",
+            collapsed
+                ? "Expand navigation menu"
+                : "Collapse navigation menu"
+        );
+    }
+}
+
+
+// ------------------------------------------------------------
+// MOBILE SIDEBAR MENU
 // ------------------------------------------------------------
 
 function setMobileMenu(open) {
@@ -67,6 +115,13 @@ function setMobileMenu(open) {
             : "Open navigation menu"
     );
 
+    mobileMenuButton.setAttribute(
+        "title",
+        open
+            ? "Close navigation menu"
+            : "Open navigation menu"
+    );
+
     if (mobileMenuOverlay) {
 
         mobileMenuOverlay.classList.toggle(
@@ -87,22 +142,46 @@ function setMobileMenu(open) {
 }
 
 
+// ------------------------------------------------------------
+// HAMBURGER BUTTON
+// ------------------------------------------------------------
+
 if (mobileMenuButton) {
 
     mobileMenuButton.addEventListener(
         "click",
         function () {
 
-            const isOpen =
-                mobileMenuButton.classList.contains(
-                    "menu-open"
+            // Mobile behaviour
+            if (window.innerWidth <= 720) {
+
+                const isOpen =
+                    mobileMenuButton.classList.contains(
+                        "menu-open"
+                    );
+
+                setMobileMenu(!isOpen);
+
+                return;
+            }
+
+            // Desktop behaviour
+            const isCollapsed =
+                document.body.classList.contains(
+                    "desktop-sidebar-collapsed"
                 );
 
-            setMobileMenu(!isOpen);
+            setDesktopSidebarCollapsed(
+                !isCollapsed
+            );
         }
     );
 }
 
+
+// ------------------------------------------------------------
+// MOBILE OVERLAY
+// ------------------------------------------------------------
 
 if (mobileMenuOverlay) {
 
@@ -116,6 +195,10 @@ if (mobileMenuOverlay) {
 }
 
 
+// ------------------------------------------------------------
+// CLOSE MOBILE MENU WHEN NAVIGATING
+// ------------------------------------------------------------
+
 document
     .querySelectorAll(".sidebar-nav-link")
     .forEach(function (link) {
@@ -124,11 +207,17 @@ document
             "click",
             function () {
 
-                setMobileMenu(false);
+                if (window.innerWidth <= 720) {
+                    setMobileMenu(false);
+                }
             }
         );
     });
 
+
+// ------------------------------------------------------------
+// ESCAPE KEY
+// ------------------------------------------------------------
 
 document.addEventListener(
     "keydown",
@@ -141,6 +230,10 @@ document.addEventListener(
     }
 );
 
+
+// ------------------------------------------------------------
+// WINDOW RESIZE
+// ------------------------------------------------------------
 
 window.addEventListener(
     "resize",
@@ -548,6 +641,7 @@ if (taskForm) {
             if (taskButton) {
 
                 taskButton.disabled = true;
+
                 taskButton.textContent =
                     "Creating...";
             }
@@ -633,6 +727,7 @@ if (taskForm) {
                 if (taskButton) {
 
                     taskButton.disabled = false;
+
                     taskButton.textContent =
                         "Create Task";
                 }
@@ -1159,33 +1254,27 @@ function renderTasks(tasks) {
 
                                 <option
                                     value="Pending"
-                                    ${status ===
-                        "Pending"
+                                    ${status === "Pending"
                         ? "selected"
-                        : ""
-                    }
+                        : ""}
                                 >
                                     Pending
                                 </option>
 
                                 <option
                                     value="In Progress"
-                                    ${status ===
-                        "In Progress"
+                                    ${status === "In Progress"
                         ? "selected"
-                        : ""
-                    }
+                        : ""}
                                 >
                                     In Progress
                                 </option>
 
                                 <option
                                     value="Completed"
-                                    ${status ===
-                        "Completed"
+                                    ${status === "Completed"
                         ? "selected"
-                        : ""
-                    }
+                        : ""}
                                 >
                                     Completed
                                 </option>
@@ -1437,3 +1526,13 @@ loadSavedTheme();
 loadUser();
 
 loadTasks();
+
+
+// ------------------------------------------------------------
+// INITIAL DESKTOP SIDEBAR STATE
+// ------------------------------------------------------------
+
+if (window.innerWidth > 720) {
+
+    setDesktopSidebarCollapsed(false);
+}
