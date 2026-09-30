@@ -54,6 +54,149 @@ const logoutButton =
 
 
 // ========================================
+// MOBILE HAMBURGER MENU
+// ========================================
+
+const mobileMenuButton =
+    document.getElementById("mobileMenuButton");
+
+const studyTrackSidebar =
+    document.getElementById("studyTrackSidebar");
+
+const mobileMenuOverlay =
+    document.getElementById("mobileMenuOverlay");
+
+
+function setMobileMenu(open) {
+
+    if (
+        !mobileMenuButton ||
+        !studyTrackSidebar
+    ) {
+
+        return;
+    }
+
+
+    studyTrackSidebar.classList.toggle(
+        "mobile-menu-open",
+        open
+    );
+
+
+    mobileMenuButton.classList.toggle(
+        "menu-open",
+        open
+    );
+
+
+    mobileMenuButton.setAttribute(
+        "aria-expanded",
+        String(open)
+    );
+
+
+    mobileMenuButton.setAttribute(
+        "aria-label",
+        open
+            ? "Close navigation menu"
+            : "Open navigation menu"
+    );
+
+
+    if (mobileMenuOverlay) {
+
+        mobileMenuOverlay.classList.toggle(
+            "active",
+            open
+        );
+
+
+        mobileMenuOverlay.setAttribute(
+            "aria-hidden",
+            String(!open)
+        );
+    }
+
+
+    document.body.classList.toggle(
+        "mobile-menu-active",
+        open
+    );
+}
+
+
+if (mobileMenuButton) {
+
+    mobileMenuButton.addEventListener(
+        "click",
+        () => {
+
+            const isOpen =
+                mobileMenuButton.classList.contains(
+                    "menu-open"
+                );
+
+
+            setMobileMenu(!isOpen);
+        }
+    );
+}
+
+
+if (mobileMenuOverlay) {
+
+    mobileMenuOverlay.addEventListener(
+        "click",
+        () => {
+
+            setMobileMenu(false);
+        }
+    );
+}
+
+
+document
+    .querySelectorAll(".sidebar-nav-link")
+    .forEach(
+        (link) => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    setMobileMenu(false);
+                }
+            );
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (event.key === "Escape") {
+
+            setMobileMenu(false);
+        }
+    }
+);
+
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        if (window.innerWidth > 720) {
+
+            setMobileMenu(false);
+        }
+    }
+);
+
+
+// ========================================
 // DAY / NIGHT MODE ELEMENTS
 // ========================================
 
@@ -111,6 +254,7 @@ function updateThemeButtons() {
             !nightModeActive
         );
 
+
         dayModeButton.setAttribute(
             "aria-pressed",
             String(!nightModeActive)
@@ -124,6 +268,7 @@ function updateThemeButtons() {
             "active",
             nightModeActive
         );
+
 
         nightModeButton.setAttribute(
             "aria-pressed",
@@ -183,6 +328,7 @@ function updateTimerDisplay() {
 
     const minutes =
         Math.floor(timerSeconds / 60);
+
 
     const seconds =
         timerSeconds % 60;
@@ -261,14 +407,18 @@ async function startFocusSession() {
         startButton.disabled =
             true;
 
+
         pauseButton.disabled =
             false;
+
 
         pauseButton.textContent =
             "Pause";
 
+
         completeButton.disabled =
             false;
+
 
         resetButton.disabled =
             true;
@@ -351,14 +501,18 @@ function runTimer() {
 
         clearInterval(timerInterval);
 
+
         timerInterval =
             null;
+
 
         timerRunning =
             false;
 
+
         timerEndTime =
             null;
+
 
         completeFocusSession();
     }
@@ -400,11 +554,14 @@ function pauseTimer() {
 
     clearInterval(timerInterval);
 
+
     timerInterval =
         null;
 
+
     timerRunning =
         false;
+
 
     timerEndTime =
         null;
@@ -514,14 +671,18 @@ async function completeFocusSession() {
 
         clearInterval(timerInterval);
 
+
         timerInterval =
             null;
+
 
         timerRunning =
             false;
 
+
         timerEndTime =
             null;
+
 
         focusSessionId =
             null;
@@ -537,14 +698,18 @@ async function completeFocusSession() {
         startButton.disabled =
             false;
 
+
         pauseButton.disabled =
             true;
+
 
         pauseButton.textContent =
             "Pause";
 
+
         completeButton.disabled =
             true;
+
 
         resetButton.disabled =
             false;
@@ -587,14 +752,18 @@ function resetTimer() {
 
     clearInterval(timerInterval);
 
+
     timerInterval =
         null;
+
 
     timerRunning =
         false;
 
+
     timerEndTime =
         null;
+
 
     timerSeconds =
         25 * 60;
@@ -606,14 +775,18 @@ function resetTimer() {
     startButton.disabled =
         false;
 
+
     pauseButton.disabled =
         true;
+
 
     pauseButton.textContent =
         "Pause";
 
+
     completeButton.disabled =
         true;
+
 
     resetButton.disabled =
         false;
@@ -728,7 +901,7 @@ async function loadFocusHistory() {
         if (sessions.length === 0) {
 
             focusHistory.innerHTML =
-                "<p>No focus sessions yet.</p>";
+                "<p>No focus sessions yet.";
 
             return;
         }

@@ -1,3 +1,4 @@
+javascript
 let goals = [];
 
 
@@ -25,6 +26,565 @@ const logoutButton =
 
 
 // ========================================
+// NAVIGATION ELEMENTS
+// ========================================
+
+const mobileMenuButton =
+    document.getElementById('mobileMenuButton');
+
+const studyTrackSidebar =
+    document.getElementById('studyTrackSidebar');
+
+const mobileMenuOverlay =
+    document.getElementById('mobileMenuOverlay');
+
+
+// ========================================
+// SCREEN SIZE
+// ========================================
+
+function isMobileScreen() {
+
+    return window.matchMedia(
+        '(max-width: 720px)'
+    ).matches;
+
+}
+
+
+// ========================================
+// SIDEBAR LABELS
+// ========================================
+
+function setupSidebarLabels() {
+
+    const navigationItems =
+        document.querySelectorAll(
+            '.sidebar-nav-link, .logout-button'
+        );
+
+
+    navigationItems.forEach(
+        function (item) {
+
+            const textElement =
+                item.querySelector(
+                    'span:not(.nav-icon)'
+                );
+
+
+            if (!textElement) {
+
+                return;
+
+            }
+
+
+            const label =
+                textElement.textContent.trim();
+
+
+            if (!label) {
+
+                return;
+
+            }
+
+
+            item.setAttribute(
+                'data-tooltip',
+                label
+            );
+
+        }
+    );
+
+}
+
+
+// ========================================
+// UPDATE NAVIGATION BUTTON
+// ========================================
+
+function updateNavigationButton() {
+
+    if (!mobileMenuButton) {
+
+        return;
+
+    }
+
+
+    if (isMobileScreen()) {
+
+        const mobileOpen =
+            document.body.classList.contains(
+                'mobile-menu-open'
+            );
+
+
+        mobileMenuButton.classList.toggle(
+            'menu-open',
+            mobileOpen
+        );
+
+
+        mobileMenuButton.setAttribute(
+            'aria-expanded',
+            String(mobileOpen)
+        );
+
+
+        mobileMenuButton.setAttribute(
+            'aria-label',
+            mobileOpen
+                ? 'Close navigation menu'
+                : 'Open navigation menu'
+        );
+
+
+        mobileMenuButton.setAttribute(
+            'title',
+            mobileOpen
+                ? 'Close navigation menu'
+                : 'Open navigation menu'
+        );
+
+
+        return;
+
+    }
+
+
+    const desktopCollapsed =
+        document.body.classList.contains(
+            'desktop-sidebar-collapsed'
+        );
+
+
+    mobileMenuButton.classList.toggle(
+        'menu-open',
+        !desktopCollapsed
+    );
+
+
+    mobileMenuButton.setAttribute(
+        'aria-expanded',
+        String(!desktopCollapsed)
+    );
+
+
+    mobileMenuButton.setAttribute(
+        'aria-label',
+        desktopCollapsed
+            ? 'Expand navigation menu'
+            : 'Collapse navigation menu'
+    );
+
+
+    mobileMenuButton.setAttribute(
+        'title',
+        desktopCollapsed
+            ? 'Expand navigation menu'
+            : 'Collapse navigation menu'
+    );
+
+}
+
+
+// ========================================
+// CLOSE MOBILE MENU
+// ========================================
+
+function closeMobileMenu() {
+
+    if (studyTrackSidebar) {
+
+        studyTrackSidebar.classList.remove(
+            'mobile-menu-open'
+        );
+
+    }
+
+
+    document.body.classList.remove(
+        'mobile-menu-open'
+    );
+
+
+    document.body.classList.remove(
+        'mobile-menu-active'
+    );
+
+
+    if (mobileMenuOverlay) {
+
+        mobileMenuOverlay.classList.remove(
+            'active'
+        );
+
+
+        mobileMenuOverlay.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+
+    }
+
+}
+
+
+// ========================================
+// OPEN / CLOSE MOBILE MENU
+// ========================================
+
+function setMobileMenu(open) {
+
+    if (!studyTrackSidebar) {
+
+        return;
+
+    }
+
+
+    if (open) {
+
+        studyTrackSidebar.classList.add(
+            'mobile-menu-open'
+        );
+
+
+        document.body.classList.add(
+            'mobile-menu-open'
+        );
+
+
+        document.body.classList.remove(
+            'desktop-sidebar-collapsed'
+        );
+
+    } else {
+
+        studyTrackSidebar.classList.remove(
+            'mobile-menu-open'
+        );
+
+
+        document.body.classList.remove(
+            'mobile-menu-open'
+        );
+
+
+        document.body.classList.remove(
+            'mobile-menu-active'
+        );
+
+    }
+
+
+    if (mobileMenuOverlay) {
+
+        mobileMenuOverlay.classList.toggle(
+            'active',
+            open
+        );
+
+
+        mobileMenuOverlay.setAttribute(
+            'aria-hidden',
+            String(!open)
+        );
+
+    }
+
+
+    updateNavigationButton();
+
+}
+
+
+// ========================================
+// DESKTOP SIDEBAR COLLAPSE
+// ========================================
+
+function setDesktopSidebarCollapsed(
+    collapsed
+) {
+
+    if (!studyTrackSidebar) {
+
+        return;
+
+    }
+
+
+    if (isMobileScreen()) {
+
+        return;
+
+    }
+
+
+    closeMobileMenu();
+
+
+    if (collapsed) {
+
+        document.body.classList.add(
+            'desktop-sidebar-collapsed'
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            'desktop-sidebar-collapsed'
+        );
+
+    }
+
+
+    localStorage.setItem(
+        'studytrack-sidebar-collapsed',
+        String(collapsed)
+    );
+
+
+    updateNavigationButton();
+
+}
+
+
+// ========================================
+// INITIALIZE NAVIGATION
+// ========================================
+
+function initializeNavigation() {
+
+    if (!studyTrackSidebar) {
+
+        return;
+
+    }
+
+
+    setupSidebarLabels();
+
+
+    if (isMobileScreen()) {
+
+        document.body.classList.remove(
+            'desktop-sidebar-collapsed'
+        );
+
+
+        setMobileMenu(false);
+
+        return;
+
+    }
+
+
+    const savedCollapsedState =
+        localStorage.getItem(
+            'studytrack-sidebar-collapsed'
+        );
+
+
+    const collapsed =
+        savedCollapsedState === 'true';
+
+
+    if (collapsed) {
+
+        document.body.classList.add(
+            'desktop-sidebar-collapsed'
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            'desktop-sidebar-collapsed'
+        );
+
+    }
+
+
+    updateNavigationButton();
+
+}
+
+
+// ========================================
+// HAMBURGER BUTTON
+// ========================================
+
+if (mobileMenuButton) {
+
+    mobileMenuButton.addEventListener(
+        'click',
+        function () {
+
+            if (isMobileScreen()) {
+
+                const currentlyOpen =
+                    document.body.classList.contains(
+                        'mobile-menu-open'
+                    );
+
+
+                setMobileMenu(
+                    !currentlyOpen
+                );
+
+
+                return;
+
+            }
+
+
+            const currentlyCollapsed =
+                document.body.classList.contains(
+                    'desktop-sidebar-collapsed'
+                );
+
+
+            setDesktopSidebarCollapsed(
+                !currentlyCollapsed
+            );
+
+        }
+    );
+
+}
+
+
+// ========================================
+// MOBILE OVERLAY
+// ========================================
+
+if (mobileMenuOverlay) {
+
+    mobileMenuOverlay.addEventListener(
+        'click',
+        function () {
+
+            setMobileMenu(false);
+
+        }
+    );
+
+}
+
+
+// ========================================
+// SIDEBAR LINKS
+// ========================================
+
+document
+    .querySelectorAll(
+        '.sidebar-nav-link'
+    )
+    .forEach(
+        function (link) {
+
+            link.addEventListener(
+                'click',
+                function () {
+
+                    if (isMobileScreen()) {
+
+                        setMobileMenu(false);
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+// ========================================
+// ESCAPE KEY
+// ========================================
+
+document.addEventListener(
+    'keydown',
+    function (event) {
+
+        if (event.key !== 'Escape') {
+
+            return;
+
+        }
+
+
+        if (isMobileScreen()) {
+
+            setMobileMenu(false);
+
+        }
+
+    }
+);
+
+
+// ========================================
+// WINDOW RESIZE
+// ========================================
+
+window.addEventListener(
+    'resize',
+    function () {
+
+        if (isMobileScreen()) {
+
+            document.body.classList.remove(
+                'desktop-sidebar-collapsed'
+            );
+
+
+            setMobileMenu(false);
+
+
+            return;
+
+        }
+
+
+        closeMobileMenu();
+
+
+        const savedCollapsedState =
+            localStorage.getItem(
+                'studytrack-sidebar-collapsed'
+            );
+
+
+        if (
+            savedCollapsedState === 'true'
+        ) {
+
+            document.body.classList.add(
+                'desktop-sidebar-collapsed'
+            );
+
+        } else {
+
+            document.body.classList.remove(
+                'desktop-sidebar-collapsed'
+            );
+
+        }
+
+
+        updateNavigationButton();
+
+    }
+);
+
+
+// ========================================
 // DAY / NIGHT THEME
 // ========================================
 
@@ -43,18 +603,32 @@ function applyTheme(theme) {
             'night-mode'
         );
 
+
         if (dayModeButton) {
 
             dayModeButton.classList.remove(
                 'active'
             );
 
+
+            dayModeButton.setAttribute(
+                'aria-pressed',
+                'false'
+            );
+
         }
+
 
         if (nightModeButton) {
 
             nightModeButton.classList.add(
                 'active'
+            );
+
+
+            nightModeButton.setAttribute(
+                'aria-pressed',
+                'true'
             );
 
         }
@@ -65,18 +639,32 @@ function applyTheme(theme) {
             'night-mode'
         );
 
+
         if (nightModeButton) {
 
             nightModeButton.classList.remove(
                 'active'
             );
 
+
+            nightModeButton.setAttribute(
+                'aria-pressed',
+                'false'
+            );
+
         }
+
 
         if (dayModeButton) {
 
             dayModeButton.classList.add(
                 'active'
+            );
+
+
+            dayModeButton.setAttribute(
+                'aria-pressed',
+                'true'
             );
 
         }
@@ -244,61 +832,82 @@ if (goalForm) {
             event.preventDefault();
 
 
-            const title =
-                document
-                    .getElementById(
-                        'goalTitle'
-                    )
-                    .value
-                    .trim();
+            const goalTitleElement =
+                document.getElementById(
+                    'goalTitle'
+                );
 
+            const goalDescriptionElement =
+                document.getElementById(
+                    'goalDescription'
+                );
+
+            const goalDeadlineElement =
+                document.getElementById(
+                    'goalDeadline'
+                );
+
+            const goalCurrentElement =
+                document.getElementById(
+                    'goalCurrent'
+                );
+
+            const goalTargetElement =
+                document.getElementById(
+                    'goalTarget'
+                );
+
+            const goalUnitElement =
+                document.getElementById(
+                    'goalUnit'
+                );
+
+
+            if (
+                !goalTitleElement ||
+                !goalDescriptionElement ||
+                !goalDeadlineElement ||
+                !goalCurrentElement ||
+                !goalTargetElement ||
+                !goalUnitElement
+            ) {
+
+                console.error(
+                    'One or more goal form fields are missing.'
+                );
+
+                return;
+
+            }
+
+
+            const title =
+                goalTitleElement.value.trim();
 
             const description =
-                document
-                    .getElementById(
-                        'goalDescription'
-                    )
-                    .value
-                    .trim();
-
+                goalDescriptionElement.value.trim();
 
             const deadline =
-                document
-                    .getElementById(
-                        'goalDeadline'
-                    )
-                    .value;
-
+                goalDeadlineElement.value;
 
             const currentValue =
-                document
-                    .getElementById(
-                        'goalCurrent'
-                    )
-                    .value;
-
+                goalCurrentElement.value;
 
             const targetValue =
-                document
-                    .getElementById(
-                        'goalTarget'
-                    )
-                    .value;
-
+                goalTargetElement.value;
 
             const unit =
-                document
-                    .getElementById(
-                        'goalUnit'
-                    )
-                    .value
-                    .trim();
+                goalUnitElement.value.trim();
 
 
             if (!title) {
 
-                goalMessage.textContent =
-                    'Goal title is required.';
+                if (goalMessage) {
+
+                    goalMessage.textContent =
+                        'Goal title is required.';
+
+                }
 
                 return;
 
@@ -323,7 +932,8 @@ if (goalForm) {
 
                             body: JSON.stringify({
 
-                                title: title,
+                                title:
+                                    title,
 
                                 description:
                                     description,
@@ -356,30 +966,36 @@ if (goalForm) {
 
                 if (!response.ok) {
 
-                    goalMessage.textContent =
-                        data.message ||
-                        'Could not create goal.';
+                    if (goalMessage) {
+
+                        goalMessage.textContent =
+                            data.message ||
+                            'Could not create goal.';
+
+                    }
 
                     return;
 
                 }
 
 
-                goalMessage.textContent =
-                    'Goal created successfully.';
+                if (goalMessage) {
+
+                    goalMessage.textContent =
+                        'Goal created successfully.';
+
+                }
 
 
                 goalForm.reset();
 
 
-                document.getElementById(
-                    'goalCurrent'
-                ).value = 0;
+                goalCurrentElement.value =
+                    0;
 
 
-                document.getElementById(
-                    'goalTarget'
-                ).value = 100;
+                goalTargetElement.value =
+                    100;
 
 
                 await loadGoals();
@@ -393,8 +1009,12 @@ if (goalForm) {
                 );
 
 
-                goalMessage.textContent =
-                    'Could not connect to the server.';
+                if (goalMessage) {
+
+                    goalMessage.textContent =
+                        'Could not connect to the server.';
+
+                }
 
             }
 
@@ -752,6 +1372,13 @@ async function deleteGoal(goalId) {
 
 function displayGoals() {
 
+    if (!goalsContainer) {
+
+        return;
+
+    }
+
+
     if (
         !goals ||
         goals.length === 0
@@ -774,10 +1401,6 @@ function displayGoals() {
     goals.forEach(
         function (goal) {
 
-            // ========================================
-            // MAIN GOAL CARD
-            // ========================================
-
             const goalItem =
                 document.createElement(
                     'div'
@@ -787,10 +1410,6 @@ function displayGoals() {
             goalItem.className =
                 'goal-card';
 
-
-            // ========================================
-            // GOAL HEADER
-            // ========================================
 
             const goalHeader =
                 document.createElement(
@@ -842,10 +1461,6 @@ function displayGoals() {
             );
 
 
-            // ========================================
-            // STATUS
-            // ========================================
-
             const status =
                 document.createElement(
                     'span'
@@ -874,10 +1489,6 @@ function displayGoals() {
                 goalHeader
             );
 
-
-            // ========================================
-            // PROGRESS
-            // ========================================
 
             const progressArea =
                 document.createElement(
@@ -947,10 +1558,6 @@ function displayGoals() {
             );
 
 
-            // ========================================
-            // PROGRESS PERCENTAGE
-            // ========================================
-
             let progressPercentage = 0;
 
 
@@ -975,10 +1582,6 @@ function displayGoals() {
                     )
                 );
 
-
-            // ========================================
-            // PROGRESS BAR
-            // ========================================
 
             const progressBar =
                 document.createElement(
@@ -1024,10 +1627,6 @@ function displayGoals() {
                 progressArea
             );
 
-
-            // ========================================
-            // META INFORMATION
-            // ========================================
 
             const goalMeta =
                 document.createElement(
@@ -1097,10 +1696,6 @@ function displayGoals() {
             );
 
 
-            // ========================================
-            // ACTIONS
-            // ========================================
-
             const goalActions =
                 document.createElement(
                     'div'
@@ -1110,8 +1705,6 @@ function displayGoals() {
             goalActions.className =
                 'goal-actions';
 
-
-            // UPDATE PROGRESS
 
             const progressButton =
                 document.createElement(
@@ -1160,8 +1753,6 @@ function displayGoals() {
             );
 
 
-            // EDIT
-
             const editButton =
                 document.createElement(
                     'button'
@@ -1189,8 +1780,6 @@ function displayGoals() {
                 }
             );
 
-
-            // DELETE
 
             const deleteButton =
                 document.createElement(
@@ -1257,6 +1846,13 @@ function displayGoals() {
 // ========================================
 
 async function loadGoals() {
+
+    if (!goalsContainer) {
+
+        return;
+
+    }
+
 
     goalsContainer.innerHTML =
         '<div class="empty-state">' +
@@ -1402,6 +1998,9 @@ if (logoutButton) {
 // INITIAL PAGE LOAD
 // ========================================
 
+initializeNavigation();
+
 loadUser();
 
 loadGoals();
+

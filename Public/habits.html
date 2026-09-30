@@ -45,6 +45,25 @@
         </div>
 
 
+        <!-- =================================================
+             HAMBURGER / SIDEBAR TOGGLE
+             ================================================= -->
+
+        <button type="button"
+                id="mobileMenuButton"
+                class="mobile-menu-button"
+                aria-label="Collapse navigation menu"
+                aria-expanded="true"
+                aria-controls="studyTrackSidebar"
+                title="Collapse navigation menu">
+
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+
+        </button>
+
+
         <div class="header-right">
 
             <div class="header-user">
@@ -125,7 +144,8 @@
              SIDEBAR
              ================================================= -->
 
-        <aside class="side-navigation">
+        <aside id="studyTrackSidebar"
+               class="side-navigation">
 
             <nav class="sidebar-nav"
                  aria-label="Main navigation">
@@ -471,6 +491,17 @@
 
 
         <!-- =================================================
+             MOBILE SIDEBAR OVERLAY
+             ================================================= -->
+
+        <div id="mobileMenuOverlay"
+             class="mobile-menu-overlay"
+             aria-hidden="true">
+        </div>
+
+
+
+        <!-- =================================================
              MAIN CONTENT
              ================================================= -->
 
@@ -508,7 +539,6 @@
                      ================================================= -->
 
                 <section class="dashboard-panel goal-form-panel">
-
 
                     <div class="panel-heading">
 
@@ -666,7 +696,6 @@
                      ================================================= -->
 
                 <section class="dashboard-panel goals-panel">
-
 
                     <div class="panel-heading">
 

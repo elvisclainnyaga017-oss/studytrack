@@ -36,6 +36,186 @@ const habitStartDate =
 
 
 // =========================================================
+// MOBILE HAMBURGER MENU
+// =========================================================
+
+const mobileMenuButton =
+    document.getElementById('mobileMenuButton');
+
+const studyTrackSidebar =
+    document.getElementById('studyTrackSidebar');
+
+const mobileMenuOverlay =
+    document.getElementById('mobileMenuOverlay');
+
+
+function setMobileMenu(open) {
+
+    if (
+        !mobileMenuButton ||
+        !studyTrackSidebar
+    ) {
+
+        return;
+
+    }
+
+
+    studyTrackSidebar.classList.toggle(
+        'mobile-menu-open',
+        open
+    );
+
+
+    mobileMenuButton.classList.toggle(
+        'menu-open',
+        open
+    );
+
+
+    mobileMenuButton.setAttribute(
+        'aria-expanded',
+        String(open)
+    );
+
+
+    mobileMenuButton.setAttribute(
+        'aria-label',
+        open
+            ? 'Close navigation menu'
+            : 'Open navigation menu'
+    );
+
+
+    mobileMenuButton.setAttribute(
+        'title',
+        open
+            ? 'Close navigation menu'
+            : 'Open navigation menu'
+    );
+
+
+    if (mobileMenuOverlay) {
+
+        mobileMenuOverlay.classList.toggle(
+            'active',
+            open
+        );
+
+
+        mobileMenuOverlay.setAttribute(
+            'aria-hidden',
+            String(!open)
+        );
+
+    }
+
+
+    document.body.classList.toggle(
+        'mobile-menu-active',
+        open
+    );
+
+}
+
+
+if (mobileMenuButton) {
+
+    mobileMenuButton.addEventListener(
+        'click',
+        function () {
+
+            const isOpen =
+                mobileMenuButton.classList.contains(
+                    'menu-open'
+                );
+
+
+            setMobileMenu(
+                !isOpen
+            );
+
+        }
+    );
+
+}
+
+
+if (mobileMenuOverlay) {
+
+    mobileMenuOverlay.addEventListener(
+        'click',
+        function () {
+
+            setMobileMenu(
+                false
+            );
+
+        }
+    );
+
+}
+
+
+document
+    .querySelectorAll(
+        '.sidebar-nav-link'
+    )
+    .forEach(
+        function (link) {
+
+            link.addEventListener(
+                'click',
+                function () {
+
+                    setMobileMenu(
+                        false
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+document.addEventListener(
+    'keydown',
+    function (event) {
+
+        if (
+            event.key === 'Escape'
+        ) {
+
+            setMobileMenu(
+                false
+            );
+
+        }
+
+    }
+);
+
+
+window.addEventListener(
+    'resize',
+    function () {
+
+        if (
+            window.innerWidth > 720
+        ) {
+
+            setMobileMenu(
+                false
+            );
+
+        }
+
+    }
+);
+
+
+// =========================================================
 // DEFAULT START DATE
 // =========================================================
 
@@ -296,159 +476,171 @@ function showHabitMessage(
 // CREATE HABIT
 // =========================================================
 
-habitForm.addEventListener(
-    'submit',
-    async (event) => {
+if (habitForm) {
 
-        event.preventDefault();
+    habitForm.addEventListener(
+        'submit',
+        async (event) => {
 
-
-        const name =
-            document.getElementById(
-                'habitName'
-            ).value.trim();
+            event.preventDefault();
 
 
-        const description =
-            document.getElementById(
-                'habitDescription'
-            ).value.trim();
+            const name =
+                document.getElementById(
+                    'habitName'
+                ).value.trim();
 
 
-        const frequency =
-            document.getElementById(
-                'habitFrequency'
-            ).value;
+            const description =
+                document.getElementById(
+                    'habitDescription'
+                ).value.trim();
 
 
-        const startDate =
-            document.getElementById(
-                'habitStartDate'
-            ).value;
+            const frequency =
+                document.getElementById(
+                    'habitFrequency'
+                ).value;
 
 
-        if (name === '') {
-
-            showHabitMessage(
-                'Habit name is required.'
-            );
-
-            return;
-
-        }
+            const startDate =
+                document.getElementById(
+                    'habitStartDate'
+                ).value;
 
 
-        if (startDate === '') {
-
-            showHabitMessage(
-                'Please select a start date.'
-            );
-
-            return;
-
-        }
-
-
-        showHabitMessage(
-            'Creating habit...'
-        );
-
-
-        const habitButton =
-            document.getElementById(
-                'habitButton'
-            );
-
-
-        habitButton.disabled =
-            true;
-
-
-        try {
-
-            const response =
-                await fetch(
-                    '/api/habits',
-                    {
-                        method: 'POST',
-
-                        headers: {
-                            'Content-Type':
-                                'application/json'
-                        },
-
-                        credentials: 'include',
-
-                        body: JSON.stringify({
-
-                            name:
-                                name,
-
-                            description:
-                                description,
-
-                            frequency:
-                                frequency,
-
-                            start_date:
-                                startDate
-
-                        })
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (response.ok) {
+            if (name === '') {
 
                 showHabitMessage(
-                    'Habit created successfully!'
+                    'Habit name is required.'
                 );
 
-
-                habitForm.reset();
-
-
-                setDefaultStartDate();
-
-
-                await loadHabits();
-
-            } else {
-
-                showHabitMessage(
-                    data.message ||
-                    'Could not create habit.'
-                );
+                return;
 
             }
 
 
-        } catch (error) {
+            if (startDate === '') {
 
-            console.error(
-                'Create habit error:',
-                error
-            );
+                showHabitMessage(
+                    'Please select a start date.'
+                );
+
+                return;
+
+            }
 
 
             showHabitMessage(
-                'Could not connect to the server.'
+                'Creating habit...'
             );
 
 
-        } finally {
+            const habitButton =
+                document.getElementById(
+                    'habitButton'
+                );
 
-            habitButton.disabled =
-                false;
+
+            if (habitButton) {
+
+                habitButton.disabled =
+                    true;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        '/api/habits',
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+
+                            credentials: 'include',
+
+                            body: JSON.stringify({
+
+                                name:
+                                    name,
+
+                                description:
+                                    description,
+
+                                frequency:
+                                    frequency,
+
+                                start_date:
+                                    startDate
+
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (response.ok) {
+
+                    showHabitMessage(
+                        'Habit created successfully!'
+                    );
+
+
+                    habitForm.reset();
+
+
+                    setDefaultStartDate();
+
+
+                    await loadHabits();
+
+                } else {
+
+                    showHabitMessage(
+                        data.message ||
+                        'Could not create habit.'
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    'Create habit error:',
+                    error
+                );
+
+
+                showHabitMessage(
+                    'Could not connect to the server.'
+                );
+
+
+            } finally {
+
+                if (habitButton) {
+
+                    habitButton.disabled =
+                        false;
+
+                }
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 // =========================================================
@@ -456,6 +648,11 @@ habitForm.addEventListener(
 // =========================================================
 
 async function loadHabits() {
+
+    if (!habitsContainer) {
+        return;
+    }
+
 
     try {
 
@@ -1042,53 +1239,57 @@ async function deleteHabit(habitId) {
 // LOGOUT
 // =========================================================
 
-logoutButton.addEventListener(
-    'click',
-    async () => {
+if (logoutButton) {
 
-        try {
+    logoutButton.addEventListener(
+        'click',
+        async () => {
 
-            const response =
-                await fetch(
-                    '/api/logout',
-                    {
-                        method: 'POST',
+            try {
 
-                        credentials: 'include'
-                    }
+                const response =
+                    await fetch(
+                        '/api/logout',
+                        {
+                            method: 'POST',
+
+                            credentials: 'include'
+                        }
+                    );
+
+
+                if (response.ok) {
+
+                    window.location.href =
+                        '/login.html';
+
+                } else {
+
+                    alert(
+                        'Could not log out.'
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    'Logout error:',
+                    error
                 );
 
 
-            if (response.ok) {
-
-                window.location.href =
-                    '/login.html';
-
-            } else {
-
                 alert(
-                    'Could not log out.'
+                    'Could not connect to the server.'
                 );
 
             }
 
-
-        } catch (error) {
-
-            console.error(
-                'Logout error:',
-                error
-            );
-
-
-            alert(
-                'Could not connect to the server.'
-            );
-
         }
+    );
 
-    }
-);
+}
 
 
 // =========================================================

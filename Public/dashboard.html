@@ -1,120 +1,63 @@
-html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>
-        StudyTrack Dashboard
-    </title>
-
-    <link rel="stylesheet"
-          href="style.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyTrack Dashboard</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
-
 <body>
-
-    <!-- =====================================================
-         HEADER
-         ===================================================== -->
 
     <header class="dashboard-header">
 
-        <!-- BRAND -->
-
         <div class="header-brand">
-
-            <div class="brand-icon">
-                ST
-            </div>
+            <div class="brand-icon" aria-hidden="true">ST</div>
 
             <div class="brand-text">
-
-                <h1>
-                    StudyTrack
-                </h1>
-
-                <p>
-                    Student Productivity System
-                </p>
-
+                <h1>StudyTrack</h1>
+                <p>Student Productivity System</p>
             </div>
-
         </div>
 
-
-        <!-- HEADER RIGHT SIDE -->
+        <button type="button"
+                id="mobileMenuButton"
+                class="mobile-menu-button"
+                aria-label="Collapse navigation menu"
+                aria-expanded="true"
+                aria-controls="studyTrackSidebar"
+                title="Collapse navigation menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
 
         <div class="header-right">
 
-            <!-- USER INFORMATION -->
-
             <div class="header-user">
-
-                <span>
-                    Welcome,
-                    <strong id="userName">
-                        User
-                    </strong>!
-                </span>
-
-                <p id="userEmail">
-                    user@example.com
-                </p>
-
+                <span>Welcome, <strong id="userName">User</strong>!</span>
+                <p id="userEmail">user@example.com</p>
             </div>
 
-
-            <!-- DAY / NIGHT SELECTOR -->
-
             <div class="header-theme-control">
-
-                <div class="theme-switch"
-                     role="group"
-                     aria-label="Choose appearance">
+                <div class="theme-switch" role="group" aria-label="Choose appearance">
 
                     <button type="button"
                             id="dayModeButton"
                             class="theme-switch-button active"
                             aria-label="Switch to day mode">
-
-                        <span class="theme-switch-icon"
-                              aria-hidden="true">
-                            ☀
-                        </span>
-
-                        <span class="theme-switch-text">
-                            Day
-                        </span>
-
+                        <span class="theme-switch-icon" aria-hidden="true">☀</span>
+                        <span class="theme-switch-text">Day</span>
                     </button>
-
 
                     <button type="button"
                             id="nightModeButton"
                             class="theme-switch-button"
                             aria-label="Switch to night mode">
-
-                        <span class="theme-switch-icon"
-                              aria-hidden="true">
-                            ☾
-                        </span>
-
-                        <span class="theme-switch-text">
-                            Night
-                        </span>
-
+                        <span class="theme-switch-icon" aria-hidden="true">☾</span>
+                        <span class="theme-switch-text">Night</span>
                     </button>
 
                 </div>
-
             </div>
 
         </div>
@@ -122,281 +65,149 @@ html
     </header>
 
 
-
-    <!-- =====================================================
-         DASHBOARD LAYOUT
-         ===================================================== -->
-
     <div class="dashboard-layout">
 
+        <aside id="studyTrackSidebar" class="side-navigation">
 
-        <!-- =================================================
-             SIDE NAVIGATION
-             ================================================= -->
+            <nav class="sidebar-nav" aria-label="Main navigation">
 
-        <aside class="side-navigation">
-
-
-            <!-- =================================================
-                 SIDEBAR NAVIGATION
-
-                 Sidebar branding removed.
-                 The main StudyTrack branding remains in
-                 the header above.
-                 ================================================= -->
-
-            <nav class="sidebar-nav"
-                 aria-label="Main navigation">
-
-
-                <!-- DASHBOARD -->
-
-                <a href="/dashboard.html"
-                   class="sidebar-nav-link active">
-
-                    <span class="nav-icon"
-                          aria-hidden="true">
-
+                <a href="dashboard.html"
+                   class="sidebar-nav-link active"
+                   aria-current="page">
+                    <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8"
+                             stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round">
-
                             <rect x="3" y="3" width="7" height="7" rx="1"></rect>
                             <rect x="14" y="3" width="7" height="7" rx="1"></rect>
                             <rect x="3" y="14" width="7" height="7" rx="1"></rect>
                             <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-
                         </svg>
-
                     </span>
-
-                    <span>
-                        Dashboard
-                    </span>
-
+                    <span>Dashboard</span>
                 </a>
 
-
-                <!-- GOALS -->
-
-                <a href="/goals.html"
+                <a href="goals.html"
                    class="sidebar-nav-link">
-
-                    <span class="nav-icon"
-                          aria-hidden="true">
-
+                    <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8"
+                             stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round">
-
-                            <circle cx="12" cy="12" r="8.5"></circle>
-                            <circle cx="12" cy="12" r="4.5"></circle>
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <circle cx="12" cy="12" r="5"></circle>
                             <circle cx="12" cy="12" r="1"></circle>
-
                         </svg>
-
                     </span>
-
-                    <span>
-                        Goals
-                    </span>
-
+                    <span>Goals</span>
                 </a>
 
-
-                <!-- HABITS -->
-
-                <a href="/habits.html"
+                <a href="habits.html"
                    class="sidebar-nav-link">
-
-                    <span class="nav-icon"
-                          aria-hidden="true">
-
+                    <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8"
+                             stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round">
-
-                            <path d="M20 11a8 8 0 1 1-2.34-5.66"></path>
-                            <path d="M20 4v7h-7"></path>
-                            <path d="M8.5 12.5l2.2 2.2 4.8-5"></path>
-
+                            <path d="M20 6L9 17l-5-5"></path>
                         </svg>
-
                     </span>
-
-                    <span>
-                        Habits
-                    </span>
-
+                    <span>Habits</span>
                 </a>
 
-
-                <!-- TASKS -->
-
-                <a href="/tasks.html"
+                <a href="tasks.html"
                    class="sidebar-nav-link">
-
-                    <span class="nav-icon"
-                          aria-hidden="true">
-
+                    <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8"
+                             stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round">
-
                             <rect x="4" y="3" width="16" height="18" rx="2"></rect>
-                            <path d="M8 8h.01"></path>
-                            <path d="M11 8h5"></path>
-                            <path d="M8 12h.01"></path>
-                            <path d="M11 12h5"></path>
-                            <path d="M8 16h.01"></path>
-                            <path d="M11 16h5"></path>
-
+                            <path d="M8 8h8"></path>
+                            <path d="M8 12h8"></path>
+                            <path d="M8 16h5"></path>
                         </svg>
-
                     </span>
-
-                    <span>
-                        Tasks
-                    </span>
-
+                    <span>Tasks</span>
                 </a>
 
-
-                <!-- REMINDERS -->
-
-                <a href="/reminders.html"
+                <a href="reminders.html"
                    class="sidebar-nav-link">
-
-                    <span class="nav-icon"
-                          aria-hidden="true">
-
+                    <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8"
+                             stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round">
-
                             <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
                             <path d="M10 21h4"></path>
-
                         </svg>
-
                     </span>
-
-                    <span>
-                        Reminders
-                    </span>
-
+                    <span>Reminders</span>
                 </a>
 
-
-                <!-- FOCUS -->
-
-                <a href="/focus.html"
+                <a href="focus.html"
                    class="sidebar-nav-link">
-
-                    <span class="nav-icon"
-                          aria-hidden="true">
-
+                    <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8"
+                             stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round">
-
-                            <circle cx="12" cy="13" r="8"></circle>
-                            <path d="M12 9v4l2.5 1.5"></path>
-                            <path d="M9 3h6"></path>
-                            <path d="M12 3v2"></path>
-
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 7v5l3 2"></path>
                         </svg>
-
                     </span>
-
-                    <span>
-                        Focus
-                    </span>
-
+                    <span>Focus</span>
                 </a>
 
-
-                <!-- PROFILE -->
-
-                <a href="/profile.html"
+                <a href="profile.html"
                    class="sidebar-nav-link">
-
-                    <span class="nav-icon"
-                          aria-hidden="true">
-
+                    <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8"
+                             stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round">
-
-                            <circle cx="12" cy="8" r="3.5"></circle>
-                            <path d="M5 20c.8-3.5 3.2-5.5 7-5.5s6.2 2 7 5.5"></path>
-
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4 21a8 8 0 0 1 16 0"></path>
                         </svg>
-
                     </span>
-
-                    <span>
-                        Profile
-                    </span>
-
+                    <span>Profile</span>
                 </a>
 
             </nav>
-
-
-            <!-- =================================================
-                 SIDEBAR BOTTOM
-                 ================================================= -->
 
             <div class="sidebar-bottom">
 
                 <button type="button"
                         id="logoutButton"
                         class="logout-button">
-
-                    <span class="nav-icon"
-                          aria-hidden="true">
-
+                    <span class="nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
-                             stroke-width="1.8"
+                             stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round">
-
-                            <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"></path>
-                            <path d="M14 8l4 4-4 4"></path>
-                            <path d="M9 12h9"></path>
-
+                            <path d="M10 17l5-5-5-5"></path>
+                            <path d="M15 12H3"></path>
+                            <path d="M21 19V5a2 2 0 0 0-2-2h-6"></path>
                         </svg>
-
                     </span>
-
-                    <span>
-                        Logout
-                    </span>
-
+                    <span>Logout</span>
                 </button>
 
             </div>
@@ -404,49 +215,36 @@ html
         </aside>
 
 
+        <div id="mobileMenuOverlay"
+             class="mobile-menu-overlay"
+             aria-hidden="true"></div>
 
-        <!-- =================================================
-             MAIN DASHBOARD
-             ================================================= -->
 
         <main class="dashboard-main">
 
             <div class="dashboard-container">
 
+                <section class="dashboard-intro page-intro">
 
-                <!-- =================================================
-                     DASHBOARD INTRO
-                     ================================================= -->
-
-                <section class="dashboard-intro">
-
-                    <p class="section-eyebrow">
+                    <span class="section-eyebrow">
                         YOUR PRODUCTIVITY
-                    </p>
+                    </span>
 
-                    <h2>
-                        Dashboard
-                    </h2>
+                    <h2>Dashboard</h2>
 
                     <p>
-                        Keep track of your goals, tasks, habits,
-                        reminders and focus sessions in one place.
+                        Keep track of your goals, tasks, habits, reminders
+                        and focus sessions in one place.
                     </p>
 
                 </section>
 
-
-
-                <!-- =================================================
-                     PRODUCTIVITY SUMMARY
-                     ================================================= -->
 
                 <section class="summary-section">
 
                     <div class="panel-heading">
 
                         <div>
-
                             <p class="section-eyebrow">
                                 OVERVIEW
                             </p>
@@ -454,7 +252,6 @@ html
                             <h2>
                                 Productivity Summary
                             </h2>
-
                         </div>
 
                     </div>
@@ -462,251 +259,135 @@ html
 
                     <div class="summary-grid">
 
-
-                        <!-- GOALS -->
-
-                        <div class="summary-card">
+                        <article class="summary-card">
 
                             <div class="summary-card-icon"
                                  aria-hidden="true">
-
-                                <svg viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     stroke-linecap="round"
-                                     stroke-linejoin="round">
-
-                                    <circle cx="12" cy="12" r="8.5"></circle>
-                                    <circle cx="12" cy="12" r="4.5"></circle>
-                                    <circle cx="12" cy="12" r="1"></circle>
-
-                                </svg>
-
+                                <span>◎</span>
                             </div>
+
+                            <h3>Goals</h3>
 
                             <div class="summary-card-content">
 
-                                <h3>
-                                    Goals
-                                </h3>
+                                <strong id="totalGoals">0</strong>
 
-                                <strong id="totalGoals">
-                                    0
-                                </strong>
-
-                                <p>
-                                    Total goals
-                                </p>
+                                <p>Total goals</p>
 
                                 <div class="summary-card-details">
 
                                     <span>
                                         Completed:
-                                        <strong id="completedGoals">
-                                            0
-                                        </strong>
+                                        <strong id="completedGoals">0</strong>
                                     </span>
 
                                     <span>
                                         In Progress:
-                                        <strong id="inProgressGoals">
-                                            0
-                                        </strong>
+                                        <strong id="inProgressGoals">0</strong>
                                     </span>
 
                                 </div>
 
                             </div>
 
-                        </div>
+                        </article>
 
 
-
-                        <!-- TASKS -->
-
-                        <div class="summary-card">
+                        <article class="summary-card">
 
                             <div class="summary-card-icon"
                                  aria-hidden="true">
-
-                                <svg viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     stroke-linecap="round"
-                                     stroke-linejoin="round">
-
-                                    <rect x="4" y="3" width="16" height="18" rx="2"></rect>
-
-                                    <path d="M8 8l1.2 1.2L11.5 7"></path>
-                                    <path d="M13 8h3"></path>
-
-                                    <path d="M8 12l1.2 1.2 2.3-2.2"></path>
-                                    <path d="M13 12h3"></path>
-
-                                    <path d="M8 16l1.2 1.2 2.3-2.2"></path>
-                                    <path d="M13 16h3"></path>
-
-                                </svg>
-
+                                <span>✓</span>
                             </div>
+
+                            <h3>Tasks</h3>
 
                             <div class="summary-card-content">
 
-                                <h3>
-                                    Tasks
-                                </h3>
+                                <strong id="totalTasks">0</strong>
 
-                                <strong id="totalTasks">
-                                    0
-                                </strong>
-
-                                <p>
-                                    Total tasks
-                                </p>
+                                <p>Total tasks</p>
 
                                 <div class="summary-card-details">
 
                                     <span>
                                         Pending:
-                                        <strong id="pendingTasks">
-                                            0
-                                        </strong>
+                                        <strong id="pendingTasks">0</strong>
                                     </span>
 
                                     <span>
                                         Completed:
-                                        <strong id="completedTasks">
-                                            0
-                                        </strong>
+                                        <strong id="completedTasks">0</strong>
                                     </span>
 
                                 </div>
 
                             </div>
 
-                        </div>
+                        </article>
 
 
-
-                        <!-- HABITS -->
-
-                        <div class="summary-card">
+                        <article class="summary-card">
 
                             <div class="summary-card-icon"
                                  aria-hidden="true">
-
-                                <svg viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     stroke-linecap="round"
-                                     stroke-linejoin="round">
-
-                                    <path d="M20 11a8 8 0 1 1-2.34-5.66"></path>
-                                    <path d="M20 4v7h-7"></path>
-                                    <path d="M8.5 12.5l2.2 2.2 4.8-5"></path>
-
-                                </svg>
-
+                                <span>↗</span>
                             </div>
+
+                            <h3>Habits</h3>
 
                             <div class="summary-card-content">
 
-                                <h3>
-                                    Habits
-                                </h3>
+                                <strong id="totalHabits">0</strong>
 
-                                <strong id="totalHabits">
-                                    0
-                                </strong>
-
-                                <p>
-                                    Total habits
-                                </p>
+                                <p>Total habits</p>
 
                                 <div class="summary-card-details">
 
                                     <span>
                                         Active:
-                                        <strong id="activeHabits">
-                                            0
-                                        </strong>
+                                        <strong id="activeHabits">0</strong>
                                     </span>
 
                                 </div>
 
                             </div>
 
-                        </div>
+                        </article>
 
 
-
-                        <!-- FOCUS -->
-
-                        <div class="summary-card">
+                        <article class="summary-card">
 
                             <div class="summary-card-icon"
                                  aria-hidden="true">
-
-                                <svg viewBox="0 0 24 24"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     stroke-linecap="round"
-                                     stroke-linejoin="round">
-
-                                    <circle cx="12" cy="13" r="8"></circle>
-
-                                    <path d="M12 9v4l2.5 1.5"></path>
-
-                                    <path d="M9 3h6"></path>
-
-                                    <path d="M12 3v2"></path>
-
-                                </svg>
-
+                                <span>◷</span>
                             </div>
+
+                            <h3>Focus</h3>
 
                             <div class="summary-card-content">
 
-                                <h3>
-                                    Focus
-                                </h3>
+                                <strong id="completedFocusSessions">0</strong>
 
-                                <strong id="completedFocusSessions">
-                                    0
-                                </strong>
-
-                                <p>
-                                    Completed sessions
-                                </p>
+                                <p>Completed sessions</p>
 
                                 <div class="summary-card-details">
 
                                     <span>
                                         Focus Minutes:
-                                        <strong id="focusMinutes">
-                                            0
-                                        </strong>
+                                        <strong id="focusMinutes">0</strong>
                                     </span>
 
                                 </div>
 
                             </div>
 
-                        </div>
+                        </article>
 
                     </div>
 
                 </section>
 
-
-
-                <!-- =================================================
-                     UPCOMING REMINDERS
-                     ================================================= -->
 
                 <section class="dashboard-panel reminders-panel">
 
@@ -724,33 +405,23 @@ html
 
                         </div>
 
-                        <a href="/reminders.html"
+                        <a href="reminders.html"
                            class="panel-link">
                             View All
                         </a>
 
                     </div>
 
-
                     <div id="upcomingReminders">
 
                         <div class="empty-state">
-
-                            <p>
-                                Loading reminders...
-                            </p>
-
+                            <p>Loading reminders...</p>
                         </div>
 
                     </div>
 
                 </section>
 
-
-
-                <!-- =================================================
-                     CREATE GOAL
-                     ================================================= -->
 
                 <section class="dashboard-panel goal-form-panel">
 
@@ -767,8 +438,8 @@ html
                             </h2>
 
                             <p>
-                                Add a measurable goal and track
-                                your progress over time.
+                                Add a measurable goal and track your
+                                progress over time.
                             </p>
 
                         </div>
@@ -778,9 +449,6 @@ html
 
                     <form id="goalForm"
                           class="goal-form">
-
-
-                        <!-- GOAL TITLE -->
 
                         <div class="form-group">
 
@@ -797,8 +465,6 @@ html
                         </div>
 
 
-                        <!-- DESCRIPTION -->
-
                         <div class="form-group">
 
                             <label for="goalDescription">
@@ -813,8 +479,6 @@ html
                         </div>
 
 
-                        <!-- DEADLINE -->
-
                         <div class="form-group">
 
                             <label for="goalDeadline">
@@ -827,8 +491,6 @@ html
 
                         </div>
 
-
-                        <!-- CURRENT VALUE -->
 
                         <div class="form-group">
 
@@ -845,8 +507,6 @@ html
                         </div>
 
 
-                        <!-- TARGET VALUE -->
-
                         <div class="form-group">
 
                             <label for="goalTarget">
@@ -862,8 +522,6 @@ html
                         </div>
 
 
-                        <!-- UNIT -->
-
                         <div class="form-group">
 
                             <label for="goalUnit">
@@ -878,16 +536,12 @@ html
                         </div>
 
 
-                        <!-- FORM ACTION -->
-
                         <div class="form-actions">
 
                             <button type="submit"
                                     id="goalButton"
                                     class="primary-button">
-
                                 Create Goal
-
                             </button>
 
                             <p id="goalMessage"
@@ -899,11 +553,6 @@ html
 
                 </section>
 
-
-
-                <!-- =================================================
-                     GOALS
-                     ================================================= -->
 
                 <section class="dashboard-panel goals-panel">
 
@@ -925,7 +574,7 @@ html
 
                         </div>
 
-                        <a href="/goals.html"
+                        <a href="goals.html"
                            class="panel-link">
                             Manage Goals
                         </a>
@@ -936,17 +585,12 @@ html
                     <div id="goalsContainer">
 
                         <div class="empty-state">
-
-                            <p>
-                                Loading goals...
-                            </p>
-
+                            <p>Loading goals...</p>
                         </div>
 
                     </div>
 
                 </section>
-
 
             </div>
 
@@ -955,17 +599,10 @@ html
     </div>
 
 
-
-    <!-- =====================================================
-         FOOTER
-         ===================================================== -->
-
     <footer class="dashboard-footer">
 
         <p>
-            StudyTrack
-            —
-            Student Productivity System
+            StudyTrack — Student Productivity System
         </p>
 
         <p>
@@ -975,14 +612,7 @@ html
     </footer>
 
 
-
-    <!-- =====================================================
-         DASHBOARD JAVASCRIPT
-         ===================================================== -->
-
     <script src="dashboard.js"></script>
 
 </body>
-
 </html>
-

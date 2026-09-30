@@ -1,136 +1,379 @@
-/* =========================================================
-   STUDYTRACK - REMINDERS PAGE
-   Reminder Management
-   ========================================================= */
+// ============================================================
+// STUDYTRACK - REMINDERS PAGE
+// File: Public/reminders.js
+// ============================================================
 
 
-/* =========================================================
-   1. DOM ELEMENTS
-   ========================================================= */
+// ------------------------------------------------------------
+// DOM ELEMENTS
+// ------------------------------------------------------------
 
-const reminderTitle = document.getElementById("reminderTitle");
-const reminderDescription = document.getElementById("reminderDescription");
-const reminderDate = document.getElementById("reminderDate");
-const reminderTime = document.getElementById("reminderTime");
+const userName = document.getElementById("userName");
+const userEmail = document.getElementById("userEmail");
 
-const createReminderButton = document.getElementById("createReminderButton");
-const reminderMessage = document.getElementById("reminderMessage");
-const remindersContainer = document.getElementById("remindersContainer");
+const reminderTitle =
+    document.getElementById("reminderTitle");
 
-const dayModeButton = document.getElementById("dayModeButton");
-const nightModeButton = document.getElementById("nightModeButton");
+const reminderDescription =
+    document.getElementById("reminderDescription");
 
-const logoutButton = document.getElementById("logoutButton");
+const reminderDate =
+    document.getElementById("reminderDate");
+
+const reminderTime =
+    document.getElementById("reminderTime");
+
+const createReminderButton =
+    document.getElementById("createReminderButton");
+
+const reminderMessage =
+    document.getElementById("reminderMessage");
+
+const remindersContainer =
+    document.getElementById("remindersContainer");
+
+const dayModeButton =
+    document.getElementById("dayModeButton");
+
+const nightModeButton =
+    document.getElementById("nightModeButton");
+
+const logoutButton =
+    document.getElementById("logoutButton");
 
 
-/* =========================================================
-   2. THEME MANAGEMENT
-   ========================================================= */
+// ------------------------------------------------------------
+// MOBILE MENU ELEMENTS
+// ------------------------------------------------------------
+
+const mobileMenuButton =
+    document.getElementById("mobileMenuButton");
+
+const studyTrackSidebar =
+    document.getElementById("studyTrackSidebar");
+
+const mobileMenuOverlay =
+    document.getElementById("mobileMenuOverlay");
+
+
+// ------------------------------------------------------------
+// MOBILE MENU MANAGEMENT
+// ------------------------------------------------------------
+
+function setMobileMenu(open) {
+
+    if (!mobileMenuButton || !studyTrackSidebar) {
+        return;
+    }
+
+    studyTrackSidebar.classList.toggle(
+        "mobile-menu-open",
+        open
+    );
+
+    mobileMenuButton.classList.toggle(
+        "menu-open",
+        open
+    );
+
+    mobileMenuButton.setAttribute(
+        "aria-expanded",
+        String(open)
+    );
+
+    mobileMenuButton.setAttribute(
+        "aria-label",
+        open
+            ? "Close navigation menu"
+            : "Open navigation menu"
+    );
+
+    if (mobileMenuOverlay) {
+
+        mobileMenuOverlay.classList.toggle(
+            "active",
+            open
+        );
+
+        mobileMenuOverlay.setAttribute(
+            "aria-hidden",
+            String(!open)
+        );
+    }
+
+    document.body.classList.toggle(
+        "mobile-menu-active",
+        open
+    );
+}
+
+
+if (mobileMenuButton) {
+
+    mobileMenuButton.addEventListener(
+        "click",
+        function () {
+
+            const isOpen =
+                mobileMenuButton.classList.contains(
+                    "menu-open"
+                );
+
+            setMobileMenu(!isOpen);
+        }
+    );
+}
+
+
+if (mobileMenuOverlay) {
+
+    mobileMenuOverlay.addEventListener(
+        "click",
+        function () {
+
+            setMobileMenu(false);
+        }
+    );
+}
+
+
+document
+    .querySelectorAll(".sidebar-nav-link")
+    .forEach(function (link) {
+
+        link.addEventListener(
+            "click",
+            function () {
+
+                setMobileMenu(false);
+            }
+        );
+    });
+
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            setMobileMenu(false);
+        }
+    }
+);
+
+
+window.addEventListener(
+    "resize",
+    function () {
+
+        if (window.innerWidth > 720) {
+
+            setMobileMenu(false);
+        }
+    }
+);
+
+
+// ------------------------------------------------------------
+// THEME MANAGEMENT
+// ------------------------------------------------------------
 
 function applyTheme(theme) {
-    if (theme === "night") {
-        document.body.classList.add("night-mode");
 
-        if (dayModeButton) {
-            dayModeButton.classList.remove("active");
-        }
+    const isNight =
+        theme === "night";
 
-        if (nightModeButton) {
-            nightModeButton.classList.add("active");
-        }
-    } else {
-        document.body.classList.remove("night-mode");
+    document.body.classList.toggle(
+        "night-mode",
+        isNight
+    );
 
-        if (dayModeButton) {
-            dayModeButton.classList.add("active");
-        }
+    if (dayModeButton) {
 
-        if (nightModeButton) {
-            nightModeButton.classList.remove("active");
-        }
+        dayModeButton.disabled = false;
+
+        dayModeButton.classList.toggle(
+            "active",
+            !isNight
+        );
+
+        dayModeButton.setAttribute(
+            "aria-pressed",
+            String(!isNight)
+        );
+    }
+
+    if (nightModeButton) {
+
+        nightModeButton.disabled = false;
+
+        nightModeButton.classList.toggle(
+            "active",
+            isNight
+        );
+
+        nightModeButton.setAttribute(
+            "aria-pressed",
+            String(isNight)
+        );
     }
 }
 
 
 function loadSavedTheme() {
-    const savedTheme = localStorage.getItem("studytrack-theme");
+
+    const savedTheme =
+        localStorage.getItem(
+            "studytrack-theme"
+        );
 
     if (savedTheme === "night") {
+
         applyTheme("night");
+
     } else {
+
         applyTheme("day");
     }
 }
 
 
 if (dayModeButton) {
-    dayModeButton.addEventListener("click", () => {
-        localStorage.setItem("studytrack-theme", "day");
-        applyTheme("day");
-    });
+
+    dayModeButton.disabled = false;
+
+    dayModeButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            localStorage.setItem(
+                "studytrack-theme",
+                "day"
+            );
+
+            applyTheme("day");
+        }
+    );
 }
 
 
 if (nightModeButton) {
-    nightModeButton.addEventListener("click", () => {
-        localStorage.setItem("studytrack-theme", "night");
-        applyTheme("night");
-    });
+
+    nightModeButton.disabled = false;
+
+    nightModeButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            localStorage.setItem(
+                "studytrack-theme",
+                "night"
+            );
+
+            applyTheme("night");
+        }
+    );
 }
 
 
-/* =========================================================
-   3. LOAD CURRENT USER
-   ========================================================= */
+// ------------------------------------------------------------
+// LOAD CURRENT USER
+// ------------------------------------------------------------
 
 async function loadUser() {
+
     try {
-        const response = await fetch("/api/me");
+
+        const response =
+            await fetch(
+                "/api/me",
+                {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
 
         if (!response.ok) {
-            window.location.href = "/login.html";
+
+            console.error(
+                "User session request failed:",
+                response.status
+            );
+
+            window.location.href =
+                "/login.html";
+
             return null;
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        /*
-           The StudyTrack API returns the authenticated
-           user inside the "user" property.
+        if (!data || !data.user) {
 
-           Example:
-           {
-               "user": {
-                   "id": 3,
-                   "full_name": "Elvis Test",
-                   "email": "elvistest@studytrack.com"
-               }
-           }
+            console.error(
+                "No authenticated user returned from /api/me."
+            );
 
-           Therefore we check data.user instead of
-           data.logged_in.
-        */
+            window.location.href =
+                "/login.html";
 
-        if (!data.user) {
-            window.location.href = "/login.html";
             return null;
         }
 
-        return data.user;
+        const currentUser =
+            data.user;
+
+        if (userName) {
+
+            userName.textContent =
+                currentUser.full_name ||
+                "User";
+        }
+
+        if (userEmail) {
+
+            userEmail.textContent =
+                currentUser.email ||
+                "";
+        }
+
+        return currentUser;
+
     } catch (error) {
-        console.error("Failed to load user:", error);
-        window.location.href = "/login.html";
+
+        console.error(
+            "Failed to load user:",
+            error
+        );
+
+        window.location.href =
+            "/login.html";
+
         return null;
     }
 }
 
 
-/* =========================================================
-   4. SECURITY - ESCAPE HTML
-   ========================================================= */
+// ------------------------------------------------------------
+// SECURITY - ESCAPE HTML
+// ------------------------------------------------------------
 
 function escapeHtml(value) {
-    if (value === null || value === undefined) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
         return "";
     }
 
@@ -143,16 +386,21 @@ function escapeHtml(value) {
 }
 
 
-/* =========================================================
-   5. STATUS NORMALIZATION
-   ========================================================= */
+// ------------------------------------------------------------
+// STATUS NORMALIZATION
+// ------------------------------------------------------------
 
 function normalizeStatus(status) {
-    const value = String(status || "pending")
-        .trim()
-        .toLowerCase();
+
+    const value =
+        String(
+            status || "pending"
+        )
+            .trim()
+            .toLowerCase();
 
     if (value === "completed") {
+
         return "completed";
     }
 
@@ -160,64 +408,101 @@ function normalizeStatus(status) {
 }
 
 
-/* =========================================================
-   6. DATE HELPERS
-   ========================================================= */
+// ------------------------------------------------------------
+// DATE HELPERS
+// ------------------------------------------------------------
 
 function getDateValue(dateValue) {
+
     if (!dateValue) {
         return "";
     }
 
     if (typeof dateValue === "string") {
-        return dateValue.substring(0, 10);
+
+        return dateValue.substring(
+            0,
+            10
+        );
     }
 
     return "";
 }
 
 
-function formatDateForDisplay(dateValue) {
-    const cleanDate = getDateValue(dateValue);
+function formatDateForDisplay(
+    dateValue
+) {
+
+    const cleanDate =
+        getDateValue(
+            dateValue
+        );
 
     if (!cleanDate) {
+
         return "No date";
     }
 
-    const parts = cleanDate.split("-");
+    const parts =
+        cleanDate.split("-");
 
     if (parts.length !== 3) {
+
         return cleanDate;
     }
 
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    return `${parts[2]} /${parts[1]}/${parts[0]}`;
 }
 
 
-function formatTimeForDisplay(timeValue) {
+function formatTimeForDisplay(
+    timeValue
+) {
+
     if (!timeValue) {
+
         return "No time";
     }
 
-    const cleanTime = String(timeValue).substring(0, 5);
-    const parts = cleanTime.split(":");
+    const cleanTime =
+        String(timeValue).substring(
+            0,
+            5
+        );
+
+    const parts =
+        cleanTime.split(":");
 
     if (parts.length !== 2) {
+
         return cleanTime;
     }
 
-    let hour = parseInt(parts[0], 10);
-    const minute = parts[1];
+    let hour =
+        parseInt(
+            parts[0],
+            10
+        );
+
+    const minute =
+        parts[1];
 
     if (Number.isNaN(hour)) {
+
         return cleanTime;
     }
 
-    const period = hour >= 12 ? "PM" : "AM";
+    const period =
+        hour >= 12
+            ? "PM"
+            : "AM";
 
-    hour = hour % 12;
+    hour =
+        hour % 12;
 
     if (hour === 0) {
+
         hour = 12;
     }
 
@@ -225,60 +510,90 @@ function formatTimeForDisplay(timeValue) {
 }
 
 
-/* =========================================================
-   7. CHECK WHETHER A REMINDER IS OVERDUE
-   ========================================================= */
+// ------------------------------------------------------------
+// CHECK WHETHER REMINDER IS OVERDUE
+// ------------------------------------------------------------
 
 function isReminderOverdue(
     reminderDateValue,
     reminderTimeValue,
     status
 ) {
-    const normalizedStatus = normalizeStatus(status);
 
-    /*
-       Completed reminders are never shown as overdue.
-    */
+    const normalizedStatus =
+        normalizeStatus(
+            status
+        );
 
-    if (normalizedStatus === "completed") {
+    if (
+        normalizedStatus ===
+        "completed"
+    ) {
+
         return false;
     }
 
-    const dateValue = getDateValue(reminderDateValue);
+    const dateValue =
+        getDateValue(
+            reminderDateValue
+        );
 
     if (!dateValue) {
+
         return false;
     }
 
-    let timeValue = "23:59";
+    let timeValue =
+        "23:59";
 
     if (reminderTimeValue) {
-        timeValue = String(reminderTimeValue).substring(0, 5);
+
+        timeValue =
+            String(
+                reminderTimeValue
+            ).substring(
+                0,
+                5
+            );
     }
 
-    const reminderDateTime = new Date(
-        `${dateValue}T${timeValue}:00`
-    );
+    const reminderDateTime =
+        new Date(
+            `${dateValue}T${timeValue}:00`
+        );
 
-    if (Number.isNaN(reminderDateTime.getTime())) {
+    if (
+        Number.isNaN(
+            reminderDateTime.getTime()
+        )
+    ) {
+
         return false;
     }
 
-    return reminderDateTime.getTime() < Date.now();
+    return (
+        reminderDateTime.getTime() <
+        Date.now()
+    );
 }
 
 
-/* =========================================================
-   8. GET REMINDER DATE/TIME VALUE
-   Used for sorting reminders.
-   ========================================================= */
+// ------------------------------------------------------------
+// GET REMINDER DATE/TIME FOR SORTING
+// ------------------------------------------------------------
 
-function getReminderDateTime(reminder) {
-    const dateValue = getDateValue(
-        reminder.reminder_date || reminder.date
-    );
+function getReminderDateTime(
+    reminder
+) {
+
+    const dateValue =
+        getDateValue(
+            reminder.reminder_date ||
+            reminder.date
+        );
 
     if (!dateValue) {
+
         return Number.MAX_SAFE_INTEGER;
     }
 
@@ -287,15 +602,22 @@ function getReminderDateTime(reminder) {
         reminder.time ||
         "23:59";
 
-    timeValue = String(timeValue).substring(0, 5);
+    timeValue =
+        String(timeValue).substring(
+            0,
+            5
+        );
 
-    const dateTime = new Date(
-        `${dateValue}T${timeValue}:00`
-    );
+    const dateTime =
+        new Date(
+            `${dateValue}T${timeValue}:00`
+        );
 
-    const timestamp = dateTime.getTime();
+    const timestamp =
+        dateTime.getTime();
 
     if (Number.isNaN(timestamp)) {
+
         return Number.MAX_SAFE_INTEGER;
     }
 
@@ -303,108 +625,161 @@ function getReminderDateTime(reminder) {
 }
 
 
-/* =========================================================
-   9. GET REMINDER BY ID
-   ========================================================= */
+// ------------------------------------------------------------
+// GET REMINDER BY ID
+// ------------------------------------------------------------
 
 function getReminderById(id) {
-    const reminders = window.studyTrackReminders || [];
 
-    const reminder = reminders.find(
-        item => String(item.id) === String(id)
-    );
+    const reminders =
+        window.studyTrackReminders ||
+        [];
+
+    const reminder =
+        reminders.find(
+            item =>
+                String(item.id) ===
+                String(id)
+        );
 
     return reminder || null;
 }
 
 
-/* =========================================================
-   10. DISPLAY FORM MESSAGE
-   ========================================================= */
+// ------------------------------------------------------------
+// DISPLAY FORM MESSAGE
+// ------------------------------------------------------------
 
-function showMessage(message, type = "") {
+function showMessage(
+    message,
+    type = ""
+) {
+
     if (!reminderMessage) {
         return;
     }
 
-    reminderMessage.textContent = message;
-    reminderMessage.className = "form-message";
+    reminderMessage.textContent =
+        message;
+
+    reminderMessage.className =
+        "form-message";
 
     if (message) {
-        reminderMessage.classList.add("show");
+
+        reminderMessage.classList.add(
+            "show"
+        );
     }
 
     if (type) {
-        reminderMessage.classList.add(type);
+
+        reminderMessage.classList.add(
+            type
+        );
     }
 }
 
 
-/* =========================================================
-   11. CREATE REMINDER
-   ========================================================= */
+// ------------------------------------------------------------
+// CREATE REMINDER
+// ------------------------------------------------------------
 
 async function createReminder() {
-    const title = reminderTitle?.value.trim() || "";
+
+    const title =
+        reminderTitle?.value.trim() ||
+        "";
+
     const description =
-        reminderDescription?.value.trim() || "";
-    const date = reminderDate?.value || "";
-    const time = reminderTime?.value || "";
+        reminderDescription?.value.trim() ||
+        "";
+
+    const date =
+        reminderDate?.value ||
+        "";
+
+    const time =
+        reminderTime?.value ||
+        "";
 
     if (!title) {
+
         showMessage(
             "Please enter a reminder title.",
             "error"
         );
 
         reminderTitle?.focus();
+
         return;
     }
 
     if (!date) {
+
         showMessage(
             "Please select a reminder date.",
             "error"
         );
 
         reminderDate?.focus();
+
         return;
     }
 
     if (!time) {
+
         showMessage(
             "Please select a reminder time.",
             "error"
         );
 
         reminderTime?.focus();
+
         return;
     }
 
     try {
-        createReminderButton.disabled = true;
 
-        showMessage("Creating reminder...");
+        if (createReminderButton) {
 
-        const response = await fetch(
-            "/api/reminders",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    title,
-                    description,
-                    reminder_date: date,
-                    reminder_time: time
-                })
-            }
+            createReminderButton.disabled =
+                true;
+        }
+
+        showMessage(
+            "Creating reminder..."
         );
 
-        const data = await response.json();
+        const response =
+            await fetch(
+                "/api/reminders",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        reminder_date:
+                            date,
+                        reminder_time:
+                            time
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
 
         if (!response.ok) {
+
             throw new Error(
                 data.message ||
                 "Failed to create reminder."
@@ -433,7 +808,9 @@ async function createReminder() {
         }
 
         await loadReminders();
+
     } catch (error) {
+
         console.error(
             "Create reminder error:",
             error
@@ -444,13 +821,20 @@ async function createReminder() {
             "Failed to create reminder.",
             "error"
         );
+
     } finally {
-        createReminderButton.disabled = false;
+
+        if (createReminderButton) {
+
+            createReminderButton.disabled =
+                false;
+        }
     }
 }
 
 
 if (createReminderButton) {
+
     createReminderButton.addEventListener(
         "click",
         createReminder
@@ -458,14 +842,17 @@ if (createReminderButton) {
 }
 
 
-/* =========================================================
-   12. EDIT REMINDER
-   ========================================================= */
+// ------------------------------------------------------------
+// EDIT REMINDER
+// ------------------------------------------------------------
 
 async function editReminder(id) {
-    const reminder = getReminderById(id);
+
+    const reminder =
+        getReminderById(id);
 
     if (!reminder) {
+
         showMessage(
             "The selected reminder could not be found.",
             "error"
@@ -474,20 +861,21 @@ async function editReminder(id) {
         return;
     }
 
-    const currentTitle = reminder.title || "";
-
-    const newTitle = window.prompt(
-        "Edit reminder title:",
-        currentTitle
-    );
+    const newTitle =
+        window.prompt(
+            "Edit reminder title:",
+            reminder.title || ""
+        );
 
     if (newTitle === null) {
         return;
     }
 
-    const trimmedTitle = newTitle.trim();
+    const trimmedTitle =
+        newTitle.trim();
 
     if (!trimmedTitle) {
+
         window.alert(
             "Reminder title cannot be empty."
         );
@@ -495,67 +883,88 @@ async function editReminder(id) {
         return;
     }
 
-    const currentDescription =
-        reminder.description || "";
-
-    const newDescription = window.prompt(
-        "Edit reminder description:",
-        currentDescription
-    );
+    const newDescription =
+        window.prompt(
+            "Edit reminder description:",
+            reminder.description || ""
+        );
 
     if (newDescription === null) {
         return;
     }
 
-    const currentDate = getDateValue(
-        reminder.reminder_date ||
-        reminder.date
-    );
+    const currentDate =
+        getDateValue(
+            reminder.reminder_date ||
+            reminder.date
+        );
 
-    const newDate = window.prompt(
-        "Edit reminder date (YYYY-MM-DD):",
-        currentDate
-    );
+    const newDate =
+        window.prompt(
+            "Edit reminder date (YYYY-MM-DD):",
+            currentDate
+        );
 
     if (newDate === null) {
         return;
     }
 
-    const currentTime = String(
-        reminder.reminder_time ||
-        reminder.time ||
-        ""
-    ).substring(0, 5);
+    const currentTime =
+        String(
+            reminder.reminder_time ||
+            reminder.time ||
+            ""
+        ).substring(
+            0,
+            5
+        );
 
-    const newTime = window.prompt(
-        "Edit reminder time (HH:MM):",
-        currentTime
-    );
+    const newTime =
+        window.prompt(
+            "Edit reminder time (HH:MM):",
+            currentTime
+        );
 
     if (newTime === null) {
         return;
     }
 
     try {
-        const response = await fetch(
-            `/api/reminders/${encodeURIComponent(id)}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    title: trimmedTitle,
-                    description: newDescription.trim(),
-                    reminder_date: newDate.trim(),
-                    reminder_time: newTime.trim()
-                })
-            }
-        );
 
-        const data = await response.json();
+        const response =
+            await fetch(
+                `/api/reminders/${encodeURIComponent(id)}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify({
+                        title:
+                            trimmedTitle,
+
+                        description:
+                            newDescription.trim(),
+
+                        reminder_date:
+                            newDate.trim(),
+
+                        reminder_time:
+                            newTime.trim()
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
 
         if (!response.ok) {
+
             throw new Error(
                 data.message ||
                 "Failed to update reminder."
@@ -568,7 +977,9 @@ async function editReminder(id) {
         );
 
         await loadReminders();
+
     } catch (error) {
+
         console.error(
             "Edit reminder error:",
             error
@@ -583,14 +994,17 @@ async function editReminder(id) {
 }
 
 
-/* =========================================================
-   13. DELETE REMINDER
-   ========================================================= */
+// ------------------------------------------------------------
+// DELETE REMINDER
+// ------------------------------------------------------------
 
 async function deleteReminder(id) {
-    const reminder = getReminderById(id);
+
+    const reminder =
+        getReminderById(id);
 
     if (!reminder) {
+
         showMessage(
             "The selected reminder could not be found.",
             "error"
@@ -599,25 +1013,31 @@ async function deleteReminder(id) {
         return;
     }
 
-    const confirmed = window.confirm(
-        `Delete the reminder "${reminder.title}"?`
-    );
+    const confirmed =
+        window.confirm(
+            `Delete the reminder "${reminder.title}"?`
+        );
 
     if (!confirmed) {
         return;
     }
 
     try {
-        const response = await fetch(
-            `/api/reminders/${encodeURIComponent(id)}`,
-            {
-                method: "DELETE"
-            }
-        );
 
-        const data = await response.json();
+        const response =
+            await fetch(
+                `/api/reminders/${encodeURIComponent(id)}`,
+                {
+                    method: "DELETE",
+                    credentials: "include"
+                }
+            );
+
+        const data =
+            await response.json();
 
         if (!response.ok) {
+
             throw new Error(
                 data.message ||
                 "Failed to delete reminder."
@@ -630,7 +1050,9 @@ async function deleteReminder(id) {
         );
 
         await loadReminders();
+
     } catch (error) {
+
         console.error(
             "Delete reminder error:",
             error
@@ -645,31 +1067,45 @@ async function deleteReminder(id) {
 }
 
 
-/* =========================================================
-   14. UPDATE REMINDER STATUS
-   ========================================================= */
+// ------------------------------------------------------------
+// UPDATE REMINDER STATUS
+// ------------------------------------------------------------
 
-async function updateReminderStatus(id, status) {
+async function updateReminderStatus(
+    id,
+    status
+) {
+
     const normalizedStatus =
         normalizeStatus(status);
 
     try {
-        const response = await fetch(
-            `/api/reminders/${encodeURIComponent(id)}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    status: normalizedStatus
-                })
-            }
-        );
 
-        const data = await response.json();
+        const response =
+            await fetch(
+                `/api/reminders/${encodeURIComponent(id)}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify({
+                        status:
+                            normalizedStatus
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
 
         if (!response.ok) {
+
             throw new Error(
                 data.message ||
                 "Failed to update reminder status."
@@ -677,7 +1113,9 @@ async function updateReminderStatus(id, status) {
         }
 
         await loadReminders();
+
     } catch (error) {
+
         console.error(
             "Update reminder status error:",
             error
@@ -692,11 +1130,12 @@ async function updateReminderStatus(id, status) {
 }
 
 
-/* =========================================================
-   15. REMINDER ICON
-   ========================================================= */
+// ------------------------------------------------------------
+// REMINDER ICON
+// ------------------------------------------------------------
 
 function getReminderIcon() {
+
     return `
         <svg
             viewBox="0 0 24 24"
@@ -707,66 +1146,101 @@ function getReminderIcon() {
             stroke-linejoin="round"
             aria-hidden="true"
         >
-            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
-            <path d="M10 21h4"></path>
+
+            <path
+                d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+            ></path>
+
+            <path
+                d="M10 21h4"
+            ></path>
+
         </svg>
     `;
 }
 
 
-/* =========================================================
-   16. CREATE REMINDER CARD
-   ========================================================= */
+// ------------------------------------------------------------
+// CREATE REMINDER CARD
+// ------------------------------------------------------------
 
-function createReminderCard(reminder) {
-    const id = reminder.id;
+function createReminderCard(
+    reminder
+) {
 
-    const title = escapeHtml(
-        reminder.title ||
-        "Untitled Reminder"
-    );
+    const id =
+        reminder.id;
 
-    const description = escapeHtml(
-        reminder.description ||
-        "No description provided."
-    );
+    const title =
+        escapeHtml(
+            reminder.title ||
+            "Untitled Reminder"
+        );
 
-    const dateValue = getDateValue(
-        reminder.reminder_date ||
-        reminder.date
-    );
+    const description =
+        escapeHtml(
+            reminder.description ||
+            "No description provided."
+        );
 
-    const timeValue = String(
-        reminder.reminder_time ||
-        reminder.time ||
-        ""
-    ).substring(0, 5);
+    const dateValue =
+        getDateValue(
+            reminder.reminder_date ||
+            reminder.date
+        );
+
+    const timeValue =
+        String(
+            reminder.reminder_time ||
+            reminder.time ||
+            ""
+        ).substring(
+            0,
+            5
+        );
 
     const displayDate =
-        formatDateForDisplay(dateValue);
+        formatDateForDisplay(
+            dateValue
+        );
 
     const displayTime =
-        formatTimeForDisplay(timeValue);
+        formatTimeForDisplay(
+            timeValue
+        );
 
     const normalizedStatus =
-        normalizeStatus(reminder.status);
+        normalizeStatus(
+            reminder.status
+        );
 
-    const overdue = isReminderOverdue(
-        dateValue,
-        timeValue,
-        normalizedStatus
-    );
+    const overdue =
+        isReminderOverdue(
+            dateValue,
+            timeValue,
+            normalizedStatus
+        );
 
-    let displayStatus = "Pending";
+    let displayStatus =
+        "Pending";
 
-    if (normalizedStatus === "completed") {
-        displayStatus = "Completed";
+    if (
+        normalizedStatus ===
+        "completed"
+    ) {
+
+        displayStatus =
+            "Completed";
+
     } else if (overdue) {
-        displayStatus = "Overdue";
+
+        displayStatus =
+            "Overdue";
     }
 
     const statusClass =
-        normalizedStatus === "completed"
+        normalizedStatus ===
+            "completed"
             ? "completed"
             : "pending";
 
@@ -777,7 +1251,9 @@ function createReminderCard(reminder) {
         >
 
             <div class="reminder-icon">
+
                 ${getReminderIcon()}
+
             </div>
 
             <div class="reminder-content">
@@ -791,11 +1267,15 @@ function createReminderCard(reminder) {
                 </p>
 
                 <div class="reminder-date">
+
                     Date:
                     ${escapeHtml(displayDate)}
+
                     &nbsp;&nbsp;|&nbsp;&nbsp;
+
                     Time:
                     ${escapeHtml(displayTime)}
+
                 </div>
 
                 <div
@@ -845,14 +1325,22 @@ function createReminderCard(reminder) {
 
                         <option
                             value="pending"
-                            ${normalizedStatus === "pending" ? "selected" : ""}
+                            ${normalizedStatus ===
+            "pending"
+            ? "selected"
+            : ""
+        }
                         >
                             Pending
                         </option>
 
                         <option
                             value="completed"
-                            ${normalizedStatus === "completed" ? "selected" : ""}
+                            ${normalizedStatus ===
+            "completed"
+            ? "selected"
+            : ""
+        }
                         >
                             Completed
                         </option>
@@ -898,9 +1386,9 @@ function createReminderCard(reminder) {
 }
 
 
-/* =========================================================
-   17. CREATE REMINDER GROUP
-   ========================================================= */
+// ------------------------------------------------------------
+// CREATE REMINDER GROUP
+// ------------------------------------------------------------
 
 function createReminderGroup(
     eyebrow,
@@ -908,6 +1396,7 @@ function createReminderGroup(
     description,
     reminders
 ) {
+
     if (!reminders.length) {
         return "";
     }
@@ -945,9 +1434,11 @@ function createReminderGroup(
             </div>
 
             <div class="reminder-list">
+
                 ${reminders
             .map(createReminderCard)
             .join("")}
+
             </div>
 
         </section>
@@ -955,111 +1446,137 @@ function createReminderGroup(
 }
 
 
-/* =========================================================
-   18. LOAD AND ORGANIZE REMINDERS
-   ========================================================= */
+// ------------------------------------------------------------
+// LOAD AND ORGANIZE REMINDERS
+// ------------------------------------------------------------
 
 async function loadReminders() {
+
     if (!remindersContainer) {
         return;
     }
 
     remindersContainer.innerHTML = `
         <div class="empty-state">
-            <p>Loading reminders...</p>
+
+            <p>
+                Loading reminders...
+            </p>
+
         </div>
     `;
 
     try {
-        const response = await fetch(
-            "/api/reminders"
-        );
 
-        const data = await response.json();
+        const response =
+            await fetch(
+                "/api/reminders",
+                {
+                    credentials: "include"
+                }
+            );
+
+        if (response.status === 401) {
+
+            window.location.href =
+                "/login.html";
+
+            return;
+        }
+
+        const data =
+            await response.json();
 
         if (!response.ok) {
+
             throw new Error(
                 data.message ||
                 "Failed to load reminders."
             );
         }
 
-        const reminders = Array.isArray(data)
-            ? data
-            : Array.isArray(data.reminders)
-                ? data.reminders
-                : [];
+        const reminders =
+            Array.isArray(data)
+                ? data
+                : Array.isArray(data.reminders)
+                    ? data.reminders
+                    : [];
 
-        /*
-           Keep the current reminders available globally
-           so Edit/Delete can find the selected reminder.
-        */
-
-        window.studyTrackReminders = reminders;
+        window.studyTrackReminders =
+            reminders;
 
         if (reminders.length === 0) {
+
             remindersContainer.innerHTML = `
                 <div class="empty-state">
+
                     <p>
                         You do not have any reminders yet.
                     </p>
+
                 </div>
             `;
 
             return;
         }
 
-
-        /* -----------------------------------------------------
-           Separate reminders into three groups
-           ----------------------------------------------------- */
-
         const overdueReminders = [];
         const upcomingReminders = [];
         const completedReminders = [];
 
+        reminders.forEach(
+            reminder => {
 
-        reminders.forEach(reminder => {
-            const status =
-                normalizeStatus(reminder.status);
+                const status =
+                    normalizeStatus(
+                        reminder.status
+                    );
 
-            const dateValue =
-                getDateValue(
-                    reminder.reminder_date ||
-                    reminder.date
-                );
+                const dateValue =
+                    getDateValue(
+                        reminder.reminder_date ||
+                        reminder.date
+                    );
 
-            const timeValue =
-                String(
-                    reminder.reminder_time ||
-                    reminder.time ||
-                    ""
-                ).substring(0, 5);
+                const timeValue =
+                    String(
+                        reminder.reminder_time ||
+                        reminder.time ||
+                        ""
+                    ).substring(
+                        0,
+                        5
+                    );
 
+                if (
+                    status ===
+                    "completed"
+                ) {
 
-            if (status === "completed") {
-                completedReminders.push(reminder);
+                    completedReminders.push(
+                        reminder
+                    );
 
-            } else if (
-                isReminderOverdue(
-                    dateValue,
-                    timeValue,
-                    status
-                )
-            ) {
-                overdueReminders.push(reminder);
+                } else if (
+                    isReminderOverdue(
+                        dateValue,
+                        timeValue,
+                        status
+                    )
+                ) {
 
-            } else {
-                upcomingReminders.push(reminder);
+                    overdueReminders.push(
+                        reminder
+                    );
+
+                } else {
+
+                    upcomingReminders.push(
+                        reminder
+                    );
+                }
             }
-        });
-
-
-        /* -----------------------------------------------------
-           Sort overdue reminders
-
-           Oldest overdue reminder first.
-           ----------------------------------------------------- */
+        );
 
         overdueReminders.sort(
             (a, b) =>
@@ -1067,36 +1584,17 @@ async function loadReminders() {
                 getReminderDateTime(b)
         );
 
-
-        /* -----------------------------------------------------
-           Sort upcoming reminders
-
-           Earliest upcoming reminder first.
-           ----------------------------------------------------- */
-
         upcomingReminders.sort(
             (a, b) =>
                 getReminderDateTime(a) -
                 getReminderDateTime(b)
         );
 
-
-        /* -----------------------------------------------------
-           Sort completed reminders
-
-           Most recently scheduled completed reminder first.
-           ----------------------------------------------------- */
-
         completedReminders.sort(
             (a, b) =>
                 getReminderDateTime(b) -
                 getReminderDateTime(a)
         );
-
-
-        /* -----------------------------------------------------
-           Build the three sections
-           ----------------------------------------------------- */
 
         let html = "";
 
@@ -1121,10 +1619,11 @@ async function loadReminders() {
             completedReminders
         );
 
-
-        remindersContainer.innerHTML = html;
+        remindersContainer.innerHTML =
+            html;
 
     } catch (error) {
+
         console.error(
             "Load reminders error:",
             error
@@ -1132,21 +1631,23 @@ async function loadReminders() {
 
         remindersContainer.innerHTML = `
             <div class="empty-state">
+
                 <p>
                     ${escapeHtml(
             error.message ||
             "Failed to load reminders."
         )}
                 </p>
+
             </div>
         `;
     }
 }
 
 
-/* =========================================================
-   19. REMINDER EVENT DELEGATION
-   ========================================================= */
+// ------------------------------------------------------------
+// REMINDER EVENT DELEGATION
+// ------------------------------------------------------------
 
 if (remindersContainer) {
 
@@ -1174,15 +1675,16 @@ if (remindersContainer) {
             }
 
             if (action === "edit") {
+
                 editReminder(id);
             }
 
             if (action === "delete") {
+
                 deleteReminder(id);
             }
         }
     );
-
 
     remindersContainer.addEventListener(
         "change",
@@ -1216,9 +1718,9 @@ if (remindersContainer) {
 }
 
 
-/* =========================================================
-   20. LOGOUT
-   ========================================================= */
+// ------------------------------------------------------------
+// LOGOUT
+// ------------------------------------------------------------
 
 if (logoutButton) {
 
@@ -1231,7 +1733,8 @@ if (logoutButton) {
                 await fetch(
                     "/api/logout",
                     {
-                        method: "POST"
+                        method: "POST",
+                        credentials: "include"
                     }
                 );
 
@@ -1252,9 +1755,9 @@ if (logoutButton) {
 }
 
 
-/* =========================================================
-   21. STARTUP
-   ========================================================= */
+// ------------------------------------------------------------
+// STARTUP
+// ------------------------------------------------------------
 
 loadSavedTheme();
 

@@ -1,56 +1,508 @@
 let goals = [];
 
 
-// ========================================
-// GET PAGE ELEMENTS
-// ========================================
+/* =========================================================
+   PAGE ELEMENTS
+   ========================================================= */
 
 const userName = document.getElementById('userName');
 const userEmail = document.getElementById('userEmail');
+
 const goalForm = document.getElementById('goalForm');
 const goalMessage = document.getElementById('goalMessage');
 const goalsContainer = document.getElementById('goalsContainer');
+
 const logoutButton = document.getElementById('logoutButton');
 
+const dayModeButton = document.getElementById('dayModeButton');
+const nightModeButton = document.getElementById('nightModeButton');
 
-// ========================================
-// DAY / NIGHT THEME
-// ========================================
+const mobileMenuButton = document.getElementById('mobileMenuButton');
+const studyTrackSidebar = document.getElementById('studyTrackSidebar');
+const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
 
-const dayModeButton =
-    document.getElementById('dayModeButton');
 
-const nightModeButton =
-    document.getElementById('nightModeButton');
+/* =========================================================
+   SCREEN SIZE
+   ========================================================= */
 
+function isMobileScreen() {
+    return window.innerWidth <= 720;
+}
+
+
+/* =========================================================
+   SIDEBAR FEATURE NAMES
+   ========================================================= */
+
+function setupSidebarLabels() {
+    if (!studyTrackSidebar) {
+        return;
+    }
+
+    const sidebarItems =
+        studyTrackSidebar.querySelectorAll(
+            '.sidebar-nav-link, .logout-button'
+        );
+
+    sidebarItems.forEach(function (item) {
+        const label =
+            item.querySelector(
+                'span:not(.nav-icon)'
+            );
+
+        if (!label) {
+            return;
+        }
+
+        const labelText =
+            label.textContent.trim();
+
+        if (!labelText) {
+            return;
+        }
+
+        /*
+         * The title attribute gives every sidebar item
+         * a reliable browser tooltip when the sidebar
+         * is collapsed.
+         */
+        item.setAttribute(
+            'title',
+            labelText
+        );
+
+        /*
+         * Store the name as a data attribute as well.
+         * This gives the stylesheet a reliable value to
+         * use for a custom tooltip if needed.
+         */
+        item.setAttribute(
+            'data-tooltip',
+            labelText
+        );
+    });
+}
+
+
+/* =========================================================
+   NAVIGATION BUTTON
+   ========================================================= */
+
+function updateNavigationButton() {
+    if (!mobileMenuButton) {
+        return;
+    }
+
+    if (isMobileScreen()) {
+
+        const menuIsOpen =
+            document.body.classList.contains(
+                'mobile-menu-open'
+            );
+
+        mobileMenuButton.classList.toggle(
+            'menu-open',
+            menuIsOpen
+        );
+
+        mobileMenuButton.setAttribute(
+            'aria-expanded',
+            String(menuIsOpen)
+        );
+
+        mobileMenuButton.setAttribute(
+            'aria-label',
+            menuIsOpen
+                ? 'Close navigation menu'
+                : 'Open navigation menu'
+        );
+
+        mobileMenuButton.setAttribute(
+            'title',
+            menuIsOpen
+                ? 'Close navigation menu'
+                : 'Open navigation menu'
+        );
+
+    } else {
+
+        const sidebarIsCollapsed =
+            document.body.classList.contains(
+                'desktop-sidebar-collapsed'
+            );
+
+        mobileMenuButton.classList.toggle(
+            'menu-open',
+            !sidebarIsCollapsed
+        );
+
+        mobileMenuButton.setAttribute(
+            'aria-expanded',
+            String(!sidebarIsCollapsed)
+        );
+
+        mobileMenuButton.setAttribute(
+            'aria-label',
+            sidebarIsCollapsed
+                ? 'Expand navigation sidebar'
+                : 'Collapse navigation sidebar'
+        );
+
+        mobileMenuButton.setAttribute(
+            'title',
+            sidebarIsCollapsed
+                ? 'Expand navigation sidebar'
+                : 'Collapse navigation sidebar'
+        );
+    }
+}
+
+
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
+
+function setMobileMenu(open) {
+    if (!studyTrackSidebar) {
+        return;
+    }
+
+    studyTrackSidebar.classList.toggle(
+        'mobile-menu-open',
+        open
+    );
+
+    document.body.classList.toggle(
+        'mobile-menu-open',
+        open
+    );
+
+    /*
+     * Remove the older class name if it exists.
+     * This prevents conflicts with previous versions
+     * of the navigation code.
+     */
+    document.body.classList.remove(
+        'mobile-menu-active'
+    );
+
+    if (mobileMenuOverlay) {
+
+        mobileMenuOverlay.classList.toggle(
+            'active',
+            open
+        );
+
+        mobileMenuOverlay.setAttribute(
+            'aria-hidden',
+            String(!open)
+        );
+    }
+
+    updateNavigationButton();
+}
+
+
+/* =========================================================
+   DESKTOP SIDEBAR
+   ========================================================= */
+
+function setDesktopSidebarCollapsed(collapsed) {
+    if (!studyTrackSidebar) {
+        return;
+    }
+
+    if (isMobileScreen()) {
+        return;
+    }
+
+    document.body.classList.toggle(
+        'desktop-sidebar-collapsed',
+        collapsed
+    );
+
+    localStorage.setItem(
+        'studytrack-sidebar-collapsed',
+        collapsed
+            ? 'true'
+            : 'false'
+    );
+
+    updateNavigationButton();
+}
+
+
+/* =========================================================
+   LOAD SAVED SIDEBAR STATE
+   ========================================================= */
+
+function initializeNavigation() {
+    if (!studyTrackSidebar) {
+        return;
+    }
+
+    setupSidebarLabels();
+
+    if (isMobileScreen()) {
+
+        document.body.classList.remove(
+            'desktop-sidebar-collapsed'
+        );
+
+        setMobileMenu(false);
+
+        return;
+    }
+
+
+    setMobileMenu(false);
+
+
+    const savedSidebarState =
+        localStorage.getItem(
+            'studytrack-sidebar-collapsed'
+        );
+
+
+    if (savedSidebarState === 'true') {
+
+        setDesktopSidebarCollapsed(true);
+
+    } else {
+
+        setDesktopSidebarCollapsed(false);
+    }
+}
+
+
+/* =========================================================
+   HAMBURGER BUTTON
+   ========================================================= */
+
+if (mobileMenuButton) {
+
+    mobileMenuButton.addEventListener(
+        'click',
+        function () {
+
+            if (isMobileScreen()) {
+
+                const menuIsOpen =
+                    document.body.classList.contains(
+                        'mobile-menu-open'
+                    );
+
+                setMobileMenu(
+                    !menuIsOpen
+                );
+
+                return;
+            }
+
+
+            const sidebarIsCollapsed =
+                document.body.classList.contains(
+                    'desktop-sidebar-collapsed'
+                );
+
+
+            setDesktopSidebarCollapsed(
+                !sidebarIsCollapsed
+            );
+        }
+    );
+}
+
+
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
+
+if (mobileMenuOverlay) {
+
+    mobileMenuOverlay.addEventListener(
+        'click',
+        function () {
+
+            setMobileMenu(false);
+        }
+    );
+}
+
+
+/* =========================================================
+   CLOSE MOBILE MENU AFTER NAVIGATION
+   ========================================================= */
+
+if (studyTrackSidebar) {
+
+    const sidebarLinks =
+        studyTrackSidebar.querySelectorAll(
+            '.sidebar-nav-link'
+        );
+
+
+    sidebarLinks.forEach(
+        function (link) {
+
+            link.addEventListener(
+                'click',
+                function () {
+
+                    if (isMobileScreen()) {
+
+                        setMobileMenu(false);
+                    }
+                }
+            );
+        }
+    );
+}
+
+
+/* =========================================================
+   CLOSE MOBILE MENU WITH ESCAPE
+   ========================================================= */
+
+document.addEventListener(
+    'keydown',
+    function (event) {
+
+        if (event.key !== 'Escape') {
+            return;
+        }
+
+
+        if (isMobileScreen()) {
+
+            setMobileMenu(false);
+        }
+    }
+);
+
+
+/* =========================================================
+   HANDLE SCREEN SIZE CHANGES
+   ========================================================= */
+
+window.addEventListener(
+    'resize',
+    function () {
+
+        if (isMobileScreen()) {
+
+            document.body.classList.remove(
+                'desktop-sidebar-collapsed'
+            );
+
+            setMobileMenu(false);
+
+        } else {
+
+            setMobileMenu(false);
+
+
+            const savedSidebarState =
+                localStorage.getItem(
+                    'studytrack-sidebar-collapsed'
+                );
+
+
+            if (savedSidebarState === 'true') {
+
+                setDesktopSidebarCollapsed(true);
+
+            } else {
+
+                setDesktopSidebarCollapsed(false);
+            }
+        }
+
+        updateNavigationButton();
+    }
+);
+
+
+/* =========================================================
+   DAY / NIGHT THEME
+   ========================================================= */
 
 function applyTheme(theme) {
 
     if (theme === 'night') {
 
-        document.body.classList.add('night-mode');
+        document.body.classList.add(
+            'night-mode'
+        );
+
+        document.body.classList.remove(
+            'day-mode'
+        );
+
 
         if (dayModeButton) {
-            dayModeButton.classList.remove('active');
+
+            dayModeButton.classList.remove(
+                'active'
+            );
+
+            dayModeButton.setAttribute(
+                'aria-pressed',
+                'false'
+            );
         }
 
+
         if (nightModeButton) {
-            nightModeButton.classList.add('active');
+
+            nightModeButton.classList.add(
+                'active'
+            );
+
+            nightModeButton.setAttribute(
+                'aria-pressed',
+                'true'
+            );
         }
 
     } else {
 
-        document.body.classList.remove('night-mode');
+        document.body.classList.add(
+            'day-mode'
+        );
+
+        document.body.classList.remove(
+            'night-mode'
+        );
+
 
         if (nightModeButton) {
-            nightModeButton.classList.remove('active');
+
+            nightModeButton.classList.remove(
+                'active'
+            );
+
+            nightModeButton.setAttribute(
+                'aria-pressed',
+                'false'
+            );
         }
+
 
         if (dayModeButton) {
-            dayModeButton.classList.add('active');
-        }
 
+            dayModeButton.classList.add(
+                'active'
+            );
+
+            dayModeButton.setAttribute(
+                'aria-pressed',
+                'true'
+            );
+        }
     }
+
 
     localStorage.setItem(
         'studytrack-theme',
@@ -59,9 +511,9 @@ function applyTheme(theme) {
 }
 
 
-// ========================================
-// DAY MODE BUTTON
-// ========================================
+/* =========================================================
+   DAY MODE BUTTON
+   ========================================================= */
 
 if (dayModeButton) {
 
@@ -70,16 +522,14 @@ if (dayModeButton) {
         function () {
 
             applyTheme('day');
-
         }
     );
-
 }
 
 
-// ========================================
-// NIGHT MODE BUTTON
-// ========================================
+/* =========================================================
+   NIGHT MODE BUTTON
+   ========================================================= */
 
 if (nightModeButton) {
 
@@ -88,19 +538,19 @@ if (nightModeButton) {
         function () {
 
             applyTheme('night');
-
         }
     );
-
 }
 
 
-// ========================================
-// LOAD SAVED THEME
-// ========================================
+/* =========================================================
+   LOAD SAVED THEME
+   ========================================================= */
 
 const savedTheme =
-    localStorage.getItem('studytrack-theme');
+    localStorage.getItem(
+        'studytrack-theme'
+    );
 
 
 if (savedTheme === 'night') {
@@ -110,41 +560,62 @@ if (savedTheme === 'night') {
 } else {
 
     applyTheme('day');
-
 }
 
 
-// ========================================
-// LOAD CURRENT USER
-// ========================================
+/* =========================================================
+   LOAD CURRENT USER
+   ========================================================= */
 
 async function loadUser() {
 
     try {
 
-        const response = await fetch('/api/me', {
-            credentials: 'include'
-        });
+        const response =
+            await fetch(
+                '/api/me',
+                {
+                    credentials: 'include'
+                }
+            );
 
 
         if (!response.ok) {
 
-            window.location.href = '/login.html';
+            window.location.href =
+                '/login.html';
 
             return;
-
         }
 
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
 
-        userName.textContent =
-            data.user.full_name;
+        if (!data.user) {
 
-        userEmail.textContent =
-            data.user.email;
+            window.location.href =
+                '/login.html';
 
+            return;
+        }
+
+
+        if (userName) {
+
+            userName.textContent =
+                data.user.full_name ||
+                'User';
+        }
+
+
+        if (userEmail) {
+
+            userEmail.textContent =
+                data.user.email ||
+                '';
+        }
 
     } catch (error) {
 
@@ -153,195 +624,234 @@ async function loadUser() {
             error
         );
 
-
         window.location.href =
             '/login.html';
-
     }
-
 }
 
 
-// ========================================
-// CREATE GOAL
-// ========================================
+/* =========================================================
+   CREATE GOAL
+   ========================================================= */
 
-goalForm.addEventListener(
-    'submit',
-    async function (event) {
+if (goalForm) {
 
-        event.preventDefault();
+    goalForm.addEventListener(
+        'submit',
+        async function (event) {
 
-
-        const title =
-            document
-                .getElementById('goalTitle')
-                .value
-                .trim();
+            event.preventDefault();
 
 
-        const description =
-            document
-                .getElementById('goalDescription')
-                .value
-                .trim();
+            const titleInput =
+                document.getElementById(
+                    'goalTitle'
+                );
 
+            const descriptionInput =
+                document.getElementById(
+                    'goalDescription'
+                );
 
-        const deadline =
-            document
-                .getElementById('goalDeadline')
-                .value;
+            const deadlineInput =
+                document.getElementById(
+                    'goalDeadline'
+                );
 
+            const currentInput =
+                document.getElementById(
+                    'goalCurrent'
+                );
 
-        const currentValue =
-            document
-                .getElementById('goalCurrent')
-                .value;
+            const targetInput =
+                document.getElementById(
+                    'goalTarget'
+                );
 
-
-        const targetValue =
-            document
-                .getElementById('goalTarget')
-                .value;
-
-
-        const unit =
-            document
-                .getElementById('goalUnit')
-                .value
-                .trim();
-
-
-        if (!title) {
-
-            goalMessage.textContent =
-                'Goal title is required.';
-
-            return;
-
-        }
-
-
-        try {
-
-            const response =
-                await fetch(
-                    '/api/goals',
-                    {
-
-                        method: 'POST',
-
-                        headers: {
-                            'Content-Type':
-                                'application/json'
-                        },
-
-                        credentials: 'include',
-
-                        body: JSON.stringify({
-
-                            title: title,
-
-                            description: description,
-
-                            deadline: deadline,
-
-                            current_value:
-                                Number(
-                                    currentValue || 0
-                                ),
-
-                            target_value:
-                                Number(
-                                    targetValue || 100
-                                ),
-
-                            unit: unit
-
-                        })
-
-                    }
+            const unitInput =
+                document.getElementById(
+                    'goalUnit'
                 );
 
 
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                goalMessage.textContent =
-                    data.message ||
-                    'Could not create goal.';
+            if (
+                !titleInput ||
+                !descriptionInput ||
+                !deadlineInput ||
+                !currentInput ||
+                !targetInput ||
+                !unitInput
+            ) {
 
                 return;
-
             }
 
 
-            goalMessage.textContent =
-                'Goal created successfully.';
+            const title =
+                titleInput.value.trim();
+
+            const description =
+                descriptionInput.value.trim();
+
+            const deadline =
+                deadlineInput.value;
+
+            const currentValue =
+                currentInput.value;
+
+            const targetValue =
+                targetInput.value;
+
+            const unit =
+                unitInput.value.trim();
 
 
-            goalForm.reset();
+            if (!title) {
+
+                if (goalMessage) {
+
+                    goalMessage.textContent =
+                        'Goal title is required.';
+                }
+
+                return;
+            }
 
 
-            document.getElementById(
-                'goalCurrent'
-            ).value = 0;
+            try {
+
+                const response =
+                    await fetch(
+                        '/api/goals',
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+
+                            credentials:
+                                'include',
+
+                            body:
+                                JSON.stringify({
+                                    title:
+                                        title,
+
+                                    description:
+                                        description,
+
+                                    deadline:
+                                        deadline,
+
+                                    current_value:
+                                        Number(
+                                            currentValue ||
+                                            0
+                                        ),
+
+                                    target_value:
+                                        Number(
+                                            targetValue ||
+                                            100
+                                        ),
+
+                                    unit:
+                                        unit
+                                })
+                        }
+                    );
 
 
-            document.getElementById(
-                'goalTarget'
-            ).value = 100;
+                const data =
+                    await response.json();
 
 
-            await loadGoals();
+                if (!response.ok) {
 
-            await loadDashboardSummary();
+                    if (goalMessage) {
+
+                        goalMessage.textContent =
+                            data.message ||
+                            'Could not create goal.';
+                    }
+
+                    return;
+                }
 
 
-        } catch (error) {
+                if (goalMessage) {
 
-            console.error(
-                'Create goal error:',
-                error
-            );
+                    goalMessage.textContent =
+                        'Goal created successfully.';
+                }
 
 
-            goalMessage.textContent =
-                'Could not connect to the server.';
+                goalForm.reset();
 
+
+                if (currentInput) {
+
+                    currentInput.value =
+                        0;
+                }
+
+
+                if (targetInput) {
+
+                    targetInput.value =
+                        100;
+                }
+
+
+                await loadGoals();
+
+                await loadDashboardSummary();
+
+            } catch (error) {
+
+                console.error(
+                    'Create goal error:',
+                    error
+                );
+
+
+                if (goalMessage) {
+
+                    goalMessage.textContent =
+                        'Could not connect to the server.';
+                }
+            }
         }
+    );
+}
 
-    }
-);
 
-
-// ========================================
-// FORMAT DATE
-// ========================================
+/* =========================================================
+   FORMAT DATE
+   ========================================================= */
 
 function formatDate(dateValue) {
 
     if (!dateValue) {
 
         return 'No deadline';
-
     }
 
 
-    return String(dateValue).substring(
+    return String(
+        dateValue
+    ).substring(
         0,
         10
     );
-
 }
 
 
-// ========================================
-// UPDATE GOAL PROGRESS
-// ========================================
+/* =========================================================
+   UPDATE GOAL PROGRESS
+   ========================================================= */
 
 async function updateGoalProgress(
     goalId,
@@ -356,7 +866,6 @@ async function updateGoalProgress(
                 goalId +
                 '/progress',
                 {
-
                     method: 'PUT',
 
                     headers: {
@@ -364,15 +873,16 @@ async function updateGoalProgress(
                             'application/json'
                     },
 
-                    credentials: 'include',
+                    credentials:
+                        'include',
 
-                    body: JSON.stringify({
-
-                        current_value:
-                            Number(currentValue)
-
-                    })
-
+                    body:
+                        JSON.stringify({
+                            current_value:
+                                Number(
+                                    currentValue
+                                )
+                        })
                 }
             );
 
@@ -389,14 +899,12 @@ async function updateGoalProgress(
             );
 
             return;
-
         }
 
 
         await loadGoals();
 
         await loadDashboardSummary();
-
 
     } catch (error) {
 
@@ -409,15 +917,13 @@ async function updateGoalProgress(
         alert(
             'Could not connect to the server.'
         );
-
     }
-
 }
 
 
-// ========================================
-// EDIT GOAL
-// ========================================
+/* =========================================================
+   EDIT GOAL
+   ========================================================= */
 
 async function editGoal(goal) {
 
@@ -431,7 +937,6 @@ async function editGoal(goal) {
     if (newTitle === null) {
 
         return;
-
     }
 
 
@@ -442,7 +947,6 @@ async function editGoal(goal) {
         );
 
         return;
-
     }
 
 
@@ -456,21 +960,21 @@ async function editGoal(goal) {
     if (newDescription === null) {
 
         return;
-
     }
 
 
     const newDeadline =
         prompt(
             'Enter the deadline (YYYY-MM-DD):',
-            formatDate(goal.deadline)
+            formatDate(
+                goal.deadline
+            )
         );
 
 
     if (newDeadline === null) {
 
         return;
-
     }
 
 
@@ -484,7 +988,6 @@ async function editGoal(goal) {
     if (newTarget === null) {
 
         return;
-
     }
 
 
@@ -498,7 +1001,6 @@ async function editGoal(goal) {
     if (newUnit === null) {
 
         return;
-
     }
 
 
@@ -509,7 +1011,6 @@ async function editGoal(goal) {
                 '/api/goals/' +
                 goal.id,
                 {
-
                     method: 'PUT',
 
                     headers: {
@@ -517,27 +1018,28 @@ async function editGoal(goal) {
                             'application/json'
                     },
 
-                    credentials: 'include',
+                    credentials:
+                        'include',
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
+                            title:
+                                newTitle.trim(),
 
-                        title:
-                            newTitle.trim(),
+                            description:
+                                newDescription.trim(),
 
-                        description:
-                            newDescription.trim(),
+                            deadline:
+                                newDeadline,
 
-                        deadline:
-                            newDeadline,
+                            target_value:
+                                Number(
+                                    newTarget
+                                ),
 
-                        target_value:
-                            Number(newTarget),
-
-                        unit:
-                            newUnit.trim()
-
-                    })
-
+                            unit:
+                                newUnit.trim()
+                        })
                 }
             );
 
@@ -554,14 +1056,12 @@ async function editGoal(goal) {
             );
 
             return;
-
         }
 
 
         await loadGoals();
 
         await loadDashboardSummary();
-
 
     } catch (error) {
 
@@ -574,15 +1074,13 @@ async function editGoal(goal) {
         alert(
             'Could not connect to the server.'
         );
-
     }
-
 }
 
 
-// ========================================
-// DELETE GOAL
-// ========================================
+/* =========================================================
+   DELETE GOAL
+   ========================================================= */
 
 async function deleteGoal(goalId) {
 
@@ -595,7 +1093,6 @@ async function deleteGoal(goalId) {
     if (!confirmed) {
 
         return;
-
     }
 
 
@@ -606,11 +1103,10 @@ async function deleteGoal(goalId) {
                 '/api/goals/' +
                 goalId,
                 {
-
                     method: 'DELETE',
 
-                    credentials: 'include'
-
+                    credentials:
+                        'include'
                 }
             );
 
@@ -627,14 +1123,12 @@ async function deleteGoal(goalId) {
             );
 
             return;
-
         }
 
 
         await loadGoals();
 
         await loadDashboardSummary();
-
 
     } catch (error) {
 
@@ -647,21 +1141,21 @@ async function deleteGoal(goalId) {
         alert(
             'Could not connect to the server.'
         );
-
     }
-
 }
 
 
-// ========================================
-// DISPLAY GOALS
-// ========================================
+/* =========================================================
+   DISPLAY GOALS
+   ========================================================= */
 
 function displayGoals() {
 
-    // ========================================
-    // NO GOALS
-    // ========================================
+    if (!goalsContainer) {
+
+        return;
+    }
+
 
     if (!goals || goals.length === 0) {
 
@@ -671,51 +1165,42 @@ function displayGoals() {
             '</div>';
 
         return;
-
     }
 
 
-    // Clear previous content
-    goalsContainer.innerHTML = '';
+    goalsContainer.innerHTML =
+        '';
 
-
-    // ========================================
-    // DISPLAY EVERY GOAL
-    // ========================================
 
     goals.forEach(
         function (goal) {
 
-            // ========================================
-            // MAIN GOAL CARD
-            // ========================================
-
             const goalItem =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
 
 
             goalItem.className =
                 'goal-card';
 
 
-            // ========================================
-            // GOAL CARD HEADER
-            // ========================================
+            /* ---------- Goal Header ---------- */
 
             const goalHeader =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
 
 
             goalHeader.className =
                 'goal-card-header';
 
 
-            // ========================================
-            // TITLE AREA
-            // ========================================
-
             const titleArea =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
 
 
             titleArea.className =
@@ -723,7 +1208,9 @@ function displayGoals() {
 
 
             const title =
-                document.createElement('h3');
+                document.createElement(
+                    'h3'
+                );
 
 
             title.textContent =
@@ -731,29 +1218,29 @@ function displayGoals() {
 
 
             const description =
-                document.createElement('p');
+                document.createElement(
+                    'p'
+                );
 
 
             description.textContent =
-                goal.description || '';
+                goal.description ||
+                '';
 
 
             titleArea.appendChild(
                 title
             );
 
-
             titleArea.appendChild(
                 description
             );
 
 
-            // ========================================
-            // STATUS
-            // ========================================
-
             const status =
-                document.createElement('span');
+                document.createElement(
+                    'span'
+                );
 
 
             status.className =
@@ -768,7 +1255,6 @@ function displayGoals() {
                 titleArea
             );
 
-
             goalHeader.appendChild(
                 status
             );
@@ -779,12 +1265,12 @@ function displayGoals() {
             );
 
 
-            // ========================================
-            // PROGRESS AREA
-            // ========================================
+            /* ---------- Progress ---------- */
 
             const progressArea =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
 
 
             progressArea.className =
@@ -792,7 +1278,9 @@ function displayGoals() {
 
 
             const progressHeader =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
 
 
             progressHeader.className =
@@ -800,7 +1288,9 @@ function displayGoals() {
 
 
             const progressLabel =
-                document.createElement('span');
+                document.createElement(
+                    'span'
+                );
 
 
             progressLabel.textContent =
@@ -808,18 +1298,22 @@ function displayGoals() {
 
 
             const progressValue =
-                document.createElement('strong');
+                document.createElement(
+                    'strong'
+                );
 
 
             const currentValue =
                 Number(
-                    goal.current_value || 0
+                    goal.current_value ||
+                    0
                 );
 
 
             const targetValue =
                 Number(
-                    goal.target_value || 0
+                    goal.target_value ||
+                    0
                 );
 
 
@@ -828,24 +1322,23 @@ function displayGoals() {
                 ' / ' +
                 targetValue +
                 ' ' +
-                (goal.unit || '');
+                (
+                    goal.unit ||
+                    ''
+                );
 
 
             progressHeader.appendChild(
                 progressLabel
             );
 
-
             progressHeader.appendChild(
                 progressValue
             );
 
 
-            // ========================================
-            // PROGRESS PERCENTAGE
-            // ========================================
-
-            let progressPercentage = 0;
+            let progressPercentage =
+                0;
 
 
             if (targetValue > 0) {
@@ -856,7 +1349,6 @@ function displayGoals() {
                         targetValue
                     ) *
                     100;
-
             }
 
 
@@ -870,12 +1362,10 @@ function displayGoals() {
                 );
 
 
-            // ========================================
-            // PROGRESS BAR
-            // ========================================
-
             const progressBar =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
 
 
             progressBar.className =
@@ -883,7 +1373,9 @@ function displayGoals() {
 
 
             const progressFill =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
 
 
             progressFill.className =
@@ -891,7 +1383,8 @@ function displayGoals() {
 
 
             progressFill.style.width =
-                progressPercentage + '%';
+                progressPercentage +
+                '%';
 
 
             progressBar.appendChild(
@@ -903,7 +1396,6 @@ function displayGoals() {
                 progressHeader
             );
 
-
             progressArea.appendChild(
                 progressBar
             );
@@ -914,32 +1406,36 @@ function displayGoals() {
             );
 
 
-            // ========================================
-            // GOAL META INFORMATION
-            // ========================================
+            /* ---------- Goal Details ---------- */
 
             const goalMeta =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
 
 
             goalMeta.className =
                 'goal-meta';
 
 
-            // Deadline
             const deadline =
-                document.createElement('span');
+                document.createElement(
+                    'span'
+                );
 
 
             deadline.innerHTML =
                 'Deadline: <strong>' +
-                formatDate(goal.deadline) +
+                formatDate(
+                    goal.deadline
+                ) +
                 '</strong>';
 
 
-            // Current progress
             const currentMeta =
-                document.createElement('span');
+                document.createElement(
+                    'span'
+                );
 
 
             currentMeta.innerHTML =
@@ -948,9 +1444,10 @@ function displayGoals() {
                 '</strong>';
 
 
-            // Target
             const targetMeta =
-                document.createElement('span');
+                document.createElement(
+                    'span'
+                );
 
 
             targetMeta.innerHTML =
@@ -963,11 +1460,9 @@ function displayGoals() {
                 deadline
             );
 
-
             goalMeta.appendChild(
                 currentMeta
             );
-
 
             goalMeta.appendChild(
                 targetMeta
@@ -979,24 +1474,22 @@ function displayGoals() {
             );
 
 
-            // ========================================
-            // GOAL ACTIONS CONTAINER
-            // ========================================
+            /* ---------- Goal Actions ---------- */
 
             const goalActions =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
 
 
             goalActions.className =
                 'goal-actions';
 
 
-            // ========================================
-            // UPDATE PROGRESS BUTTON
-            // ========================================
-
             const progressButton =
-                document.createElement('button');
+                document.createElement(
+                    'button'
+                );
 
 
             progressButton.type =
@@ -1022,10 +1515,12 @@ function displayGoals() {
                         );
 
 
-                    if (newProgress === null) {
+                    if (
+                        newProgress ===
+                        null
+                    ) {
 
                         return;
-
                     }
 
 
@@ -1033,17 +1528,14 @@ function displayGoals() {
                         goal.id,
                         newProgress
                     );
-
                 }
             );
 
 
-            // ========================================
-            // EDIT BUTTON
-            // ========================================
-
             const editButton =
-                document.createElement('button');
+                document.createElement(
+                    'button'
+                );
 
 
             editButton.type =
@@ -1062,18 +1554,17 @@ function displayGoals() {
                 'click',
                 function () {
 
-                    editGoal(goal);
-
+                    editGoal(
+                        goal
+                    );
                 }
             );
 
 
-            // ========================================
-            // DELETE BUTTON
-            // ========================================
-
             const deleteButton =
-                document.createElement('button');
+                document.createElement(
+                    'button'
+                );
 
 
             deleteButton.type =
@@ -1095,60 +1586,48 @@ function displayGoals() {
                     deleteGoal(
                         goal.id
                     );
-
                 }
             );
 
-
-            // ========================================
-            // ADD BUTTONS TO ACTIONS CONTAINER
-            // ========================================
 
             goalActions.appendChild(
                 progressButton
             );
 
-
             goalActions.appendChild(
                 editButton
             );
-
 
             goalActions.appendChild(
                 deleteButton
             );
 
 
-            // ========================================
-            // ADD ACTIONS TO GOAL CARD
-            // ========================================
-
             goalItem.appendChild(
                 goalActions
             );
 
 
-            // ========================================
-            // ADD GOAL CARD TO PAGE
-            // ========================================
-
             goalsContainer.appendChild(
                 goalItem
             );
-
         }
     );
-
 }
 
 
-// ========================================
-// LOAD GOALS
-// ========================================
+/* =========================================================
+   LOAD GOALS
+   ========================================================= */
 
 async function loadGoals() {
 
-    // Show loading state
+    if (!goalsContainer) {
+
+        return;
+    }
+
+
     goalsContainer.innerHTML =
         '<p>Loading goals...</p>';
 
@@ -1159,12 +1638,12 @@ async function loadGoals() {
             await fetch(
                 '/api/goals',
                 {
-                    credentials: 'include'
+                    credentials:
+                        'include'
                 }
             );
 
 
-        // Try to read server response
         let data;
 
 
@@ -1185,11 +1664,9 @@ async function loadGoals() {
                 '<p>Could not load goals.</p>';
 
             return;
-
         }
 
 
-        // Server rejected request
         if (!response.ok) {
 
             console.error(
@@ -1207,22 +1684,19 @@ async function loadGoals() {
                 ) +
                 '</p>';
 
-
             return;
-
         }
 
 
-        // Get goals from server
         goals =
-            Array.isArray(data.goals)
+            Array.isArray(
+                data.goals
+            )
                 ? data.goals
                 : [];
 
 
-        // Display goals
         displayGoals();
-
 
     } catch (error) {
 
@@ -1234,15 +1708,13 @@ async function loadGoals() {
 
         goalsContainer.innerHTML =
             '<p>Could not connect to the server.</p>';
-
     }
-
 }
 
 
-// ========================================
-// CREATE REMINDER BELL ICON
-// ========================================
+/* =========================================================
+   CREATE REMINDER BELL ICON
+   ========================================================= */
 
 function createReminderBellIcon() {
 
@@ -1258,30 +1730,25 @@ function createReminderBellIcon() {
         '0 0 24 24'
     );
 
-
     svg.setAttribute(
         'fill',
         'none'
     );
-
 
     svg.setAttribute(
         'stroke',
         'currentColor'
     );
 
-
     svg.setAttribute(
         'stroke-width',
         '1.8'
     );
 
-
     svg.setAttribute(
         'stroke-linecap',
         'round'
     );
-
 
     svg.setAttribute(
         'stroke-linejoin',
@@ -1319,20 +1786,18 @@ function createReminderBellIcon() {
         bellBody
     );
 
-
     svg.appendChild(
         bellClapper
     );
 
 
     return svg;
-
 }
 
 
-// ========================================
-// LOAD DASHBOARD SUMMARY
-// ========================================
+/* =========================================================
+   LOAD DASHBOARD SUMMARY
+   ========================================================= */
 
 async function loadDashboardSummary() {
 
@@ -1340,42 +1805,45 @@ async function loadDashboardSummary() {
 
         const results =
             await Promise.all([
-
                 fetch(
                     '/api/goals',
                     {
-                        credentials: 'include'
+                        credentials:
+                            'include'
                     }
                 ),
 
                 fetch(
                     '/api/tasks',
                     {
-                        credentials: 'include'
+                        credentials:
+                            'include'
                     }
                 ),
 
                 fetch(
                     '/api/habits',
                     {
-                        credentials: 'include'
+                        credentials:
+                            'include'
                     }
                 ),
 
                 fetch(
                     '/api/reminders',
                     {
-                        credentials: 'include'
+                        credentials:
+                            'include'
                     }
                 ),
 
                 fetch(
                     '/api/focus',
                     {
-                        credentials: 'include'
+                        credentials:
+                            'include'
                     }
                 )
-
             ]);
 
 
@@ -1411,119 +1879,161 @@ async function loadDashboardSummary() {
             await focusResponse.json();
 
 
-        // ========================================
-        // GOALS SUMMARY
-        // ========================================
+        /* ---------- Goals ---------- */
 
         const dashboardGoals =
-            goalsData.goals || [];
+            goalsData.goals ||
+            [];
 
 
-        document.getElementById(
-            'totalGoals'
-        ).textContent =
-            dashboardGoals.length;
+        const totalGoals =
+            document.getElementById(
+                'totalGoals'
+            );
+
+        const completedGoals =
+            document.getElementById(
+                'completedGoals'
+            );
+
+        const inProgressGoals =
+            document.getElementById(
+                'inProgressGoals'
+            );
 
 
-        document.getElementById(
-            'completedGoals'
-        ).textContent =
-            dashboardGoals.filter(
-                function (goal) {
+        if (totalGoals) {
 
-                    return goal.status ===
-                        'Completed';
-
-                }
-            ).length;
+            totalGoals.textContent =
+                dashboardGoals.length;
+        }
 
 
-        document.getElementById(
-            'inProgressGoals'
-        ).textContent =
-            dashboardGoals.filter(
-                function (goal) {
+        if (completedGoals) {
 
-                    return goal.status ===
-                        'In Progress';
+            completedGoals.textContent =
+                dashboardGoals.filter(
+                    function (goal) {
 
-                }
-            ).length;
+                        return goal.status ===
+                            'Completed';
+                    }
+                ).length;
+        }
 
 
-        // ========================================
-        // TASKS SUMMARY
-        // ========================================
+        if (inProgressGoals) {
+
+            inProgressGoals.textContent =
+                dashboardGoals.filter(
+                    function (goal) {
+
+                        return goal.status ===
+                            'In Progress';
+                    }
+                ).length;
+        }
+
+
+        /* ---------- Tasks ---------- */
 
         const dashboardTasks =
-            tasksData.tasks || [];
+            tasksData.tasks ||
+            [];
 
 
-        document.getElementById(
-            'totalTasks'
-        ).textContent =
-            dashboardTasks.length;
+        const totalTasks =
+            document.getElementById(
+                'totalTasks'
+            );
+
+        const pendingTasks =
+            document.getElementById(
+                'pendingTasks'
+            );
+
+        const completedTasks =
+            document.getElementById(
+                'completedTasks'
+            );
 
 
-        document.getElementById(
-            'pendingTasks'
-        ).textContent =
-            dashboardTasks.filter(
-                function (task) {
+        if (totalTasks) {
 
-                    return task.status !==
-                        'Completed';
-
-                }
-            ).length;
+            totalTasks.textContent =
+                dashboardTasks.length;
+        }
 
 
-        document.getElementById(
-            'completedTasks'
-        ).textContent =
-            dashboardTasks.filter(
-                function (task) {
+        if (pendingTasks) {
 
-                    return task.status ===
-                        'Completed';
+            pendingTasks.textContent =
+                dashboardTasks.filter(
+                    function (task) {
 
-                }
-            ).length;
+                        return task.status !==
+                            'Completed';
+                    }
+                ).length;
+        }
 
 
-        // ========================================
-        // HABITS SUMMARY
-        // ========================================
+        if (completedTasks) {
+
+            completedTasks.textContent =
+                dashboardTasks.filter(
+                    function (task) {
+
+                        return task.status ===
+                            'Completed';
+                    }
+                ).length;
+        }
+
+
+        /* ---------- Habits ---------- */
 
         const dashboardHabits =
-            habitsData.habits || [];
+            habitsData.habits ||
+            [];
 
 
-        document.getElementById(
-            'totalHabits'
-        ).textContent =
-            dashboardHabits.length;
+        const totalHabits =
+            document.getElementById(
+                'totalHabits'
+            );
+
+        const activeHabits =
+            document.getElementById(
+                'activeHabits'
+            );
 
 
-        document.getElementById(
-            'activeHabits'
-        ).textContent =
-            dashboardHabits.filter(
-                function (habit) {
+        if (totalHabits) {
 
-                    return habit.status ===
-                        'Active';
-
-                }
-            ).length;
+            totalHabits.textContent =
+                dashboardHabits.length;
+        }
 
 
-        // ========================================
-        // FOCUS SUMMARY
-        // ========================================
+        if (activeHabits) {
+
+            activeHabits.textContent =
+                dashboardHabits.filter(
+                    function (habit) {
+
+                        return habit.status ===
+                            'Active';
+                    }
+                ).length;
+        }
+
+
+        /* ---------- Focus ---------- */
 
         const dashboardFocus =
-            focusData.focus_sessions || [];
+            focusData.focus_sessions ||
+            [];
 
 
         const completedFocus =
@@ -1532,15 +2042,26 @@ async function loadDashboardSummary() {
 
                     return session.status ===
                         'Completed';
-
                 }
             );
 
 
-        document.getElementById(
-            'completedFocusSessions'
-        ).textContent =
-            completedFocus.length;
+        const completedFocusSessions =
+            document.getElementById(
+                'completedFocusSessions'
+            );
+
+        const focusMinutes =
+            document.getElementById(
+                'focusMinutes'
+            );
+
+
+        if (completedFocusSessions) {
+
+            completedFocusSessions.textContent =
+                completedFocus.length;
+        }
 
 
         const totalFocusMinutes =
@@ -1555,24 +2076,23 @@ async function loadDashboardSummary() {
                             session.duration_minutes ||
                             0
                         );
-
                 },
                 0
             );
 
 
-        document.getElementById(
-            'focusMinutes'
-        ).textContent =
-            totalFocusMinutes;
+        if (focusMinutes) {
+
+            focusMinutes.textContent =
+                totalFocusMinutes;
+        }
 
 
-        // ========================================
-        // UPCOMING REMINDERS
-        // ========================================
+        /* ---------- Reminders ---------- */
 
         const dashboardReminders =
-            remindersData.reminders || [];
+            remindersData.reminders ||
+            [];
 
 
         const now =
@@ -1581,7 +2101,6 @@ async function loadDashboardSummary() {
 
         const upcomingReminders =
             dashboardReminders
-
                 .filter(
                     function (reminder) {
 
@@ -1591,7 +2110,6 @@ async function loadDashboardSummary() {
                         ) {
 
                             return false;
-
                         }
 
 
@@ -1600,7 +2118,6 @@ async function loadDashboardSummary() {
                         ) {
 
                             return false;
-
                         }
 
 
@@ -1632,10 +2149,8 @@ async function loadDashboardSummary() {
                             reminderDateTime >=
                             now
                         );
-
                     }
                 )
-
                 .sort(
                     function (a, b) {
 
@@ -1672,10 +2187,8 @@ async function loadDashboardSummary() {
 
 
                         return aDate - bDate;
-
                     }
                 )
-
                 .slice(
                     0,
                     5
@@ -1688,12 +2201,15 @@ async function loadDashboardSummary() {
             );
 
 
-        // ========================================
-        // DISPLAY REMINDERS
-        // ========================================
+        if (!remindersContainer) {
+
+            return;
+        }
+
 
         if (
-            upcomingReminders.length === 0
+            upcomingReminders.length ===
+            0
         ) {
 
             remindersContainer.innerHTML =
@@ -1720,9 +2236,7 @@ async function loadDashboardSummary() {
                         'reminder-card';
 
 
-                    // ========================================
-                    // HEADER
-                    // ========================================
+                    /* ---------- Header ---------- */
 
                     const header =
                         document.createElement(
@@ -1733,10 +2247,6 @@ async function loadDashboardSummary() {
                     header.className =
                         'reminder-card-header';
 
-
-                    // ========================================
-                    // REMINDER BELL ICON
-                    // ========================================
 
                     const icon =
                         document.createElement(
@@ -1754,12 +2264,8 @@ async function loadDashboardSummary() {
                     );
 
 
-                    const bellIcon =
-                        createReminderBellIcon();
-
-
                     icon.appendChild(
-                        bellIcon
+                        createReminderBellIcon()
                     );
 
 
@@ -1797,7 +2303,6 @@ async function loadDashboardSummary() {
                         title
                     );
 
-
                     titleArea.appendChild(
                         status
                     );
@@ -1806,7 +2311,6 @@ async function loadDashboardSummary() {
                     header.appendChild(
                         icon
                     );
-
 
                     header.appendChild(
                         titleArea
@@ -1818,9 +2322,7 @@ async function loadDashboardSummary() {
                     );
 
 
-                    // ========================================
-                    // DESCRIPTION
-                    // ========================================
+                    /* ---------- Description ---------- */
 
                     const content =
                         document.createElement(
@@ -1853,9 +2355,7 @@ async function loadDashboardSummary() {
                     );
 
 
-                    // ========================================
-                    // DETAILS
-                    // ========================================
+                    /* ---------- Date and Time ---------- */
 
                     const details =
                         document.createElement(
@@ -1866,10 +2366,6 @@ async function loadDashboardSummary() {
                     details.className =
                         'reminder-card-details';
 
-
-                    // ========================================
-                    // DATE
-                    // ========================================
 
                     const dateDetail =
                         document.createElement(
@@ -1911,15 +2407,10 @@ async function loadDashboardSummary() {
                         dateLabel
                     );
 
-
                     dateDetail.appendChild(
                         dateValue
                     );
 
-
-                    // ========================================
-                    // TIME
-                    // ========================================
 
                     const timeDetail =
                         document.createElement(
@@ -1965,7 +2456,6 @@ async function loadDashboardSummary() {
                         timeLabel
                     );
 
-
                     timeDetail.appendChild(
                         timeValue
                     );
@@ -1974,7 +2464,6 @@ async function loadDashboardSummary() {
                     details.appendChild(
                         dateDetail
                     );
-
 
                     details.appendChild(
                         timeDetail
@@ -1989,12 +2478,9 @@ async function loadDashboardSummary() {
                     remindersContainer.appendChild(
                         reminderItem
                     );
-
                 }
             );
-
         }
-
 
     } catch (error) {
 
@@ -2002,15 +2488,13 @@ async function loadDashboardSummary() {
             'Dashboard summary error:',
             error
         );
-
     }
-
 }
 
 
-// ========================================
-// LOGOUT
-// ========================================
+/* =========================================================
+   LOGOUT
+   ========================================================= */
 
 async function logout() {
 
@@ -2020,10 +2504,11 @@ async function logout() {
             '/api/logout',
             {
                 method: 'POST',
-                credentials: 'include'
+
+                credentials:
+                    'include'
             }
         );
-
 
     } catch (error) {
 
@@ -2031,29 +2516,32 @@ async function logout() {
             'Logout error:',
             error
         );
-
     }
 
 
     window.location.href =
         '/login.html';
-
 }
 
 
-// ========================================
-// LOGOUT BUTTON
-// ========================================
+/* =========================================================
+   LOGOUT BUTTON
+   ========================================================= */
 
-logoutButton.addEventListener(
-    'click',
-    logout
-);
+if (logoutButton) {
+
+    logoutButton.addEventListener(
+        'click',
+        logout
+    );
+}
 
 
-// ========================================
-// INITIAL PAGE LOAD
-// ========================================
+/* =========================================================
+   INITIAL PAGE LOAD
+   ========================================================= */
+
+initializeNavigation();
 
 loadUser();
 

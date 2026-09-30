@@ -22,58 +22,241 @@ const nightModeButton = document.getElementById("nightModeButton");
 
 
 // ------------------------------------------------------------
+// MOBILE MENU ELEMENTS
+// ------------------------------------------------------------
+
+const mobileMenuButton =
+    document.getElementById("mobileMenuButton");
+
+const studyTrackSidebar =
+    document.getElementById("studyTrackSidebar");
+
+const mobileMenuOverlay =
+    document.getElementById("mobileMenuOverlay");
+
+
+// ------------------------------------------------------------
+// MOBILE MENU MANAGEMENT
+// ------------------------------------------------------------
+
+function setMobileMenu(open) {
+
+    if (!mobileMenuButton || !studyTrackSidebar) {
+        return;
+    }
+
+    studyTrackSidebar.classList.toggle(
+        "mobile-menu-open",
+        open
+    );
+
+    mobileMenuButton.classList.toggle(
+        "menu-open",
+        open
+    );
+
+    mobileMenuButton.setAttribute(
+        "aria-expanded",
+        String(open)
+    );
+
+    mobileMenuButton.setAttribute(
+        "aria-label",
+        open
+            ? "Close navigation menu"
+            : "Open navigation menu"
+    );
+
+    if (mobileMenuOverlay) {
+
+        mobileMenuOverlay.classList.toggle(
+            "active",
+            open
+        );
+
+        mobileMenuOverlay.setAttribute(
+            "aria-hidden",
+            String(!open)
+        );
+    }
+
+    document.body.classList.toggle(
+        "mobile-menu-active",
+        open
+    );
+}
+
+
+if (mobileMenuButton) {
+
+    mobileMenuButton.addEventListener(
+        "click",
+        function () {
+
+            const isOpen =
+                mobileMenuButton.classList.contains(
+                    "menu-open"
+                );
+
+            setMobileMenu(!isOpen);
+        }
+    );
+}
+
+
+if (mobileMenuOverlay) {
+
+    mobileMenuOverlay.addEventListener(
+        "click",
+        function () {
+
+            setMobileMenu(false);
+        }
+    );
+}
+
+
+document
+    .querySelectorAll(".sidebar-nav-link")
+    .forEach(function (link) {
+
+        link.addEventListener(
+            "click",
+            function () {
+
+                setMobileMenu(false);
+            }
+        );
+    });
+
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            setMobileMenu(false);
+        }
+    }
+);
+
+
+window.addEventListener(
+    "resize",
+    function () {
+
+        if (window.innerWidth > 720) {
+
+            setMobileMenu(false);
+        }
+    }
+);
+
+
+// ------------------------------------------------------------
 // THEME MANAGEMENT
 // ------------------------------------------------------------
 
 function applyTheme(theme) {
-    if (theme === "night") {
-        document.body.classList.add("night-mode");
 
-        if (nightModeButton) {
-            nightModeButton.classList.add("active");
-        }
+    const isNight =
+        theme === "night";
 
-        if (dayModeButton) {
-            dayModeButton.classList.remove("active");
-        }
-    } else {
-        document.body.classList.remove("night-mode");
+    document.body.classList.toggle(
+        "night-mode",
+        isNight
+    );
 
-        if (dayModeButton) {
-            dayModeButton.classList.add("active");
-        }
+    if (dayModeButton) {
 
-        if (nightModeButton) {
-            nightModeButton.classList.remove("active");
-        }
+        dayModeButton.disabled = false;
+
+        dayModeButton.classList.toggle(
+            "active",
+            !isNight
+        );
+
+        dayModeButton.setAttribute(
+            "aria-pressed",
+            String(!isNight)
+        );
+    }
+
+    if (nightModeButton) {
+
+        nightModeButton.disabled = false;
+
+        nightModeButton.classList.toggle(
+            "active",
+            isNight
+        );
+
+        nightModeButton.setAttribute(
+            "aria-pressed",
+            String(isNight)
+        );
     }
 }
 
 
 function loadSavedTheme() {
-    const savedTheme = localStorage.getItem("studytrack-theme");
+
+    const savedTheme =
+        localStorage.getItem(
+            "studytrack-theme"
+        );
 
     if (savedTheme === "night") {
+
         applyTheme("night");
+
     } else {
+
         applyTheme("day");
     }
 }
 
 
 if (dayModeButton) {
-    dayModeButton.addEventListener("click", function () {
-        localStorage.setItem("studytrack-theme", "day");
-        applyTheme("day");
-    });
+
+    dayModeButton.disabled = false;
+
+    dayModeButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            localStorage.setItem(
+                "studytrack-theme",
+                "day"
+            );
+
+            applyTheme("day");
+        }
+    );
 }
 
 
 if (nightModeButton) {
-    nightModeButton.addEventListener("click", function () {
-        localStorage.setItem("studytrack-theme", "night");
-        applyTheme("night");
-    });
+
+    nightModeButton.disabled = false;
+
+    nightModeButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            localStorage.setItem(
+                "studytrack-theme",
+                "night"
+            );
+
+            applyTheme("night");
+        }
+    );
 }
 
 
@@ -82,7 +265,11 @@ if (nightModeButton) {
 // ------------------------------------------------------------
 
 function escapeHtml(value) {
-    if (value === null || value === undefined) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
         return "";
     }
 
@@ -99,16 +286,26 @@ function escapeHtml(value) {
 // SHOW FORM MESSAGE
 // ------------------------------------------------------------
 
-function showTaskMessage(message, type) {
+function showTaskMessage(
+    message,
+    type
+) {
+
     if (!taskMessage) {
         return;
     }
 
-    taskMessage.textContent = message;
-    taskMessage.className = "form-message";
+    taskMessage.textContent =
+        message;
+
+    taskMessage.className =
+        "form-message";
 
     if (type) {
-        taskMessage.classList.add(type);
+
+        taskMessage.classList.add(
+            type
+        );
     }
 }
 
@@ -118,25 +315,79 @@ function showTaskMessage(message, type) {
 // ------------------------------------------------------------
 
 async function loadUser() {
+
     try {
-        const response = await fetch("/api/me", {
-            credentials: "include"
-        });
+
+        const response =
+            await fetch(
+                "/api/me",
+                {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
 
         if (!response.ok) {
-            window.location.href = "/login.html";
-            return;
+
+            console.error(
+                "User session request failed:",
+                response.status
+            );
+
+            window.location.href =
+                "/login.html";
+
+            return null;
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        if (data.user) {
-            userName.textContent = data.user.full_name;
-            userEmail.textContent = data.user.email;
+        if (!data || !data.user) {
+
+            console.error(
+                "No authenticated user returned from /api/me."
+            );
+
+            window.location.href =
+                "/login.html";
+
+            return null;
         }
+
+        const currentUser =
+            data.user;
+
+        if (userName) {
+
+            userName.textContent =
+                currentUser.full_name ||
+                "User";
+        }
+
+        if (userEmail) {
+
+            userEmail.textContent =
+                currentUser.email ||
+                "";
+        }
+
+        return currentUser;
+
     } catch (error) {
-        console.error("Error loading user:", error);
-        window.location.href = "/login.html";
+
+        console.error(
+            "Error loading user:",
+            error
+        );
+
+        window.location.href =
+            "/login.html";
+
+        return null;
     }
 }
 
@@ -145,19 +396,27 @@ async function loadUser() {
 // FORMAT DATE
 // ------------------------------------------------------------
 
-function formatDateForDisplay(dateValue) {
+function formatDateForDisplay(
+    dateValue
+) {
+
     if (!dateValue) {
+
         return "No due date";
     }
 
-    const dateText = String(dateValue).split("T")[0];
-    const parts = dateText.split("-");
+    const dateText =
+        String(dateValue).split("T")[0];
+
+    const parts =
+        dateText.split("-");
 
     if (parts.length !== 3) {
+
         return "No due date";
     }
 
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    return `${parts[2]} /${parts[1]}/${parts[0]}`;
 }
 
 
@@ -166,13 +425,25 @@ function formatDateForDisplay(dateValue) {
 // ------------------------------------------------------------
 
 function getStatusClass(status) {
-    const normalizedStatus = String(status || "Pending").toLowerCase();
 
-    if (normalizedStatus === "completed") {
+    const normalizedStatus =
+        String(
+            status || "Pending"
+        ).toLowerCase();
+
+    if (
+        normalizedStatus ===
+        "completed"
+    ) {
+
         return "completed";
     }
 
-    if (normalizedStatus === "in progress") {
+    if (
+        normalizedStatus ===
+        "in progress"
+    ) {
+
         return "in-progress";
     }
 
@@ -185,13 +456,25 @@ function getStatusClass(status) {
 // ------------------------------------------------------------
 
 function getPriorityClass(priority) {
-    const normalizedPriority = String(priority || "Medium").toLowerCase();
 
-    if (normalizedPriority === "high") {
+    const normalizedPriority =
+        String(
+            priority || "Medium"
+        ).toLowerCase();
+
+    if (
+        normalizedPriority ===
+        "high"
+    ) {
+
         return "high";
     }
 
-    if (normalizedPriority === "low") {
+    if (
+        normalizedPriority ===
+        "low"
+    ) {
+
         return "low";
     }
 
@@ -204,78 +487,158 @@ function getPriorityClass(priority) {
 // ------------------------------------------------------------
 
 if (taskForm) {
-    taskForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
 
-        const titleInput = document.getElementById("taskTitle");
-        const descriptionInput = document.getElementById("taskDescription");
-        const dueDateInput = document.getElementById("taskDueDate");
-        const priorityInput = document.getElementById("taskPriority");
-        const taskButton = document.getElementById("taskButton");
+    taskForm.addEventListener(
+        "submit",
+        async function (event) {
 
-        const title = titleInput.value.trim();
-        const description = descriptionInput.value.trim();
-        const dueDate = dueDateInput.value;
-        const priority = priorityInput.value;
+            event.preventDefault();
 
-        if (!title) {
-            showTaskMessage("Please enter a task title.", "error");
-            return;
-        }
+            const titleInput =
+                document.getElementById(
+                    "taskTitle"
+                );
 
-        taskButton.disabled = true;
-        taskButton.textContent = "Creating...";
+            const descriptionInput =
+                document.getElementById(
+                    "taskDescription"
+                );
 
-        showTaskMessage("Creating task...");
+            const dueDateInput =
+                document.getElementById(
+                    "taskDueDate"
+                );
 
-        try {
-            const response = await fetch("/api/tasks", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    title: title,
-                    description: description,
-                    due_date: dueDate || null,
-                    priority: priority
-                })
-            });
+            const priorityInput =
+                document.getElementById(
+                    "taskPriority"
+                );
 
-            const data = await response.json();
+            const taskButton =
+                document.getElementById(
+                    "taskButton"
+                );
 
-            if (!response.ok) {
+            const title =
+                titleInput?.value.trim() ||
+                "";
+
+            const description =
+                descriptionInput?.value.trim() ||
+                "";
+
+            const dueDate =
+                dueDateInput?.value ||
+                "";
+
+            const priority =
+                priorityInput?.value ||
+                "Medium";
+
+            if (!title) {
+
                 showTaskMessage(
-                    data.message || "Could not create task.",
+                    "Please enter a task title.",
                     "error"
                 );
+
                 return;
             }
 
-            showTaskMessage(
-                "Task created successfully!",
-                "success"
-            );
+            if (taskButton) {
 
-            taskForm.reset();
-
-            priorityInput.value = "Medium";
-
-            await loadTasks();
-
-        } catch (error) {
-            console.error("Error creating task:", error);
+                taskButton.disabled = true;
+                taskButton.textContent =
+                    "Creating...";
+            }
 
             showTaskMessage(
-                "Something went wrong while creating the task.",
-                "error"
+                "Creating task..."
             );
-        } finally {
-            taskButton.disabled = false;
-            taskButton.textContent = "Create Task";
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/tasks",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            credentials: "include",
+
+                            body: JSON.stringify({
+                                title:
+                                    title,
+
+                                description:
+                                    description,
+
+                                due_date:
+                                    dueDate || null,
+
+                                priority:
+                                    priority
+                            })
+                        }
+                    );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    showTaskMessage(
+                        data.message ||
+                        "Could not create task.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+                showTaskMessage(
+                    "Task created successfully!",
+                    "success"
+                );
+
+                taskForm.reset();
+
+                if (priorityInput) {
+
+                    priorityInput.value =
+                        "Medium";
+                }
+
+                await loadTasks();
+
+            } catch (error) {
+
+                console.error(
+                    "Error creating task:",
+                    error
+                );
+
+                showTaskMessage(
+                    "Something went wrong while creating the task.",
+                    "error"
+                );
+
+            } finally {
+
+                if (taskButton) {
+
+                    taskButton.disabled = false;
+                    taskButton.textContent =
+                        "Create Task";
+                }
+            }
         }
-    });
+    );
 }
 
 
@@ -284,106 +647,156 @@ if (taskForm) {
 // ------------------------------------------------------------
 
 async function editTask(taskId) {
+
     try {
-        const response = await fetch("/api/tasks", {
-            credentials: "include"
-        });
+
+        const response =
+            await fetch(
+                "/api/tasks",
+                {
+                    credentials: "include"
+                }
+            );
 
         if (!response.ok) {
-            alert("Could not load the task.");
+
+            alert(
+                "Could not load the task."
+            );
+
             return;
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        const task = data.tasks.find(function (item) {
-            return Number(item.id) === Number(taskId);
-        });
+        const task =
+            (data.tasks || []).find(
+                function (item) {
+
+                    return Number(item.id) ===
+                        Number(taskId);
+                }
+            );
 
         if (!task) {
-            alert("Task not found.");
+
+            alert(
+                "Task not found."
+            );
+
             return;
         }
 
-        const newTitle = prompt(
-            "Task title:",
-            task.title || ""
-        );
+        const newTitle =
+            prompt(
+                "Task title:",
+                task.title || ""
+            );
 
         if (newTitle === null) {
             return;
         }
 
-        const newDescription = prompt(
-            "Task description:",
-            task.description || ""
-        );
+        const newDescription =
+            prompt(
+                "Task description:",
+                task.description || ""
+            );
 
         if (newDescription === null) {
             return;
         }
 
-        const newDueDate = prompt(
-            "Due date (YYYY-MM-DD):",
-            task.due_date
-                ? String(task.due_date).split("T")[0]
-                : ""
-        );
+        const newDueDate =
+            prompt(
+                "Due date (YYYY-MM-DD):",
+                task.due_date
+                    ? String(task.due_date).split("T")[0]
+                    : ""
+            );
 
         if (newDueDate === null) {
             return;
         }
 
-        const newPriority = prompt(
-            "Priority (Low, Medium, High):",
-            task.priority || "Medium"
-        );
+        const newPriority =
+            prompt(
+                "Priority (Low, Medium, High):",
+                task.priority || "Medium"
+            );
 
         if (newPriority === null) {
             return;
         }
 
-        const newStatus = prompt(
-            "Status (Pending, In Progress, Completed):",
-            task.status || "Pending"
-        );
+        const newStatus =
+            prompt(
+                "Status (Pending, In Progress, Completed):",
+                task.status || "Pending"
+            );
 
         if (newStatus === null) {
             return;
         }
 
-        const updateResponse = await fetch(
-            `/api/tasks/${taskId}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    title: newTitle.trim(),
-                    description: newDescription.trim(),
-                    due_date: newDueDate || null,
-                    priority: newPriority.trim(),
-                    status: newStatus.trim()
-                })
-            }
-        );
+        const updateResponse =
+            await fetch(
+                `/api/tasks/${encodeURIComponent(taskId)}`,
+                {
+                    method: "PUT",
 
-        const result = await updateResponse.json();
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify({
+                        title:
+                            newTitle.trim(),
+
+                        description:
+                            newDescription.trim(),
+
+                        due_date:
+                            newDueDate || null,
+
+                        priority:
+                            newPriority.trim(),
+
+                        status:
+                            newStatus.trim()
+                    })
+                }
+            );
+
+        const result =
+            await updateResponse.json();
 
         if (!updateResponse.ok) {
+
             alert(
-                result.message || "Could not update the task."
+                result.message ||
+                "Could not update the task."
             );
+
             return;
         }
 
         await loadTasks();
 
     } catch (error) {
-        console.error("Error editing task:", error);
-        alert("Something went wrong while editing the task.");
+
+        console.error(
+            "Error editing task:",
+            error
+        );
+
+        alert(
+            "Something went wrong while editing the task."
+        );
     }
 }
 
@@ -393,37 +806,52 @@ async function editTask(taskId) {
 // ------------------------------------------------------------
 
 async function deleteTask(taskId) {
-    const confirmed = confirm(
-        "Are you sure you want to delete this task?"
-    );
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this task?"
+        );
 
     if (!confirmed) {
         return;
     }
 
     try {
-        const response = await fetch(
-            `/api/tasks/${taskId}`,
-            {
-                method: "DELETE",
-                credentials: "include"
-            }
-        );
 
-        const data = await response.json();
+        const response =
+            await fetch(
+                `/api/tasks/${encodeURIComponent(taskId)}`,
+                {
+                    method: "DELETE",
+                    credentials: "include"
+                }
+            );
+
+        const data =
+            await response.json();
 
         if (!response.ok) {
+
             alert(
-                data.message || "Could not delete the task."
+                data.message ||
+                "Could not delete the task."
             );
+
             return;
         }
 
         await loadTasks();
 
     } catch (error) {
-        console.error("Error deleting task:", error);
-        alert("Something went wrong while deleting the task.");
+
+        console.error(
+            "Error deleting task:",
+            error
+        );
+
+        alert(
+            "Something went wrong while deleting the task."
+        );
     }
 }
 
@@ -432,59 +860,105 @@ async function deleteTask(taskId) {
 // UPDATE TASK STATUS
 // ------------------------------------------------------------
 
-async function updateTaskStatus(taskId, newStatus) {
+async function updateTaskStatus(
+    taskId,
+    newStatus
+) {
+
     try {
-        const response = await fetch("/api/tasks", {
-            credentials: "include"
-        });
+
+        const response =
+            await fetch(
+                "/api/tasks",
+                {
+                    credentials: "include"
+                }
+            );
 
         if (!response.ok) {
-            alert("Could not load the task.");
+
+            alert(
+                "Could not load the task."
+            );
+
             return;
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        const task = data.tasks.find(function (item) {
-            return Number(item.id) === Number(taskId);
-        });
+        const task =
+            (data.tasks || []).find(
+                function (item) {
+
+                    return Number(item.id) ===
+                        Number(taskId);
+                }
+            );
 
         if (!task) {
-            alert("Task not found.");
+
+            alert(
+                "Task not found."
+            );
+
             return;
         }
 
-        const updateResponse = await fetch(
-            `/api/tasks/${taskId}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    title: task.title,
-                    description: task.description || "",
-                    due_date: task.due_date || null,
-                    priority: task.priority || "Medium",
-                    status: newStatus
-                })
-            }
-        );
+        const updateResponse =
+            await fetch(
+                `/api/tasks/${encodeURIComponent(taskId)}`,
+                {
+                    method: "PUT",
 
-        const result = await updateResponse.json();
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify({
+                        title:
+                            task.title,
+
+                        description:
+                            task.description || "",
+
+                        due_date:
+                            task.due_date || null,
+
+                        priority:
+                            task.priority || "Medium",
+
+                        status:
+                            newStatus
+                    })
+                }
+            );
+
+        const result =
+            await updateResponse.json();
 
         if (!updateResponse.ok) {
+
             alert(
-                result.message || "Could not update task status."
+                result.message ||
+                "Could not update task status."
             );
+
             return;
         }
 
         await loadTasks();
 
     } catch (error) {
-        console.error("Error updating task status:", error);
+
+        console.error(
+            "Error updating task status:",
+            error
+        );
+
         alert(
             "Something went wrong while updating the task."
         );
@@ -497,15 +971,23 @@ async function updateTaskStatus(taskId, newStatus) {
 // ------------------------------------------------------------
 
 function renderTasks(tasks) {
+
     if (!tasksContainer) {
         return;
     }
 
-    if (!tasks || tasks.length === 0) {
+    if (
+        !tasks ||
+        tasks.length === 0
+    ) {
+
         tasksContainer.innerHTML = `
             <div class="empty-state">
 
-                <div class="empty-state-icon" aria-hidden="true">
+                <div
+                    class="empty-state-icon"
+                    aria-hidden="true"
+                >
 
                     <svg
                         viewBox="0 0 24 24"
@@ -517,6 +999,7 @@ function renderTasks(tasks) {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                     >
+
                         <rect
                             x="4"
                             y="3"
@@ -526,13 +1009,18 @@ function renderTasks(tasks) {
                         ></rect>
 
                         <path d="M8 8h8"></path>
+
                         <path d="M8 12h8"></path>
+
                         <path d="M8 16h5"></path>
+
                     </svg>
 
                 </div>
 
-                <h3>No tasks yet</h3>
+                <h3>
+                    No tasks yet
+                </h3>
 
                 <p>
                     Create your first task above to start
@@ -545,133 +1033,195 @@ function renderTasks(tasks) {
         return;
     }
 
-    tasksContainer.innerHTML = tasks.map(function (task) {
+    tasksContainer.innerHTML =
+        tasks.map(
+            function (task) {
 
-        const status = task.status || "Pending";
-        const priority = task.priority || "Medium";
+                const status =
+                    task.status ||
+                    "Pending";
 
-        const statusClass = getStatusClass(status);
-        const priorityClass = getPriorityClass(priority);
+                const priority =
+                    task.priority ||
+                    "Medium";
 
-        const safeTitle = escapeHtml(
-            task.title || "Untitled Task"
-        );
+                const statusClass =
+                    getStatusClass(
+                        status
+                    );
 
-        const safeDescription = escapeHtml(
-            task.description || "No description provided."
-        );
+                const priorityClass =
+                    getPriorityClass(
+                        priority
+                    );
 
-        const formattedDueDate = formatDateForDisplay(
-            task.due_date
-        );
+                const safeTitle =
+                    escapeHtml(
+                        task.title ||
+                        "Untitled Task"
+                    );
 
-        return `
-            <article class="goal-card task-card">
+                const safeDescription =
+                    escapeHtml(
+                        task.description ||
+                        "No description provided."
+                    );
 
-                <div class="goal-card-header">
+                const formattedDueDate =
+                    formatDateForDisplay(
+                        task.due_date
+                    );
 
-                    <div>
-
-                        <h3 class="goal-card-title">
-                            ${safeTitle}
-                        </h3>
-
-                        <span class="goal-status task-status ${statusClass}">
-                            ${escapeHtml(status)}
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="task-card-description">
-
-                    <p>
-                        ${safeDescription}
-                    </p>
-
-                </div>
-
-
-                <div class="goal-meta task-meta">
-
-                    <span>
-                        <strong>Due:</strong>
-                        ${escapeHtml(formattedDueDate)}
-                    </span>
-
-                    <span class="task-priority ${priorityClass}">
-                        <strong>Priority:</strong>
-                        ${escapeHtml(priority)}
-                    </span>
-
-                </div>
-
-
-                <div class="task-status-control">
-
-                    <label for="status-${task.id}">
-                        Update status
-                    </label>
-
-                    <select
-                        id="status-${task.id}"
-                        class="task-status-select"
-                        data-task-id="${task.id}"
+                return `
+                    <article
+                        class="goal-card task-card"
                     >
 
-                        <option
-                            value="Pending"
-                            ${status === "Pending" ? "selected" : ""}
+                        <div
+                            class="goal-card-header"
                         >
-                            Pending
-                        </option>
 
-                        <option
-                            value="In Progress"
-                            ${status === "In Progress" ? "selected" : ""}
+                            <div>
+
+                                <h3
+                                    class="goal-card-title"
+                                >
+                                    ${safeTitle}
+                                </h3>
+
+                                <span
+                                    class="goal-status task-status ${statusClass}"
+                                >
+                                    ${escapeHtml(status)}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="task-card-description"
                         >
-                            In Progress
-                        </option>
 
-                        <option
-                            value="Completed"
-                            ${status === "Completed" ? "selected" : ""}
+                            <p>
+                                ${safeDescription}
+                            </p>
+
+                        </div>
+
+                        <div
+                            class="goal-meta task-meta"
                         >
-                            Completed
-                        </option>
 
-                    </select>
+                            <span>
 
-                </div>
+                                <strong>
+                                    Due:
+                                </strong>
 
+                                ${escapeHtml(
+                    formattedDueDate
+                )}
 
-                <div class="goal-actions">
+                            </span>
 
-                    <button
-                        type="button"
-                        class="goal-action-button edit"
-                        data-action="edit"
-                        data-task-id="${task.id}"
-                    >
-                        Edit Task
-                    </button>
+                            <span
+                                class="task-priority ${priorityClass}"
+                            >
 
-                    <button
-                        type="button"
-                        class="goal-action-button delete"
-                        data-action="delete"
-                        data-task-id="${task.id}"
-                    >
-                        Delete Task
-                    </button>
+                                <strong>
+                                    Priority:
+                                </strong>
 
-                </div>
+                                ${escapeHtml(
+                    priority
+                )}
 
-            </article>
-        `;
-    }).join("");
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="task-status-control"
+                        >
+
+                            <label
+                                for="status-${task.id}"
+                            >
+                                Update status
+                            </label>
+
+                            <select
+                                id="status-${task.id}"
+                                class="task-status-select"
+                                data-task-id="${task.id}"
+                            >
+
+                                <option
+                                    value="Pending"
+                                    ${status ===
+                        "Pending"
+                        ? "selected"
+                        : ""
+                    }
+                                >
+                                    Pending
+                                </option>
+
+                                <option
+                                    value="In Progress"
+                                    ${status ===
+                        "In Progress"
+                        ? "selected"
+                        : ""
+                    }
+                                >
+                                    In Progress
+                                </option>
+
+                                <option
+                                    value="Completed"
+                                    ${status ===
+                        "Completed"
+                        ? "selected"
+                        : ""
+                    }
+                                >
+                                    Completed
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div
+                            class="goal-actions"
+                        >
+
+                            <button
+                                type="button"
+                                class="goal-action-button edit"
+                                data-action="edit"
+                                data-task-id="${task.id}"
+                            >
+                                Edit Task
+                            </button>
+
+                            <button
+                                type="button"
+                                class="goal-action-button delete"
+                                data-action="delete"
+                                data-task-id="${task.id}"
+                            >
+                                Delete Task
+                            </button>
+
+                        </div>
+
+                    </article>
+                `;
+            }
+        ).join("");
 
     attachTaskEventListeners();
 }
@@ -683,53 +1233,74 @@ function renderTasks(tasks) {
 
 function attachTaskEventListeners() {
 
-    const statusSelects = document.querySelectorAll(
-        ".task-status-select"
-    );
+    const statusSelects =
+        document.querySelectorAll(
+            ".task-status-select"
+        );
 
-    statusSelects.forEach(function (select) {
+    statusSelects.forEach(
+        function (select) {
 
-        select.addEventListener("change", function () {
+            select.addEventListener(
+                "change",
+                function () {
 
-            const taskId = select.dataset.taskId;
-            const newStatus = select.value;
+                    const taskId =
+                        select.dataset.taskId;
 
-            updateTaskStatus(
-                taskId,
-                newStatus
+                    const newStatus =
+                        select.value;
+
+                    updateTaskStatus(
+                        taskId,
+                        newStatus
+                    );
+                }
             );
-        });
-    });
-
-
-    const editButtons = document.querySelectorAll(
-        '[data-action="edit"]'
+        }
     );
 
-    editButtons.forEach(function (button) {
+    const editButtons =
+        document.querySelectorAll(
+            '[data-action="edit"]'
+        );
 
-        button.addEventListener("click", function () {
+    editButtons.forEach(
+        function (button) {
 
-            const taskId = button.dataset.taskId;
+            button.addEventListener(
+                "click",
+                function () {
 
-            editTask(taskId);
-        });
-    });
+                    const taskId =
+                        button.dataset.taskId;
 
-
-    const deleteButtons = document.querySelectorAll(
-        '[data-action="delete"]'
+                    editTask(taskId);
+                }
+            );
+        }
     );
 
-    deleteButtons.forEach(function (button) {
+    const deleteButtons =
+        document.querySelectorAll(
+            '[data-action="delete"]'
+        );
 
-        button.addEventListener("click", function () {
+    deleteButtons.forEach(
+        function (button) {
 
-            const taskId = button.dataset.taskId;
+            button.addEventListener(
+                "click",
+                function () {
 
-            deleteTask(taskId);
-        });
-    });
+                    const taskId =
+                        button.dataset.taskId;
+
+                    deleteTask(taskId);
+                }
+            );
+        }
+    );
 }
 
 
@@ -745,32 +1316,43 @@ async function loadTasks() {
 
     tasksContainer.innerHTML = `
         <div class="empty-state">
-
             <p>
                 Loading your tasks...
             </p>
-
         </div>
     `;
 
     try {
 
-        const response = await fetch("/api/tasks", {
-            credentials: "include"
-        });
+        const response =
+            await fetch(
+                "/api/tasks",
+                {
+                    credentials: "include"
+                }
+            );
 
         if (response.status === 401) {
-            window.location.href = "/login.html";
+
+            window.location.href =
+                "/login.html";
+
             return;
         }
 
         if (!response.ok) {
-            throw new Error("Could not load tasks.");
+
+            throw new Error(
+                "Could not load tasks."
+            );
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        renderTasks(data.tasks || []);
+        renderTasks(
+            data.tasks || []
+        );
 
     } catch (error) {
 
@@ -809,18 +1391,25 @@ if (logoutButton) {
 
             try {
 
-                const response = await fetch(
-                    "/api/logout",
-                    {
-                        method: "POST",
-                        credentials: "include"
-                    }
-                );
+                const response =
+                    await fetch(
+                        "/api/logout",
+                        {
+                            method: "POST",
+                            credentials: "include"
+                        }
+                    );
 
                 if (response.ok) {
-                    window.location.href = "/login.html";
+
+                    window.location.href =
+                        "/login.html";
+
                 } else {
-                    alert("Could not log out.");
+
+                    alert(
+                        "Could not log out."
+                    );
                 }
 
             } catch (error) {
@@ -844,5 +1433,7 @@ if (logoutButton) {
 // ------------------------------------------------------------
 
 loadSavedTheme();
+
 loadUser();
+
 loadTasks();

@@ -1,3 +1,4 @@
+javascript
 /* =========================================================
    STUDYTRACK - PROFILE PAGE
    ========================================================= */
@@ -5,76 +6,99 @@
 
 /* =========================================================
    ELEMENTS
-   ========================================================= */
+========================================================= */
 
 const profileForm =
-    document.getElementById('profileForm');
+    document.getElementById("profileForm");
 
 const fullNameInput =
-    document.getElementById('fullName');
+    document.getElementById("fullName");
 
 const emailInput =
-    document.getElementById('email');
+    document.getElementById("email");
 
 const universityInput =
-    document.getElementById('university');
+    document.getElementById("university");
 
 const courseInput =
-    document.getElementById('course');
+    document.getElementById("course");
+
+
+/* =========================================================
+   PROFILE PICTURE ELEMENTS
+========================================================= */
 
 const profilePictureInput =
-    document.getElementById('profilePictureInput');
+    document.getElementById("avatarFile");
 
 const profilePicturePreview =
-    document.getElementById('profilePicturePreview');
+    document.getElementById("profilePictureImage");
 
-const profilePicturePlaceholder =
-    document.getElementById('profilePicturePlaceholder');
+const profilePictureInitials =
+    document.getElementById("profilePictureInitials");
 
-const selectedImageName =
-    document.getElementById('selectedImageName');
+const choosePictureButton =
+    document.getElementById("choosePictureButton");
 
 const removeProfilePictureButton =
-    document.getElementById(
-        'removeProfilePictureButton'
-    );
+    document.getElementById("removePictureButton");
+
+const selectedImageName =
+    document.getElementById("selectedPictureName");
+
+
+/* =========================================================
+   OTHER ELEMENTS
+========================================================= */
 
 const saveProfileButton =
-    document.getElementById('saveProfileButton');
+    document.getElementById("saveProfileButton");
 
 const resetProfileButton =
-    document.getElementById(
-        'resetProfileButton'
-    );
+    document.getElementById("resetProfileButton");
 
 const profileMessage =
-    document.getElementById('profileMessage');
+    document.getElementById("profileMessage");
 
 const userName =
-    document.getElementById('userName');
+    document.getElementById("userName");
 
 const userEmail =
-    document.getElementById('userEmail');
+    document.getElementById("userEmail");
 
 const logoutButton =
-    document.getElementById('logoutButton');
+    document.getElementById("logoutButton");
 
 const dayModeButton =
-    document.getElementById('dayModeButton');
+    document.getElementById("dayModeButton");
 
 const nightModeButton =
-    document.getElementById('nightModeButton');
+    document.getElementById("nightModeButton");
 
 const accountStatus =
-    document.getElementById('accountStatus');
+    document.getElementById("accountStatus");
 
 const accountDates =
-    document.getElementById('accountDates');
+    document.getElementById("accountDates");
+
+
+/* =========================================================
+   MOBILE MENU ELEMENTS
+========================================================= */
+
+const mobileMenuButton =
+    document.getElementById("mobileMenuButton");
+
+const studyTrackSidebar =
+    document.getElementById("studyTrackSidebar");
+
+const mobileMenuOverlay =
+    document.getElementById("mobileMenuOverlay");
 
 
 /* =========================================================
    PROFILE DATA
-   ========================================================= */
+========================================================= */
 
 let originalProfile = null;
 
@@ -87,40 +111,42 @@ let temporaryPreviewUrl = null;
 
 /* =========================================================
    MESSAGE
-   ========================================================= */
+========================================================= */
 
 function showMessage(message, type) {
 
-    profileMessage.textContent =
-        message;
+    if (!profileMessage) {
+        return;
+    }
+
+    profileMessage.textContent = message;
 
     profileMessage.className =
-        `form-message show ${type}`;
-
+        `form - message show ${ type }`;
 }
 
 
 function clearMessage() {
 
-    profileMessage.textContent =
-        '';
+    if (!profileMessage) {
+        return;
+    }
+
+    profileMessage.textContent = "";
 
     profileMessage.className =
-        'form-message';
-
+        "form-message";
 }
 
 
 /* =========================================================
    TEMPORARY PREVIEW URL
-   ========================================================= */
+========================================================= */
 
 function revokeTemporaryPreviewUrl() {
 
     if (!temporaryPreviewUrl) {
-
         return;
-
     }
 
     URL.revokeObjectURL(
@@ -128,126 +154,168 @@ function revokeTemporaryPreviewUrl() {
     );
 
     temporaryPreviewUrl = null;
-
 }
 
 
 /* =========================================================
    PROFILE PICTURE PREVIEW
-   ========================================================= */
+========================================================= */
 
 function showProfilePicture(url) {
 
     if (!url) {
-
         clearProfilePicturePreview();
-
         return;
-
     }
 
 
-    /*
-        Set the image source first.
+    if (profilePicturePreview) {
 
-        The image load handler below determines
-        whether the image can actually be displayed.
-    */
+        profilePicturePreview.src = url;
 
-    profilePicturePreview.hidden =
-        true;
+        profilePicturePreview.hidden = false;
+    }
 
-    profilePicturePlaceholder.hidden =
-        true;
 
-    profilePicturePreview.src =
-        url;
+    if (profilePictureInitials) {
 
+        profilePictureInitials.hidden = true;
+    }
 }
 
 
 /* =========================================================
    PROFILE PICTURE LOAD SUCCESS
-   ========================================================= */
+========================================================= */
 
 function handleProfilePictureLoad() {
 
-    /*
-        The image loaded successfully.
+    if (profilePicturePreview) {
 
-        Show the image and make sure the
-        placeholder is hidden.
-    */
+        profilePicturePreview.hidden = false;
+    }
 
-    profilePicturePreview.hidden =
-        false;
 
-    profilePicturePlaceholder.hidden =
-        true;
+    if (profilePictureInitials) {
 
+        profilePictureInitials.hidden = true;
+    }
 }
 
 
 /* =========================================================
    PROFILE PICTURE LOAD ERROR
-   ========================================================= */
+========================================================= */
 
 function handleProfilePictureError() {
 
-    /*
-        This is important.
+    if (profilePicturePreview) {
 
-        If the saved image URL is broken or the
-        image cannot be loaded, do NOT allow the
-        browser to display the alt text.
+        profilePicturePreview.hidden = true;
 
-        Instead, hide the broken image and show
-        the normal placeholder.
-    */
+        profilePicturePreview.removeAttribute(
+            "src"
+        );
+    }
 
-    profilePicturePreview.hidden =
-        true;
 
-    profilePicturePreview.removeAttribute(
-        'src'
-    );
+    if (profilePictureInitials) {
 
-    profilePicturePlaceholder.hidden =
-        false;
+        profilePictureInitials.hidden = false;
+    }
+
 
     console.warn(
-        'StudyTrack could not load the profile picture.'
+        "StudyTrack could not load the profile picture."
     );
-
 }
 
 
 /* =========================================================
    CLEAR PROFILE PICTURE PREVIEW
-   ========================================================= */
+========================================================= */
 
 function clearProfilePicturePreview() {
 
     revokeTemporaryPreviewUrl();
 
 
-    profilePicturePreview.hidden =
-        true;
+    if (profilePicturePreview) {
 
-    profilePicturePreview.removeAttribute(
-        'src'
-    );
+        profilePicturePreview.hidden = true;
+
+        profilePicturePreview.removeAttribute(
+            "src"
+        );
+    }
 
 
-    profilePicturePlaceholder.hidden =
-        false;
+    if (profilePictureInitials) {
 
+        profilePictureInitials.hidden = false;
+    }
+}
+
+
+/* =========================================================
+   UPDATE PROFILE INITIALS
+========================================================= */
+
+function updateProfileInitials(name) {
+
+    if (!profilePictureInitials) {
+        return;
+    }
+
+
+    const cleanName =
+        String(name || "User")
+            .trim();
+
+
+    if (!cleanName) {
+
+        profilePictureInitials.textContent =
+            "U";
+
+        return;
+    }
+
+
+    const words =
+        cleanName
+            .split(/\s+/)
+            .filter(Boolean);
+
+
+    let initials = "";
+
+
+    if (words.length === 1) {
+
+        initials =
+            words[0]
+                .substring(0, 2)
+                .toUpperCase();
+
+    } else {
+
+        initials =
+            (
+                words[0][0] +
+                words[words.length - 1][0]
+            ).toUpperCase();
+    }
+
+
+    profilePictureInitials.textContent =
+        initials;
 }
 
 
 /* =========================================================
    LOAD PROFILE
-   ========================================================= */
+========================================================= */
 
 async function loadProfile() {
 
@@ -255,8 +323,15 @@ async function loadProfile() {
 
         clearMessage();
 
+
         const response =
-            await fetch('/api/profile');
+            await fetch(
+                "/api/profile",
+                {
+                    credentials: "include",
+                    cache: "no-store"
+                }
+            );
 
 
         const data =
@@ -268,27 +343,24 @@ async function loadProfile() {
             if (response.status === 401) {
 
                 window.location.href =
-                    'login.html';
+                    "login.html";
 
                 return;
-
             }
 
 
             throw new Error(
                 data.message ||
-                'Failed to load profile'
+                "Failed to load profile"
             );
-
         }
 
 
         if (!data.profile) {
 
             throw new Error(
-                'Profile information was not returned'
+                "Profile information was not returned."
             );
-
         }
 
 
@@ -300,53 +372,77 @@ async function loadProfile() {
             data.profile
         );
 
-
     } catch (error) {
 
         console.error(
-            'Load profile error:',
+            "Load profile error:",
             error
         );
 
 
         showMessage(
             error.message ||
-            'Unable to load profile.',
-            'error'
+            "Unable to load profile.",
+            "error"
         );
-
     }
-
 }
 
 
 /* =========================================================
    DISPLAY PROFILE
-   ========================================================= */
+========================================================= */
 
 function displayProfile(profile) {
 
     revokeTemporaryPreviewUrl();
 
 
-    fullNameInput.value =
-        profile.full_name || '';
+    if (fullNameInput) {
 
-    emailInput.value =
-        profile.email || '';
-
-    universityInput.value =
-        profile.university || '';
-
-    courseInput.value =
-        profile.course || '';
+        fullNameInput.value =
+            profile.full_name || "";
+    }
 
 
-    userName.textContent =
-        profile.full_name || 'User';
+    if (emailInput) {
 
-    userEmail.textContent =
-        profile.email || '';
+        emailInput.value =
+            profile.email || "";
+    }
+
+
+    if (universityInput) {
+
+        universityInput.value =
+            profile.university || "";
+    }
+
+
+    if (courseInput) {
+
+        courseInput.value =
+            profile.course || "";
+    }
+
+
+    if (userName) {
+
+        userName.textContent =
+            profile.full_name || "User";
+    }
+
+
+    if (userEmail) {
+
+        userEmail.textContent =
+            profile.email || "";
+    }
+
+
+    updateProfileInitials(
+        profile.full_name
+    );
 
 
     if (profile.avatar_url) {
@@ -358,7 +454,6 @@ function displayProfile(profile) {
     } else {
 
         clearProfilePicturePreview();
-
     }
 
 
@@ -369,11 +464,18 @@ function displayProfile(profile) {
         false;
 
 
-    profilePictureInput.value =
-        '';
+    if (profilePictureInput) {
 
-    selectedImageName.textContent =
-        '';
+        profilePictureInput.value =
+            "";
+    }
+
+
+    if (selectedImageName) {
+
+        selectedImageName.textContent =
+            "";
+    }
 
 
     updateRemoveButton(
@@ -384,18 +486,25 @@ function displayProfile(profile) {
     updateAccountInformation(
         profile
     );
-
 }
 
 
 /* =========================================================
    ACCOUNT INFORMATION
-   ========================================================= */
+========================================================= */
 
 function updateAccountInformation(profile) {
 
-    accountStatus.textContent =
-        'Profile information loaded';
+    if (accountStatus) {
+
+        accountStatus.textContent =
+            "Profile information loaded";
+    }
+
+
+    if (!accountDates) {
+        return;
+    }
 
 
     if (
@@ -404,48 +513,61 @@ function updateAccountInformation(profile) {
     ) {
 
         accountDates.textContent =
-            `Profile created: ${profile.created_at} | ` +
-            `Last updated: ${profile.updated_at}`;
+            `Profile created: ${ profile.created_at } | ` +
+            `Last updated: ${ profile.updated_at }`;
 
         return;
-
     }
 
 
     if (profile.created_at) {
 
         accountDates.textContent =
-            `Profile created: ${profile.created_at}`;
+            `Profile created: ${ profile.created_at }`;
 
         return;
-
     }
 
 
     accountDates.textContent =
-        'Your profile information is ready to use.';
-
+        "Your profile information is ready to use.";
 }
 
 
 /* =========================================================
    UPDATE REMOVE BUTTON
-   ========================================================= */
+========================================================= */
 
 function updateRemoveButton(hasPicture) {
 
-    removeProfilePictureButton.disabled =
-        !hasPicture &&
-        !selectedProfilePicture;
+    if (!removeProfilePictureButton) {
+        return;
+    }
 
+
+    const canRemove =
+        hasPicture ||
+        Boolean(selectedProfilePicture);
+
+
+    removeProfilePictureButton.hidden =
+        !canRemove;
+
+    removeProfilePictureButton.disabled =
+        !canRemove;
 }
 
 
 /* =========================================================
    SELECT PROFILE PICTURE
-   ========================================================= */
+========================================================= */
 
 function handleProfilePictureSelection() {
+
+    if (!profilePictureInput) {
+        return;
+    }
+
 
     const file =
         profilePictureInput.files[0];
@@ -456,8 +578,13 @@ function handleProfilePictureSelection() {
         selectedProfilePicture =
             null;
 
-        selectedImageName.textContent =
-            '';
+
+        if (selectedImageName) {
+
+            selectedImageName.textContent =
+                "";
+        }
+
 
         updateRemoveButton(
             Boolean(
@@ -466,15 +593,15 @@ function handleProfilePictureSelection() {
             )
         );
 
-        return;
 
+        return;
     }
 
 
     const allowedTypes = [
-        'image/jpeg',
-        'image/png',
-        'image/webp'
+        "image/jpeg",
+        "image/png",
+        "image/webp"
     ];
 
 
@@ -485,18 +612,19 @@ function handleProfilePictureSelection() {
     ) {
 
         profilePictureInput.value =
-            '';
+            "";
 
         selectedProfilePicture =
             null;
 
+
         showMessage(
-            'Please choose a JPG, PNG or WebP image.',
-            'error'
+            "Please choose a JPG, PNG or WebP image.",
+            "error"
         );
 
-        return;
 
+        return;
     }
 
 
@@ -507,18 +635,19 @@ function handleProfilePictureSelection() {
     if (file.size > maximumSize) {
 
         profilePictureInput.value =
-            '';
+            "";
 
         selectedProfilePicture =
             null;
 
+
         showMessage(
-            'Profile picture must be 5 MB or smaller.',
-            'error'
+            "Profile picture must be 5 MB or smaller.",
+            "error"
         );
 
-        return;
 
+        return;
     }
 
 
@@ -529,14 +658,12 @@ function handleProfilePictureSelection() {
         false;
 
 
-    selectedImageName.textContent =
-        `Selected: ${file.name}`;
+    if (selectedImageName) {
 
+        selectedImageName.textContent =
+            `Selected: ${ file.name }`;
+    }
 
-    /*
-        Remove the old temporary preview URL
-        before creating a new one.
-    */
 
     revokeTemporaryPreviewUrl();
 
@@ -550,26 +677,36 @@ function handleProfilePictureSelection() {
     );
 
 
-    updateRemoveButton(
-        true
-    );
+    updateRemoveButton(true);
 
 
     clearMessage();
+}
 
+
+/* =========================================================
+   CHOOSE PROFILE PICTURE
+========================================================= */
+
+function chooseProfilePicture() {
+
+    if (!profilePictureInput) {
+        return;
+    }
+
+
+    profilePictureInput.click();
 }
 
 
 /* =========================================================
    UPLOAD PROFILE PICTURE
-   ========================================================= */
+========================================================= */
 
 async function uploadProfilePicture() {
 
     if (!selectedProfilePicture) {
-
         return null;
-
     }
 
 
@@ -578,17 +715,18 @@ async function uploadProfilePicture() {
 
 
     formData.append(
-        'avatar',
+        "avatar",
         selectedProfilePicture
     );
 
 
     const response =
         await fetch(
-            '/api/profile/avatar',
+            "/api/profile/avatar",
             {
-                method: 'POST',
-                body: formData
+                method: "POST",
+                body: formData,
+                credentials: "include"
             }
         );
 
@@ -602,31 +740,28 @@ async function uploadProfilePicture() {
         if (response.status === 401) {
 
             window.location.href =
-                'login.html';
+                "login.html";
 
             return null;
-
         }
 
 
         throw new Error(
             data.message ||
-            'Failed to upload profile picture'
+            "Failed to upload profile picture."
         );
-
     }
 
 
     return data.avatar_url;
-
 }
 
 
 /* =========================================================
    REMOVE PROFILE PICTURE
-   ========================================================= */
+========================================================= */
 
-async function removeProfilePicture() {
+function removeProfilePicture() {
 
     const hasSavedPicture =
         Boolean(
@@ -647,15 +782,8 @@ async function removeProfilePicture() {
     ) {
 
         return;
-
     }
 
-
-    /*
-        If the user has only selected a new image
-        and it has not been uploaded yet, simply
-        cancel the selection.
-    */
 
     if (
         !hasSavedPicture &&
@@ -665,64 +793,90 @@ async function removeProfilePicture() {
         selectedProfilePicture =
             null;
 
-        profilePictureInput.value =
-            '';
 
-        selectedImageName.textContent =
-            '';
+        if (profilePictureInput) {
+
+            profilePictureInput.value =
+                "";
+        }
+
+
+        if (selectedImageName) {
+
+            selectedImageName.textContent =
+                "";
+        }
+
 
         clearProfilePicturePreview();
 
-        updateRemoveButton(
-            false
-        );
+
+        updateRemoveButton(false);
+
 
         return;
-
     }
 
-
-    /*
-        If the picture is already saved, mark it
-        for deletion. The actual deletion happens
-        when the user saves the profile.
-    */
 
     selectedProfilePicture =
         null;
 
-    profilePictureInput.value =
-        '';
 
-    selectedImageName.textContent =
-        '';
+    if (profilePictureInput) {
+
+        profilePictureInput.value =
+            "";
+    }
+
+
+    if (selectedImageName) {
+
+        selectedImageName.textContent =
+            "";
+    }
+
 
     profilePictureWasRemoved =
         true;
 
+
     clearProfilePicturePreview();
 
-    updateRemoveButton(
-        false
-    );
+
+    updateRemoveButton(false);
+
 
     showMessage(
-        'Profile picture will be removed when you save your changes.',
-        'success'
+        "Profile picture will be removed when you save your changes.",
+        "success"
     );
-
 }
 
 
 /* =========================================================
    SAVE PROFILE
-   ========================================================= */
+========================================================= */
 
 async function saveProfile(event) {
 
     event.preventDefault();
 
     clearMessage();
+
+
+    if (
+        !fullNameInput ||
+        !universityInput ||
+        !courseInput
+    ) {
+
+        showMessage(
+            "Profile form could not be loaded correctly.",
+            "error"
+        );
+
+        return;
+    }
 
 
     const fullName =
@@ -738,45 +892,51 @@ async function saveProfile(event) {
     if (!fullName) {
 
         showMessage(
-            'Full name is required.',
-            'error'
+            "Full name is required.",
+            "error"
         );
+
 
         fullNameInput.focus();
 
         return;
-
     }
 
 
-    saveProfileButton.disabled =
-        true;
+    if (saveProfileButton) {
 
-    resetProfileButton.disabled =
-        true;
+        saveProfileButton.disabled =
+            true;
 
-    saveProfileButton.textContent =
-        'Saving...';
+        saveProfileButton.textContent =
+            "Saving...";
+    }
+
+
+    if (resetProfileButton) {
+
+        resetProfileButton.disabled =
+            true;
+    }
 
 
     try {
 
-        /*
-            First save the normal profile information.
-        */
-
         const profileResponse =
             await fetch(
-                '/api/profile',
+                "/api/profile",
                 {
-                    method: 'PUT',
+                    method: "PUT",
 
                     headers: {
-                        'Content-Type':
-                            'application/json'
+                        "Content-Type":
+                            "application/json"
                     },
 
+                    credentials: "include",
+
                     body: JSON.stringify({
+
                         full_name:
                             fullName,
 
@@ -785,6 +945,7 @@ async function saveProfile(event) {
 
                         course:
                             course
+
                     })
                 }
             );
@@ -802,45 +963,33 @@ async function saveProfile(event) {
             ) {
 
                 window.location.href =
-                    'login.html';
+                    "login.html";
 
                 return;
-
             }
 
 
             throw new Error(
                 profileData.message ||
-                'Failed to update profile'
+                "Failed to update profile."
             );
-
         }
 
-
-        /*
-            If the user selected a new picture,
-            upload it now.
-        */
 
         if (selectedProfilePicture) {
 
             await uploadProfilePicture();
-
         }
 
-
-        /*
-            If the user asked to remove the
-            existing picture, remove it now.
-        */
 
         if (profilePictureWasRemoved) {
 
             const removeResponse =
                 await fetch(
-                    '/api/profile/avatar',
+                    "/api/profile/avatar",
                     {
-                        method: 'DELETE'
+                        method: "DELETE",
+                        credentials: "include"
                     }
                 );
 
@@ -853,23 +1002,19 @@ async function saveProfile(event) {
 
                 throw new Error(
                     removeData.message ||
-                    'Failed to remove profile picture'
+                    "Failed to remove profile picture."
                 );
-
             }
-
         }
 
 
-        /*
-            Reload the profile so that the
-            database values become the new
-            original values.
-        */
-
         const updatedResponse =
             await fetch(
-                '/api/profile'
+                "/api/profile",
+                {
+                    credentials: "include",
+                    cache: "no-store"
+                }
             );
 
 
@@ -881,9 +1026,8 @@ async function saveProfile(event) {
 
             throw new Error(
                 updatedData.message ||
-                'Profile was saved but could not be reloaded'
+                "Profile was saved but could not be reloaded."
             );
-
         }
 
 
@@ -897,45 +1041,50 @@ async function saveProfile(event) {
 
 
         showMessage(
-            'Profile updated successfully.',
-            'success'
+            "Profile updated successfully.",
+            "success"
         );
 
 
     } catch (error) {
 
         console.error(
-            'Save profile error:',
+            "Save profile error:",
             error
         );
 
 
         showMessage(
             error.message ||
-            'Unable to update profile.',
-            'error'
+            "Unable to update profile.",
+            "error"
         );
 
 
     } finally {
 
-        saveProfileButton.disabled =
-            false;
+        if (saveProfileButton) {
 
-        resetProfileButton.disabled =
-            false;
+            saveProfileButton.disabled =
+                false;
 
-        saveProfileButton.textContent =
-            'Save Changes';
+            saveProfileButton.textContent =
+                "Save Changes";
+        }
 
+
+        if (resetProfileButton) {
+
+            resetProfileButton.disabled =
+                false;
+        }
     }
-
 }
 
 
 /* =========================================================
    RESET PROFILE
-   ========================================================= */
+========================================================= */
 
 function resetProfile() {
 
@@ -947,46 +1096,42 @@ function resetProfile() {
         loadProfile();
 
         return;
-
     }
 
 
     displayProfile(
         originalProfile
     );
-
 }
 
 
 /* =========================================================
    DAY / NIGHT MODE
-   ========================================================= */
+========================================================= */
 
 function applySavedTheme() {
 
     const savedTheme =
         localStorage.getItem(
-            'studytrack-theme'
+            "studytrack-theme"
         );
 
 
-    if (savedTheme === 'night') {
+    if (savedTheme === "night") {
 
         document.body.classList.add(
-            'night-mode'
+            "night-mode"
         );
 
     } else {
 
         document.body.classList.remove(
-            'night-mode'
+            "night-mode"
         );
-
     }
 
 
     updateThemeButtons();
-
 }
 
 
@@ -994,58 +1139,225 @@ function updateThemeButtons() {
 
     const nightMode =
         document.body.classList.contains(
-            'night-mode'
+            "night-mode"
         );
 
 
-    dayModeButton.classList.toggle(
-        'active',
-        !nightMode
-    );
+    if (dayModeButton) {
 
-    nightModeButton.classList.toggle(
-        'active',
-        nightMode
-    );
+        dayModeButton.classList.toggle(
+            "active",
+            !nightMode
+        );
 
+
+        dayModeButton.setAttribute(
+            "aria-pressed",
+            String(!nightMode)
+        );
+    }
+
+
+    if (nightModeButton) {
+
+        nightModeButton.classList.toggle(
+            "active",
+            nightMode
+        );
+
+
+        nightModeButton.setAttribute(
+            "aria-pressed",
+            String(nightMode)
+        );
+    }
 }
 
 
 function enableDayMode() {
 
     document.body.classList.remove(
-        'night-mode'
+        "night-mode"
     );
+
 
     localStorage.setItem(
-        'studytrack-theme',
-        'day'
+        "studytrack-theme",
+        "day"
     );
 
-    updateThemeButtons();
 
+    updateThemeButtons();
 }
 
 
 function enableNightMode() {
 
     document.body.classList.add(
-        'night-mode'
+        "night-mode"
     );
+
 
     localStorage.setItem(
-        'studytrack-theme',
-        'night'
+        "studytrack-theme",
+        "night"
     );
 
-    updateThemeButtons();
 
+    updateThemeButtons();
 }
 
 
 /* =========================================================
+   MOBILE MENU
+========================================================= */
+
+function setMobileMenu(open) {
+
+    if (
+        !mobileMenuButton ||
+        !studyTrackSidebar
+    ) {
+
+        return;
+    }
+
+
+    studyTrackSidebar.classList.toggle(
+        "mobile-menu-open",
+        open
+    );
+
+
+    mobileMenuButton.classList.toggle(
+        "menu-open",
+        open
+    );
+
+
+    mobileMenuButton.setAttribute(
+        "aria-expanded",
+        String(open)
+    );
+
+
+    mobileMenuButton.setAttribute(
+        "aria-label",
+        open
+            ? "Close navigation menu"
+            : "Open navigation menu"
+    );
+
+
+    mobileMenuButton.setAttribute(
+        "title",
+        open
+            ? "Close navigation menu"
+            : "Open navigation menu"
+    );
+
+
+    if (mobileMenuOverlay) {
+
+        mobileMenuOverlay.classList.toggle(
+            "active",
+            open
+        );
+
+
+        mobileMenuOverlay.setAttribute(
+            "aria-hidden",
+            String(!open)
+        );
+    }
+
+
+    document.body.classList.toggle(
+        "mobile-menu-active",
+        open
+    );
+}
+
+
+/* =========================================================
+   MOBILE MENU EVENTS
+========================================================= */
+
+if (mobileMenuButton) {
+
+    mobileMenuButton.addEventListener(
+        "click",
+        function () {
+
+            const isOpen =
+                mobileMenuButton.classList.contains(
+                    "menu-open"
+                );
+
+
+            setMobileMenu(
+                !isOpen
+            );
+        }
+    );
+}
+
+
+if (mobileMenuOverlay) {
+
+    mobileMenuOverlay.addEventListener(
+        "click",
+        function () {
+
+            setMobileMenu(false);
+        }
+    );
+}
+
+
+document
+    .querySelectorAll(".sidebar-nav-link")
+    .forEach(
+        function (link) {
+
+            link.addEventListener(
+                "click",
+                function () {
+
+                    setMobileMenu(false);
+                }
+            );
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            setMobileMenu(false);
+        }
+    }
+);
+
+
+window.addEventListener(
+    "resize",
+    function () {
+
+        if (window.innerWidth > 720) {
+
+            setMobileMenu(false);
+        }
+    }
+);
+
+
+/* =========================================================
    LOGOUT
-   ========================================================= */
+========================================================= */
 
 async function logout() {
 
@@ -1053,9 +1365,10 @@ async function logout() {
 
         const response =
             await fetch(
-                '/api/logout',
+                "/api/logout",
                 {
-                    method: 'POST'
+                    method: "POST",
+                    credentials: "include"
                 }
             );
 
@@ -1063,104 +1376,127 @@ async function logout() {
         if (!response.ok) {
 
             throw new Error(
-                'Logout failed'
+                "Logout failed"
             );
-
         }
 
 
         window.location.href =
-            'login.html';
+            "login.html";
 
 
     } catch (error) {
 
         console.error(
-            'Logout error:',
+            "Logout error:",
             error
         );
 
 
         showMessage(
-            'Unable to log out. Please try again.',
-            'error'
+            "Unable to log out. Please try again.",
+            "error"
         );
-
     }
-
 }
 
 
 /* =========================================================
    EVENT LISTENERS
-   ========================================================= */
+========================================================= */
 
-profileForm.addEventListener(
-    'submit',
-    saveProfile
-);
+if (profileForm) {
 
-
-resetProfileButton.addEventListener(
-    'click',
-    resetProfile
-);
+    profileForm.addEventListener(
+        "submit",
+        saveProfile
+    );
+}
 
 
-logoutButton.addEventListener(
-    'click',
-    logout
-);
+if (resetProfileButton) {
+
+    resetProfileButton.addEventListener(
+        "click",
+        resetProfile
+    );
+}
 
 
-dayModeButton.addEventListener(
-    'click',
-    enableDayMode
-);
+if (logoutButton) {
+
+    logoutButton.addEventListener(
+        "click",
+        logout
+    );
+}
 
 
-nightModeButton.addEventListener(
-    'click',
-    enableNightMode
-);
+if (dayModeButton) {
+
+    dayModeButton.addEventListener(
+        "click",
+        enableDayMode
+    );
+}
 
 
-profilePictureInput.addEventListener(
-    'change',
-    handleProfilePictureSelection
-);
+if (nightModeButton) {
+
+    nightModeButton.addEventListener(
+        "click",
+        enableNightMode
+    );
+}
 
 
-removeProfilePictureButton.addEventListener(
-    'click',
-    removeProfilePicture
-);
+if (choosePictureButton) {
+
+    choosePictureButton.addEventListener(
+        "click",
+        chooseProfilePicture
+    );
+}
 
 
-/*
-    Detect a broken saved image.
+if (profilePictureInput) {
 
-    This prevents the browser from displaying
-    "Profile picture preview" if the image URL
-    cannot be loaded.
-*/
-
-profilePicturePreview.addEventListener(
-    'load',
-    handleProfilePictureLoad
-);
+    profilePictureInput.addEventListener(
+        "change",
+        handleProfilePictureSelection
+    );
+}
 
 
-profilePicturePreview.addEventListener(
-    'error',
-    handleProfilePictureError
-);
+if (removeProfilePictureButton) {
+
+    removeProfilePictureButton.addEventListener(
+        "click",
+        removeProfilePicture
+    );
+}
+
+
+if (profilePicturePreview) {
+
+    profilePicturePreview.addEventListener(
+        "load",
+        handleProfilePictureLoad
+    );
+
+
+    profilePicturePreview.addEventListener(
+        "error",
+        handleProfilePictureError
+    );
+}
 
 
 /* =========================================================
-   INITIALIZE PAGE
-   ========================================================= */
+   INITIALIZE
+========================================================= */
 
 applySavedTheme();
 
 loadProfile();
+
