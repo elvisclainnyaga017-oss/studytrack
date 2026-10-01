@@ -1075,6 +1075,30 @@ app.post(
                 });
             }
 
+            const allowedPriorities = [
+                'Low',
+                'Medium',
+                'High'
+            ];
+
+            const allowedStatuses = [
+                'Pending',
+                'In Progress',
+                'Completed'
+            ];
+
+            const cleanPriority =
+                priority &&
+                    allowedPriorities.includes(priority)
+                    ? priority
+                    : 'Medium';
+
+            const cleanStatus =
+                status &&
+                    allowedStatuses.includes(status)
+                    ? status
+                    : 'Pending';
+
             const [result] =
                 await db.promise().query(
                     `INSERT INTO tasks
@@ -1092,8 +1116,8 @@ app.post(
                         title.trim(),
                         description || null,
                         due_date || null,
-                        priority || 'Medium',
-                        status || 'Pending'
+                        cleanPriority,
+                        cleanStatus
                     ]
                 );
 
@@ -1113,6 +1137,170 @@ app.post(
             res.status(500).json({
                 message:
                     'Failed to create task.'
+            });
+        }
+    }
+);
+
+
+/* =========================================================
+   UPDATE TASK
+   ========================================================= */
+
+app.put(
+    '/api/tasks/:id',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const {
+                title,
+                description,
+                due_date,
+                priority,
+                status
+            } = req.body;
+
+            if (!title || !title.trim()) {
+                return res.status(400).json({
+                    message:
+                        'Task title is required.'
+                });
+            }
+
+            const allowedPriorities = [
+                'Low',
+                'Medium',
+                'High'
+            ];
+
+            const allowedStatuses = [
+                'Pending',
+                'In Progress',
+                'Completed'
+            ];
+
+            if (
+                !priority ||
+                !allowedPriorities.includes(priority)
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Task priority must be Low, Medium, or High.'
+                });
+            }
+
+            if (
+                !status ||
+                !allowedStatuses.includes(status)
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Task status must be Pending, In Progress, or Completed.'
+                });
+            }
+
+            const cleanDescription =
+                description &&
+                    description.trim()
+                    ? description.trim()
+                    : null;
+
+            const cleanDueDate =
+                due_date &&
+                    due_date.trim()
+                    ? due_date.trim()
+                    : null;
+
+            const [result] =
+                await db.promise().query(
+                    `UPDATE tasks
+                     SET
+                        title = ?,
+                        description = ?,
+                        due_date = ?,
+                        priority = ?,
+                        status = ?
+                     WHERE id = ?
+                     AND user_id = ?`,
+                    [
+                        title.trim(),
+                        cleanDescription,
+                        cleanDueDate,
+                        priority,
+                        status,
+                        req.params.id,
+                        req.session.userId
+                    ]
+                );
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message:
+                        'Task not found.'
+                });
+            }
+
+            res.json({
+                message:
+                    'Task updated successfully.'
+            });
+
+        } catch (error) {
+            console.error(
+                'Update task error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to update task.'
+            });
+        }
+    }
+);
+
+
+/* =========================================================
+   DELETE TASK
+   ========================================================= */
+
+app.delete(
+    '/api/tasks/:id',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const [result] =
+                await db.promise().query(
+                    `DELETE FROM tasks
+                     WHERE id = ?
+                     AND user_id = ?`,
+                    [
+                        req.params.id,
+                        req.session.userId
+                    ]
+                );
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message:
+                        'Task not found.'
+                });
+            }
+
+            res.json({
+                message:
+                    'Task deleted successfully.'
+            });
+
+        } catch (error) {
+            console.error(
+                'Delete task error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to delete task.'
             });
         }
     }

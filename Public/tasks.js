@@ -17,8 +17,11 @@ const tasksContainer = document.getElementById("tasksContainer");
 
 const logoutButton = document.getElementById("logoutButton");
 
-const dayModeButton = document.getElementById("dayModeButton");
-const nightModeButton = document.getElementById("nightModeButton");
+const dayModeButton =
+    document.getElementById("dayModeButton");
+
+const nightModeButton =
+    document.getElementById("nightModeButton");
 
 
 // ------------------------------------------------------------
@@ -152,7 +155,6 @@ if (mobileMenuButton) {
         "click",
         function () {
 
-            // Mobile behaviour
             if (window.innerWidth <= 720) {
 
                 const isOpen =
@@ -165,7 +167,6 @@ if (mobileMenuButton) {
                 return;
             }
 
-            // Desktop behaviour
             const isCollapsed =
                 document.body.classList.contains(
                     "desktop-sidebar-collapsed"
@@ -224,7 +225,6 @@ document.addEventListener(
     function (event) {
 
         if (event.key === "Escape") {
-
             setMobileMenu(false);
         }
     }
@@ -240,7 +240,6 @@ window.addEventListener(
     function () {
 
         if (window.innerWidth > 720) {
-
             setMobileMenu(false);
         }
     }
@@ -253,17 +252,25 @@ window.addEventListener(
 
 function applyTheme(theme) {
 
+    const selectedTheme =
+        theme === "night"
+            ? "night"
+            : "day";
+
     const isNight =
-        theme === "night";
+        selectedTheme === "night";
 
     document.body.classList.toggle(
         "night-mode",
         isNight
     );
 
-    if (dayModeButton) {
+    document.body.setAttribute(
+        "data-theme",
+        selectedTheme
+    );
 
-        dayModeButton.disabled = false;
+    if (dayModeButton) {
 
         dayModeButton.classList.toggle(
             "active",
@@ -277,8 +284,6 @@ function applyTheme(theme) {
     }
 
     if (nightModeButton) {
-
-        nightModeButton.disabled = false;
 
         nightModeButton.classList.toggle(
             "active",
@@ -313,8 +318,6 @@ function loadSavedTheme() {
 
 if (dayModeButton) {
 
-    dayModeButton.disabled = false;
-
     dayModeButton.addEventListener(
         "click",
         function (event) {
@@ -333,8 +336,6 @@ if (dayModeButton) {
 
 
 if (nightModeButton) {
-
-    nightModeButton.disabled = false;
 
     nightModeButton.addEventListener(
         "click",
@@ -423,15 +424,20 @@ async function loadUser() {
                 }
             );
 
-        if (!response.ok) {
-
-            console.error(
-                "User session request failed:",
-                response.status
-            );
+        if (response.status === 401) {
 
             window.location.href =
                 "/login.html";
+
+            return null;
+        }
+
+        if (!response.ok) {
+
+            console.error(
+                "Could not load user. Status:",
+                response.status
+            );
 
             return null;
         }
@@ -439,36 +445,40 @@ async function loadUser() {
         const data =
             await response.json();
 
-        if (!data || !data.user) {
+        /*
+         * server.js returns:
+         *
+         * {
+         *     id,
+         *     full_name,
+         *     email
+         * }
+         */
+
+        if (!data || !data.id) {
 
             console.error(
-                "No authenticated user returned from /api/me."
+                "No valid user returned from /api/me."
             );
-
-            window.location.href =
-                "/login.html";
 
             return null;
         }
 
-        const currentUser =
-            data.user;
-
         if (userName) {
 
             userName.textContent =
-                currentUser.full_name ||
+                data.full_name ||
                 "User";
         }
 
         if (userEmail) {
 
             userEmail.textContent =
-                currentUser.email ||
+                data.email ||
                 "";
         }
 
-        return currentUser;
+        return data;
 
     } catch (error) {
 
@@ -476,9 +486,6 @@ async function loadUser() {
             "Error loading user:",
             error
         );
-
-        window.location.href =
-            "/login.html";
 
         return null;
     }
@@ -489,27 +496,24 @@ async function loadUser() {
 // FORMAT DATE
 // ------------------------------------------------------------
 
-function formatDateForDisplay(
-    dateValue
-) {
+function formatDateForDisplay(dateValue) {
 
     if (!dateValue) {
-
         return "No due date";
     }
 
     const dateText =
-        String(dateValue).split("T")[0];
+        String(dateValue)
+            .split("T")[0];
 
     const parts =
         dateText.split("-");
 
     if (parts.length !== 3) {
-
         return "No due date";
     }
 
-    return `${parts[2]} /${parts[1]}/${parts[0]}`;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
 
 
@@ -524,19 +528,11 @@ function getStatusClass(status) {
             status || "Pending"
         ).toLowerCase();
 
-    if (
-        normalizedStatus ===
-        "completed"
-    ) {
-
+    if (normalizedStatus === "completed") {
         return "completed";
     }
 
-    if (
-        normalizedStatus ===
-        "in progress"
-    ) {
-
+    if (normalizedStatus === "in progress") {
         return "in-progress";
     }
 
@@ -555,19 +551,11 @@ function getPriorityClass(priority) {
             priority || "Medium"
         ).toLowerCase();
 
-    if (
-        normalizedPriority ===
-        "high"
-    ) {
-
+    if (normalizedPriority === "high") {
         return "high";
     }
 
-    if (
-        normalizedPriority ===
-        "low"
-    ) {
-
+    if (normalizedPriority === "low") {
         return "low";
     }
 
@@ -613,20 +601,16 @@ if (taskForm) {
                 );
 
             const title =
-                titleInput?.value.trim() ||
-                "";
+                titleInput?.value.trim() || "";
 
             const description =
-                descriptionInput?.value.trim() ||
-                "";
+                descriptionInput?.value.trim() || "";
 
             const dueDate =
-                dueDateInput?.value ||
-                "";
+                dueDateInput?.value || "";
 
             const priority =
-                priorityInput?.value ||
-                "Medium";
+                priorityInput?.value || "Medium";
 
             if (!title) {
 
@@ -666,20 +650,21 @@ if (taskForm) {
                             credentials: "include",
 
                             body: JSON.stringify({
-                                title:
-                                    title,
-
-                                description:
-                                    description,
-
-                                due_date:
-                                    dueDate || null,
-
-                                priority:
-                                    priority
+                                title: title,
+                                description: description,
+                                due_date: dueDate || null,
+                                priority: priority
                             })
                         }
                     );
+
+                if (response.status === 401) {
+
+                    window.location.href =
+                        "/login.html";
+
+                    return;
+                }
 
                 const data =
                     await response.json();
@@ -703,7 +688,6 @@ if (taskForm) {
                 taskForm.reset();
 
                 if (priorityInput) {
-
                     priorityInput.value =
                         "Medium";
                 }
@@ -753,6 +737,14 @@ async function editTask(taskId) {
                 }
             );
 
+        if (response.status === 401) {
+
+            window.location.href =
+                "/login.html";
+
+            return;
+        }
+
         if (!response.ok) {
 
             alert(
@@ -765,8 +757,13 @@ async function editTask(taskId) {
         const data =
             await response.json();
 
+        const tasks =
+            Array.isArray(data)
+                ? data
+                : [];
+
         const task =
-            (data.tasks || []).find(
+            tasks.find(
                 function (item) {
 
                     return Number(item.id) ===
@@ -867,6 +864,14 @@ async function editTask(taskId) {
                 }
             );
 
+        if (updateResponse.status === 401) {
+
+            window.location.href =
+                "/login.html";
+
+            return;
+        }
+
         const result =
             await updateResponse.json();
 
@@ -922,6 +927,14 @@ async function deleteTask(taskId) {
                 }
             );
 
+        if (response.status === 401) {
+
+            window.location.href =
+                "/login.html";
+
+            return;
+        }
+
         const data =
             await response.json();
 
@@ -970,6 +983,14 @@ async function updateTaskStatus(
                 }
             );
 
+        if (response.status === 401) {
+
+            window.location.href =
+                "/login.html";
+
+            return;
+        }
+
         if (!response.ok) {
 
             alert(
@@ -982,8 +1003,13 @@ async function updateTaskStatus(
         const data =
             await response.json();
 
+        const tasks =
+            Array.isArray(data)
+                ? data
+                : [];
+
         const task =
-            (data.tasks || []).find(
+            tasks.find(
                 function (item) {
 
                     return Number(item.id) ===
@@ -1032,6 +1058,14 @@ async function updateTaskStatus(
                 }
             );
 
+        if (updateResponse.status === 401) {
+
+            window.location.href =
+                "/login.html";
+
+            return;
+        }
+
         const result =
             await updateResponse.json();
 
@@ -1071,10 +1105,7 @@ function renderTasks(tasks) {
         return;
     }
 
-    if (
-        !tasks ||
-        tasks.length === 0
-    ) {
+    if (!Array.isArray(tasks) || tasks.length === 0) {
 
         tasksContainer.innerHTML = `
             <div class="empty-state">
@@ -1083,7 +1114,6 @@ function renderTasks(tasks) {
                     class="empty-state-icon"
                     aria-hidden="true"
                 >
-
                     <svg
                         viewBox="0 0 24 24"
                         width="28"
@@ -1094,7 +1124,6 @@ function renderTasks(tasks) {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                     >
-
                         <rect
                             x="4"
                             y="3"
@@ -1108,9 +1137,7 @@ function renderTasks(tasks) {
                         <path d="M8 12h8"></path>
 
                         <path d="M8 16h5"></path>
-
                     </svg>
-
                 </div>
 
                 <h3>
@@ -1133,22 +1160,16 @@ function renderTasks(tasks) {
             function (task) {
 
                 const status =
-                    task.status ||
-                    "Pending";
+                    task.status || "Pending";
 
                 const priority =
-                    task.priority ||
-                    "Medium";
+                    task.priority || "Medium";
 
                 const statusClass =
-                    getStatusClass(
-                        status
-                    );
+                    getStatusClass(status);
 
                 const priorityClass =
-                    getPriorityClass(
-                        priority
-                    );
+                    getPriorityClass(priority);
 
                 const safeTitle =
                     escapeHtml(
@@ -1168,19 +1189,13 @@ function renderTasks(tasks) {
                     );
 
                 return `
-                    <article
-                        class="goal-card task-card"
-                    >
+                    <article class="goal-card task-card">
 
-                        <div
-                            class="goal-card-header"
-                        >
+                        <div class="goal-card-header">
 
                             <div>
 
-                                <h3
-                                    class="goal-card-title"
-                                >
+                                <h3 class="goal-card-title">
                                     ${safeTitle}
                                 </h3>
 
@@ -1194,9 +1209,7 @@ function renderTasks(tasks) {
 
                         </div>
 
-                        <div
-                            class="task-card-description"
-                        >
+                        <div class="task-card-description">
 
                             <p>
                                 ${safeDescription}
@@ -1204,9 +1217,7 @@ function renderTasks(tasks) {
 
                         </div>
 
-                        <div
-                            class="goal-meta task-meta"
-                        >
+                        <div class="goal-meta task-meta">
 
                             <span>
 
@@ -1228,17 +1239,13 @@ function renderTasks(tasks) {
                                     Priority:
                                 </strong>
 
-                                ${escapeHtml(
-                    priority
-                )}
+                                ${escapeHtml(priority)}
 
                             </span>
 
                         </div>
 
-                        <div
-                            class="task-status-control"
-                        >
+                        <div class="task-status-control">
 
                             <label
                                 for="status-${task.id}"
@@ -1283,9 +1290,7 @@ function renderTasks(tasks) {
 
                         </div>
 
-                        <div
-                            class="goal-actions"
-                        >
+                        <div class="goal-actions">
 
                             <button
                                 type="button"
@@ -1310,7 +1315,8 @@ function renderTasks(tasks) {
                     </article>
                 `;
             }
-        ).join("");
+        )
+            .join("");
 
     attachTaskEventListeners();
 }
@@ -1349,6 +1355,7 @@ function attachTaskEventListeners() {
         }
     );
 
+
     const editButtons =
         document.querySelectorAll(
             '[data-action="edit"]'
@@ -1369,6 +1376,7 @@ function attachTaskEventListeners() {
             );
         }
     );
+
 
     const deleteButtons =
         document.querySelectorAll(
@@ -1417,7 +1425,11 @@ async function loadTasks() {
             await fetch(
                 "/api/tasks",
                 {
-                    credentials: "include"
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Accept": "application/json"
+                    }
                 }
             );
 
@@ -1429,19 +1441,32 @@ async function loadTasks() {
             return;
         }
 
+        const data =
+            await response.json();
+
         if (!response.ok) {
 
             throw new Error(
+                data.message ||
                 "Could not load tasks."
             );
         }
 
-        const data =
-            await response.json();
+        /*
+         * server.js returns the task array directly.
+         */
 
-        renderTasks(
-            data.tasks || []
+        const tasks =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        console.log(
+            "StudyTrack tasks loaded:",
+            tasks
         );
+
+        renderTasks(tasks);
 
     } catch (error) {
 
@@ -1521,11 +1546,19 @@ if (logoutButton) {
 // START TASK PAGE
 // ------------------------------------------------------------
 
-loadSavedTheme();
+async function initializeTasksPage() {
 
-loadUser();
+    loadSavedTheme();
 
-loadTasks();
+    const currentUser =
+        await loadUser();
+
+    if (!currentUser) {
+        return;
+    }
+
+    await loadTasks();
+}
 
 
 // ------------------------------------------------------------
@@ -1536,3 +1569,10 @@ if (window.innerWidth > 720) {
 
     setDesktopSidebarCollapsed(false);
 }
+
+
+// ------------------------------------------------------------
+// INITIALIZE
+// ------------------------------------------------------------
+
+initializeTasksPage();

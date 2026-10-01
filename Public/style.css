@@ -362,7 +362,7 @@ img {
     visibility: hidden;
     pointer-events: none;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
-    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+    transition: none;
 }
 
     .sidebar-tooltip::before {
@@ -2042,7 +2042,7 @@ body.desktop-sidebar-collapsed .logout-button {
         pointer-events: none;
         transform: translateY(-50%) translateX(-4px);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
-        transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+        transition: none;
     }
 
     body.desktop-sidebar-collapsed .sidebar-nav-link:hover::after,
@@ -2417,7 +2417,228 @@ body.night-mode .side-navigation {
     }
 
 
-/* ---------- 30.14 Night mode dashboard cards ---------- */
+/* =========================================================
+   31. TASK PAGE VISUAL STYLES
+   ---------------------------------------------------------
+   These styles only provide the existing Tasks page with
+   the same visual treatment used by the StudyTrack cards,
+   badges, forms and action buttons.
+   ========================================================= */
+
+
+/* ---------- 31.1 Task list ---------- */
+
+.goals-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+
+/* ---------- 31.2 Task card header ---------- */
+
+.goal-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    min-width: 0;
+}
+
+    .goal-card-header > div {
+        min-width: 0;
+    }
+
+.goal-card-title {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+
+/* ---------- 31.3 Task status ---------- */
+
+.goal-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    margin-top: 9px;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface-soft);
+    color: var(--text-secondary);
+    font-size: 10px;
+    font-weight: 750;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+    .goal-status.completed {
+        border-color: var(--accent-border);
+        background: var(--accent-soft);
+        color: var(--accent-hover);
+    }
+
+    .goal-status.pending {
+        border-color: #e4d5a8;
+        background: var(--warning-soft);
+        color: var(--warning);
+    }
+
+    .goal-status.in-progress {
+        border-color: var(--accent-border);
+        background: var(--accent-soft);
+        color: var(--accent-hover);
+    }
+
+
+/* ---------- 31.4 Task description ---------- */
+
+.task-card-description {
+    margin-top: 16px;
+}
+
+    .task-card-description p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 12px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+
+/* ---------- 31.5 Task metadata ---------- */
+
+.goal-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-soft);
+}
+
+    .goal-meta span {
+        color: var(--text-secondary);
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .goal-meta strong {
+        color: var(--text-primary);
+        font-weight: 750;
+    }
+
+.task-priority.high {
+    color: var(--danger);
+}
+
+.task-priority.medium {
+    color: var(--warning);
+}
+
+.task-priority.low {
+    color: var(--accent-hover);
+}
+
+
+/* ---------- 31.6 Task status control ---------- */
+
+.task-status-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+    .task-status-control label {
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+.task-status-select {
+    min-width: 150px;
+    min-height: 38px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 12px;
+    cursor: pointer;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+    .task-status-select:hover {
+        border-color: #cbd5d9;
+    }
+
+    .task-status-select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+
+
+/* ---------- 31.7 Task action buttons ---------- */
+
+.task-card .goal-actions {
+    margin-top: 18px;
+}
+
+.task-card .goal-action-button.edit {
+    border-color: var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+}
+
+    .task-card .goal-action-button.edit:hover {
+        border-color: var(--accent-border);
+        background: var(--accent-soft);
+        color: var(--accent-hover);
+    }
+
+.task-card .goal-action-button.delete {
+    border-color: #e4c4c4;
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+    .task-card .goal-action-button.delete:hover {
+        border-color: #d39a9a;
+        background: #f6e2e2;
+        color: #8f3d3d;
+    }
+
+
+/* ---------- 31.8 Task page night mode ---------- */
+
+body.night-mode .task-status-select {
+    background: var(--surface);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+
+    body.night-mode .task-status-select:hover {
+        border-color: #46585e;
+    }
+
+body.night-mode .goal-meta {
+    border-top-color: var(--border-soft);
+}
+
+
+/* =========================================================
+   32. NIGHT MODE DASHBOARD CARDS
+   ========================================================= */
 
 body.night-mode .dashboard-panel,
 body.night-mode .summary-card {
@@ -2452,22 +2673,50 @@ body.night-mode .goal-form .form-actions {
 
 
 /* =========================================================
-   31. NEW SHELL RESPONSIVE
+   33. NEW SHELL RESPONSIVE
    ========================================================= */
 
 @media (max-width: 1100px) {
+
+    .page-content {
+        padding: 26px;
+    }
 
     .dashboard-container {
         padding: 26px;
     }
 
+    .dashboard-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .summary-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .two-column-layout {
+        grid-template-columns: 1fr;
     }
 }
 
 
 @media (max-width: 900px) {
+
+    .header-user-email {
+        display: none;
+    }
+
+    .header-user-name {
+        max-width: 160px;
+    }
 
     .header-user p {
         display: none;
@@ -2477,6 +2726,10 @@ body.night-mode .goal-form .form-actions {
         max-width: 160px;
     }
 
+    .goal-grid {
+        grid-template-columns: 1fr;
+    }
+
     .goal-form {
         grid-template-columns: 1fr;
     }
@@ -2484,6 +2737,18 @@ body.night-mode .goal-form .form-actions {
         .goal-form .form-actions {
             grid-column: auto;
         }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .goals-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 
@@ -2540,6 +2805,20 @@ body.night-mode .goal-form .form-actions {
 
     .panel-heading {
         gap: 14px;
+    }
+
+    .goals-container {
+        grid-template-columns: 1fr;
+    }
+
+    .task-status-control {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .task-status-select {
+        width: 100%;
     }
 }
 
@@ -2608,5 +2887,15 @@ body.night-mode .goal-form .form-actions {
 
     .summary-card-content > strong {
         font-size: 28px;
+    }
+
+    .task-card {
+        padding: 16px;
+    }
+
+    .goal-meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
     }
 }
