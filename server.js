@@ -23,6 +23,7 @@ db.connect((error) => {
         console.error('Database connection failed:', error);
         return;
     }
+
     console.log('Database connected successfully.');
 });
 
@@ -50,7 +51,9 @@ const profilePicturesDirectory = path.join(
 );
 
 if (!fs.existsSync(profilePicturesDirectory)) {
-    fs.mkdirSync(profilePicturesDirectory, { recursive: true });
+    fs.mkdirSync(profilePicturesDirectory, {
+        recursive: true
+    });
 }
 
 const profileStorage = multer.diskStorage({
@@ -59,7 +62,8 @@ const profileStorage = multer.diskStorage({
     },
 
     filename: function (req, file, callback) {
-        const extension = path.extname(file.originalname).toLowerCase();
+        const extension =
+            path.extname(file.originalname).toLowerCase();
 
         const filename =
             `profile-${req.session.userId}-${Date.now()}${extension}`;
@@ -143,29 +147,33 @@ app.post('/api/register', async (req, res) => {
         const cleanName = full_name.trim();
         const cleanEmail = email.trim().toLowerCase();
 
-        const [existingUsers] = await db.promise().query(
-            'SELECT id FROM users WHERE email = ?',
-            [cleanEmail]
-        );
+        const [existingUsers] =
+            await db.promise().query(
+                'SELECT id FROM users WHERE email = ?',
+                [cleanEmail]
+            );
 
         if (existingUsers.length > 0) {
             return res.status(400).json({
-                message: 'An account with this email already exists.'
+                message:
+                    'An account with this email already exists.'
             });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword =
+            await bcrypt.hash(password, 10);
 
-        const [result] = await db.promise().query(
-            `INSERT INTO users
-             (full_name, email, password_hash)
-             VALUES (?, ?, ?)`,
-            [
-                cleanName,
-                cleanEmail,
-                hashedPassword
-            ]
-        );
+        const [result] =
+            await db.promise().query(
+                `INSERT INTO users
+                 (full_name, email, password_hash)
+                 VALUES (?, ?, ?)`,
+                [
+                    cleanName,
+                    cleanEmail,
+                    hashedPassword
+                ]
+            );
 
         res.status(201).json({
             message: 'Registration successful.',
@@ -173,7 +181,10 @@ app.post('/api/register', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Registration error:', error);
+        console.error(
+            'Registration error:',
+            error
+        );
 
         res.status(500).json({
             message: 'Registration failed.'
@@ -191,39 +202,45 @@ app.post('/api/login', async (req, res) => {
 
         if (!email || !password) {
             return res.status(400).json({
-                message: 'Please enter your email and password.'
+                message:
+                    'Please enter your email and password.'
             });
         }
 
-        const cleanEmail = email.trim().toLowerCase();
+        const cleanEmail =
+            email.trim().toLowerCase();
 
-        const [users] = await db.promise().query(
-            `SELECT
-                id,
-                full_name,
-                email,
-                password_hash
-             FROM users
-             WHERE email = ?`,
-            [cleanEmail]
-        );
+        const [users] =
+            await db.promise().query(
+                `SELECT
+                    id,
+                    full_name,
+                    email,
+                    password_hash
+                 FROM users
+                 WHERE email = ?`,
+                [cleanEmail]
+            );
 
         if (users.length === 0) {
             return res.status(401).json({
-                message: 'Invalid email or password.'
+                message:
+                    'Invalid email or password.'
             });
         }
 
         const user = users[0];
 
-        const passwordMatches = await bcrypt.compare(
-            password,
-            user.password_hash
-        );
+        const passwordMatches =
+            await bcrypt.compare(
+                password,
+                user.password_hash
+            );
 
         if (!passwordMatches) {
             return res.status(401).json({
-                message: 'Invalid email or password.'
+                message:
+                    'Invalid email or password.'
             });
         }
 
@@ -255,7 +272,10 @@ app.post('/api/login', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Login error:', error);
+        console.error(
+            'Login error:',
+            error
+        );
 
         res.status(500).json({
             message: 'Login failed.'
@@ -264,43 +284,52 @@ app.post('/api/login', async (req, res) => {
 });
 
 
-app.get('/api/me', requireLogin, async (req, res) => {
-    try {
-        const [users] = await db.promise().query(
-            `SELECT
-                id,
-                full_name,
-                email
-             FROM users
-             WHERE id = ?`,
-            [req.session.userId]
-        );
+app.get(
+    '/api/me',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const [users] =
+                await db.promise().query(
+                    `SELECT
+                        id,
+                        full_name,
+                        email
+                     FROM users
+                     WHERE id = ?`,
+                    [req.session.userId]
+                );
 
-        if (users.length === 0) {
-            return res.status(404).json({
-                message: 'User not found.'
+            if (users.length === 0) {
+                return res.status(404).json({
+                    message: 'User not found.'
+                });
+            }
+
+            res.json(users[0]);
+
+        } catch (error) {
+            console.error(
+                'Get current user error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to load user.'
             });
         }
-
-        res.json(users[0]);
-
-    } catch (error) {
-        console.error(
-            'Get current user error:',
-            error
-        );
-
-        res.status(500).json({
-            message: 'Failed to load user.'
-        });
     }
-});
+);
 
 
 app.post('/api/logout', (req, res) => {
     req.session.destroy((error) => {
         if (error) {
-            console.error('Logout error:', error);
+            console.error(
+                'Logout error:',
+                error
+            );
 
             return res.status(500).json({
                 message: 'Logout failed.'
@@ -318,119 +347,142 @@ app.post('/api/logout', (req, res) => {
    PROFILE
    ========================================================= */
 
-app.get('/api/profile', requireLogin, async (req, res) => {
-    try {
-        const [profiles] = await db.promise().query(
-            `SELECT
-                id,
-                user_id,
-                phone,
-                bio,
-                avatar_url,
-                created_at,
-                updated_at
-             FROM profiles
-             WHERE user_id = ?`,
-            [req.session.userId]
-        );
+app.get(
+    '/api/profile',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const [profiles] =
+                await db.promise().query(
+                    `SELECT
+                        id,
+                        user_id,
+                        phone,
+                        bio,
+                        avatar_url,
+                        created_at,
+                        updated_at
+                     FROM profiles
+                     WHERE user_id = ?`,
+                    [req.session.userId]
+                );
 
-        if (profiles.length === 0) {
-            return res.json({
-                profile: null
+            if (profiles.length === 0) {
+                return res.json({
+                    profile: null
+                });
+            }
+
+            res.json({
+                profile: profiles[0]
+            });
+
+        } catch (error) {
+            console.error(
+                'Get profile error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to load profile.'
             });
         }
-
-        res.json({
-            profile: profiles[0]
-        });
-
-    } catch (error) {
-        console.error('Get profile error:', error);
-
-        res.status(500).json({
-            message: 'Failed to load profile.'
-        });
     }
-});
+);
 
 
-app.post('/api/profile', requireLogin, async (req, res) => {
-    try {
-        const {
-            phone,
-            bio
-        } = req.body;
+app.post(
+    '/api/profile',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const {
+                phone,
+                bio
+            } = req.body;
 
-        const [existingProfiles] = await db.promise().query(
-            `SELECT id
-             FROM profiles
-             WHERE user_id = ?`,
-            [req.session.userId]
-        );
+            const [existingProfiles] =
+                await db.promise().query(
+                    `SELECT id
+                     FROM profiles
+                     WHERE user_id = ?`,
+                    [req.session.userId]
+                );
 
-        if (existingProfiles.length === 0) {
-            await db.promise().query(
-                `INSERT INTO profiles
-                 (user_id, phone, bio)
-                 VALUES (?, ?, ?)`,
-                [
-                    req.session.userId,
-                    phone || null,
-                    bio || null
-                ]
+            if (existingProfiles.length === 0) {
+                await db.promise().query(
+                    `INSERT INTO profiles
+                     (user_id, phone, bio)
+                     VALUES (?, ?, ?)`,
+                    [
+                        req.session.userId,
+                        phone || null,
+                        bio || null
+                    ]
+                );
+
+            } else {
+                await db.promise().query(
+                    `UPDATE profiles
+                     SET phone = ?,
+                         bio = ?
+                     WHERE user_id = ?`,
+                    [
+                        phone || null,
+                        bio || null,
+                        req.session.userId
+                    ]
+                );
+            }
+
+            res.json({
+                message:
+                    'Profile saved successfully.'
+            });
+
+        } catch (error) {
+            console.error(
+                'Save profile error:',
+                error
             );
 
-        } else {
-            await db.promise().query(
-                `UPDATE profiles
-                 SET phone = ?,
-                     bio = ?
-                 WHERE user_id = ?`,
-                [
-                    phone || null,
-                    bio || null,
-                    req.session.userId
-                ]
-            );
+            res.status(500).json({
+                message:
+                    'Failed to save profile.'
+            });
         }
-
-        res.json({
-            message: 'Profile saved successfully.'
-        });
-
-    } catch (error) {
-        console.error('Save profile error:', error);
-
-        res.status(500).json({
-            message: 'Failed to save profile.'
-        });
     }
-});
+);
 
 
 app.post(
     '/api/profile/picture',
     requireLogin,
-    uploadProfilePicture.single('profile_picture'),
+    uploadProfilePicture.single(
+        'profile_picture'
+    ),
     async (req, res) => {
         try {
             if (!req.file) {
                 return res.status(400).json({
-                    message: 'Please select an image.'
+                    message:
+                        'Please select an image.'
                 });
             }
 
             const avatarUrl =
                 `/uploads/profile-pictures/${req.file.filename}`;
 
-            const [existingProfiles] = await db.promise().query(
-                `SELECT
-                    id,
-                    avatar_url
-                 FROM profiles
-                 WHERE user_id = ?`,
-                [req.session.userId]
-            );
+            const [existingProfiles] =
+                await db.promise().query(
+                    `SELECT
+                        id,
+                        avatar_url
+                     FROM profiles
+                     WHERE user_id = ?`,
+                    [req.session.userId]
+                );
 
             if (existingProfiles.length === 0) {
                 await db.promise().query(
@@ -473,7 +525,9 @@ app.post(
                         );
 
                     if (fs.existsSync(oldFilePath)) {
-                        fs.unlinkSync(oldFilePath);
+                        fs.unlinkSync(
+                            oldFilePath
+                        );
                     }
                 }
             }
@@ -482,7 +536,8 @@ app.post(
                 message:
                     'Profile picture uploaded successfully.',
 
-                avatar_url: avatarUrl
+                avatar_url:
+                    avatarUrl
             });
 
         } catch (error) {
@@ -504,252 +559,301 @@ app.post(
    GOALS
    ========================================================= */
 
-app.get('/api/goals', requireLogin, async (req, res) => {
-    try {
-        const [goals] = await db.promise().query(
-            `SELECT
-                id,
-                user_id,
+app.get(
+    '/api/goals',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const [goals] =
+                await db.promise().query(
+                    `SELECT
+                        id,
+                        user_id,
+                        title,
+                        description,
+                        deadline,
+                        current_value,
+                        target_value,
+                        unit,
+                        status,
+                        created_at,
+                        updated_at
+                     FROM goals
+                     WHERE user_id = ?
+                     ORDER BY id DESC`,
+                    [req.session.userId]
+                );
+
+            res.json(goals);
+
+        } catch (error) {
+            console.error(
+                'Get goals error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to load goals.'
+            });
+        }
+    }
+);
+
+
+app.post(
+    '/api/goals',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const {
                 title,
                 description,
                 deadline,
                 current_value,
                 target_value,
-                unit,
-                status,
-                created_at,
-                updated_at
-             FROM goals
-             WHERE user_id = ?
-             ORDER BY id DESC`,
-            [req.session.userId]
-        );
+                unit
+            } = req.body;
 
-        res.json(goals);
+            if (!title || !title.trim()) {
+                return res.status(400).json({
+                    message:
+                        'Goal title is required.'
+                });
+            }
 
-    } catch (error) {
-        console.error('Get goals error:', error);
+            const cleanCurrentValue =
+                current_value === undefined ||
+                    current_value === null ||
+                    current_value === ''
+                    ? 0
+                    : Number(current_value);
 
-        res.status(500).json({
-            message: 'Failed to load goals.'
-        });
+            const cleanTargetValue =
+                target_value === undefined ||
+                    target_value === null ||
+                    target_value === ''
+                    ? 100
+                    : Number(target_value);
+
+            if (
+                !Number.isFinite(
+                    cleanCurrentValue
+                ) ||
+                cleanCurrentValue < 0
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Current progress must be a valid number of 0 or greater.'
+                });
+            }
+
+            if (
+                !Number.isFinite(
+                    cleanTargetValue
+                ) ||
+                cleanTargetValue <= 0
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Target value must be a valid number greater than 0.'
+                });
+            }
+
+            if (
+                cleanCurrentValue >
+                cleanTargetValue
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Current progress cannot be greater than the target value.'
+                });
+            }
+
+            const goalStatus =
+                cleanCurrentValue >=
+                    cleanTargetValue
+                    ? 'Completed'
+                    : cleanCurrentValue > 0
+                        ? 'In Progress'
+                        : 'Not Started';
+
+            const [result] =
+                await db.promise().query(
+                    `INSERT INTO goals
+                     (
+                        user_id,
+                        title,
+                        description,
+                        deadline,
+                        current_value,
+                        target_value,
+                        unit,
+                        status
+                     )
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                        req.session.userId,
+                        title.trim(),
+                        description || null,
+                        deadline || null,
+                        cleanCurrentValue,
+                        cleanTargetValue,
+                        unit || null,
+                        goalStatus
+                    ]
+                );
+
+            res.status(201).json({
+                message:
+                    'Goal created successfully.',
+                goalId:
+                    result.insertId
+            });
+
+        } catch (error) {
+            console.error(
+                'Create goal error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to create goal.'
+            });
+        }
     }
-});
+);
 
 
-app.post('/api/goals', requireLogin, async (req, res) => {
-    try {
-        const {
-            title,
-            description,
-            deadline,
-            current_value,
-            target_value,
-            unit
-        } = req.body;
-
-        if (!title || !title.trim()) {
-            return res.status(400).json({
-                message: 'Goal title is required.'
-            });
-        }
-
-        const cleanCurrentValue =
-            current_value === undefined ||
-                current_value === null ||
-                current_value === ''
-                ? 0
-                : Number(current_value);
-
-        const cleanTargetValue =
-            target_value === undefined ||
-                target_value === null ||
-                target_value === ''
-                ? 100
-                : Number(target_value);
-
-        if (
-            !Number.isFinite(cleanCurrentValue) ||
-            cleanCurrentValue < 0
-        ) {
-            return res.status(400).json({
-                message:
-                    'Current progress must be a valid number of 0 or greater.'
-            });
-        }
-
-        if (
-            !Number.isFinite(cleanTargetValue) ||
-            cleanTargetValue <= 0
-        ) {
-            return res.status(400).json({
-                message:
-                    'Target value must be a valid number greater than 0.'
-            });
-        }
-
-        if (cleanCurrentValue > cleanTargetValue) {
-            return res.status(400).json({
-                message:
-                    'Current progress cannot be greater than the target value.'
-            });
-        }
-
-        const goalStatus =
-            cleanCurrentValue >= cleanTargetValue
-                ? 'Completed'
-                : cleanCurrentValue > 0
-                    ? 'In Progress'
-                    : 'Not Started';
-
-        const [result] = await db.promise().query(
-            `INSERT INTO goals
-             (
-                user_id,
+app.put(
+    '/api/goals/:id',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const {
                 title,
                 description,
                 deadline,
                 current_value,
                 target_value,
-                unit,
-                status
-             )
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [
-                req.session.userId,
-                title.trim(),
-                description || null,
-                deadline || null,
-                cleanCurrentValue,
-                cleanTargetValue,
-                unit || null,
-                goalStatus
-            ]
-        );
+                unit
+            } = req.body;
 
-        res.status(201).json({
-            message: 'Goal created successfully.',
-            goalId: result.insertId
-        });
+            if (!title || !title.trim()) {
+                return res.status(400).json({
+                    message:
+                        'Goal title is required.'
+                });
+            }
 
-    } catch (error) {
-        console.error('Create goal error:', error);
+            const cleanCurrentValue =
+                current_value === undefined ||
+                    current_value === null ||
+                    current_value === ''
+                    ? 0
+                    : Number(current_value);
 
-        res.status(500).json({
-            message: 'Failed to create goal.'
-        });
+            const cleanTargetValue =
+                target_value === undefined ||
+                    target_value === null ||
+                    target_value === ''
+                    ? 100
+                    : Number(target_value);
+
+            if (
+                !Number.isFinite(
+                    cleanCurrentValue
+                ) ||
+                cleanCurrentValue < 0
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Current progress must be a valid number of 0 or greater.'
+                });
+            }
+
+            if (
+                !Number.isFinite(
+                    cleanTargetValue
+                ) ||
+                cleanTargetValue <= 0
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Target value must be a valid number greater than 0.'
+                });
+            }
+
+            if (
+                cleanCurrentValue >
+                cleanTargetValue
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Current progress cannot be greater than the target value.'
+                });
+            }
+
+            const goalStatus =
+                cleanCurrentValue >=
+                    cleanTargetValue
+                    ? 'Completed'
+                    : cleanCurrentValue > 0
+                        ? 'In Progress'
+                        : 'Not Started';
+
+            const [result] =
+                await db.promise().query(
+                    `UPDATE goals
+                     SET
+                        title = ?,
+                        description = ?,
+                        deadline = ?,
+                        current_value = ?,
+                        target_value = ?,
+                        unit = ?,
+                        status = ?
+                     WHERE id = ?
+                     AND user_id = ?`,
+                    [
+                        title.trim(),
+                        description || null,
+                        deadline || null,
+                        cleanCurrentValue,
+                        cleanTargetValue,
+                        unit || null,
+                        goalStatus,
+                        req.params.id,
+                        req.session.userId
+                    ]
+                );
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message:
+                        'Goal not found.'
+                });
+            }
+
+            res.json({
+                message:
+                    'Goal updated successfully.'
+            });
+
+        } catch (error) {
+            console.error(
+                'Update goal error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to update goal.'
+            });
+        }
     }
-});
-
-
-app.put('/api/goals/:id', requireLogin, async (req, res) => {
-    try {
-        const {
-            title,
-            description,
-            deadline,
-            current_value,
-            target_value,
-            unit
-        } = req.body;
-
-        if (!title || !title.trim()) {
-            return res.status(400).json({
-                message: 'Goal title is required.'
-            });
-        }
-
-        const cleanCurrentValue =
-            current_value === undefined ||
-                current_value === null ||
-                current_value === ''
-                ? 0
-                : Number(current_value);
-
-        const cleanTargetValue =
-            target_value === undefined ||
-                target_value === null ||
-                target_value === ''
-                ? 100
-                : Number(target_value);
-
-        if (
-            !Number.isFinite(cleanCurrentValue) ||
-            cleanCurrentValue < 0
-        ) {
-            return res.status(400).json({
-                message:
-                    'Current progress must be a valid number of 0 or greater.'
-            });
-        }
-
-        if (
-            !Number.isFinite(cleanTargetValue) ||
-            cleanTargetValue <= 0
-        ) {
-            return res.status(400).json({
-                message:
-                    'Target value must be a valid number greater than 0.'
-            });
-        }
-
-        if (cleanCurrentValue > cleanTargetValue) {
-            return res.status(400).json({
-                message:
-                    'Current progress cannot be greater than the target value.'
-            });
-        }
-
-        const goalStatus =
-            cleanCurrentValue >= cleanTargetValue
-                ? 'Completed'
-                : cleanCurrentValue > 0
-                    ? 'In Progress'
-                    : 'Not Started';
-
-        const [result] = await db.promise().query(
-            `UPDATE goals
-             SET
-                title = ?,
-                description = ?,
-                deadline = ?,
-                current_value = ?,
-                target_value = ?,
-                unit = ?,
-                status = ?
-             WHERE id = ?
-             AND user_id = ?`,
-            [
-                title.trim(),
-                description || null,
-                deadline || null,
-                cleanCurrentValue,
-                cleanTargetValue,
-                unit || null,
-                goalStatus,
-                req.params.id,
-                req.session.userId
-            ]
-        );
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({
-                message: 'Goal not found.'
-            });
-        }
-
-        res.json({
-            message: 'Goal updated successfully.'
-        });
-
-    } catch (error) {
-        console.error('Update goal error:', error);
-
-        res.status(500).json({
-            message: 'Failed to update goal.'
-        });
-    }
-});
+);
 
 
 app.put(
@@ -771,28 +875,34 @@ app.put(
                 });
             }
 
-            const [goalRows] = await db.promise().query(
-                `SELECT target_value
-                 FROM goals
-                 WHERE id = ?
-                 AND user_id = ?`,
-                [
-                    req.params.id,
-                    req.session.userId
-                ]
-            );
+            const [goalRows] =
+                await db.promise().query(
+                    `SELECT target_value
+                     FROM goals
+                     WHERE id = ?
+                     AND user_id = ?`,
+                    [
+                        req.params.id,
+                        req.session.userId
+                    ]
+                );
 
             if (goalRows.length === 0) {
                 return res.status(404).json({
-                    message: 'Goal not found.'
+                    message:
+                        'Goal not found.'
                 });
             }
 
             const targetValue =
-                Number(goalRows[0].target_value);
+                Number(
+                    goalRows[0].target_value
+                );
 
             if (
-                !Number.isFinite(targetValue) ||
+                !Number.isFinite(
+                    targetValue
+                ) ||
                 targetValue <= 0
             ) {
                 return res.status(400).json({
@@ -802,7 +912,8 @@ app.put(
             }
 
             const newCurrentValue =
-                (targetValue * progress) / 100;
+                (targetValue * progress) /
+                100;
 
             const goalStatus =
                 progress >= 100
@@ -811,24 +922,26 @@ app.put(
                         ? 'In Progress'
                         : 'Not Started';
 
-            const [result] = await db.promise().query(
-                `UPDATE goals
-                 SET
-                    current_value = ?,
-                    status = ?
-                 WHERE id = ?
-                 AND user_id = ?`,
-                [
-                    newCurrentValue,
-                    goalStatus,
-                    req.params.id,
-                    req.session.userId
-                ]
-            );
+            const [result] =
+                await db.promise().query(
+                    `UPDATE goals
+                     SET
+                        current_value = ?,
+                        status = ?
+                     WHERE id = ?
+                     AND user_id = ?`,
+                    [
+                        newCurrentValue,
+                        goalStatus,
+                        req.params.id,
+                        req.session.userId
+                    ]
+                );
 
             if (result.affectedRows === 0) {
                 return res.status(404).json({
-                    message: 'Goal not found.'
+                    message:
+                        'Goal not found.'
                 });
             }
 
@@ -836,7 +949,8 @@ app.put(
                 message:
                     'Goal progress updated successfully.',
 
-                progress: progress,
+                progress:
+                    progress,
 
                 current_value:
                     newCurrentValue,
@@ -868,24 +982,27 @@ app.delete(
     requireLogin,
     async (req, res) => {
         try {
-            const [result] = await db.promise().query(
-                `DELETE FROM goals
-                 WHERE id = ?
-                 AND user_id = ?`,
-                [
-                    req.params.id,
-                    req.session.userId
-                ]
-            );
+            const [result] =
+                await db.promise().query(
+                    `DELETE FROM goals
+                     WHERE id = ?
+                     AND user_id = ?`,
+                    [
+                        req.params.id,
+                        req.session.userId
+                    ]
+                );
 
             if (result.affectedRows === 0) {
                 return res.status(404).json({
-                    message: 'Goal not found.'
+                    message:
+                        'Goal not found.'
                 });
             }
 
             res.json({
-                message: 'Goal deleted successfully.'
+                message:
+                    'Goal deleted successfully.'
             });
 
         } catch (error) {
@@ -907,104 +1024,364 @@ app.delete(
    TASKS
    ========================================================= */
 
-app.get('/api/tasks', requireLogin, async (req, res) => {
-    try {
-        const [tasks] = await db.promise().query(
-            `SELECT *
-             FROM tasks
-             WHERE user_id = ?
-             ORDER BY id DESC`,
-            [req.session.userId]
-        );
+app.get(
+    '/api/tasks',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const [tasks] =
+                await db.promise().query(
+                    `SELECT *
+                     FROM tasks
+                     WHERE user_id = ?
+                     ORDER BY id DESC`,
+                    [req.session.userId]
+                );
 
-        res.json(tasks);
+            res.json(tasks);
 
-    } catch (error) {
-        console.error('Get tasks error:', error);
+        } catch (error) {
+            console.error(
+                'Get tasks error:',
+                error
+            );
 
-        res.status(500).json({
-            message: 'Failed to load tasks.'
-        });
-    }
-});
-
-
-app.post('/api/tasks', requireLogin, async (req, res) => {
-    try {
-        const {
-            title,
-            description,
-            due_date,
-            priority,
-            status
-        } = req.body;
-
-        if (!title || !title.trim()) {
-            return res.status(400).json({
-                message: 'Task title is required.'
+            res.status(500).json({
+                message:
+                    'Failed to load tasks.'
             });
         }
+    }
+);
 
-        const [result] = await db.promise().query(
-            `INSERT INTO tasks
-             (
-                user_id,
+
+app.post(
+    '/api/tasks',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const {
                 title,
                 description,
                 due_date,
                 priority,
                 status
-             )
-             VALUES (?, ?, ?, ?, ?, ?)`,
-            [
-                req.session.userId,
-                title.trim(),
-                description || null,
-                due_date || null,
-                priority || 'Medium',
-                status || 'Pending'
-            ]
-        );
+            } = req.body;
 
-        res.status(201).json({
-            message: 'Task created successfully.',
-            taskId: result.insertId
-        });
+            if (!title || !title.trim()) {
+                return res.status(400).json({
+                    message:
+                        'Task title is required.'
+                });
+            }
 
-    } catch (error) {
-        console.error('Create task error:', error);
+            const [result] =
+                await db.promise().query(
+                    `INSERT INTO tasks
+                     (
+                        user_id,
+                        title,
+                        description,
+                        due_date,
+                        priority,
+                        status
+                     )
+                     VALUES (?, ?, ?, ?, ?, ?)`,
+                    [
+                        req.session.userId,
+                        title.trim(),
+                        description || null,
+                        due_date || null,
+                        priority || 'Medium',
+                        status || 'Pending'
+                    ]
+                );
 
-        res.status(500).json({
-            message: 'Failed to create task.'
-        });
+            res.status(201).json({
+                message:
+                    'Task created successfully.',
+                taskId:
+                    result.insertId
+            });
+
+        } catch (error) {
+            console.error(
+                'Create task error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to create task.'
+            });
+        }
     }
-});
+);
 
 
 /* =========================================================
    HABITS
    ========================================================= */
 
-app.get('/api/habits', requireLogin, async (req, res) => {
-    try {
-        const [habits] = await db.promise().query(
-            `SELECT *
-             FROM habits
-             WHERE user_id = ?
-             ORDER BY id DESC`,
-            [req.session.userId]
-        );
+app.get(
+    '/api/habits',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const [habits] =
+                await db.promise().query(
+                    `SELECT *
+                     FROM habits
+                     WHERE user_id = ?
+                     ORDER BY id DESC`,
+                    [req.session.userId]
+                );
 
-        res.json(habits);
+            res.json(habits);
 
-    } catch (error) {
-        console.error('Get habits error:', error);
+        } catch (error) {
+            console.error(
+                'Get habits error:',
+                error
+            );
 
-        res.status(500).json({
-            message: 'Failed to load habits.'
-        });
+            res.status(500).json({
+                message:
+                    'Failed to load habits.'
+            });
+        }
     }
-});
+);
+
+
+/* =========================================================
+   CREATE HABIT
+   ========================================================= */
+
+app.post(
+    '/api/habits',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const {
+                name,
+                description,
+                frequency,
+                start_date
+            } = req.body;
+
+            if (!name || !name.trim()) {
+                return res.status(400).json({
+                    message:
+                        'Habit name is required.'
+                });
+            }
+
+            if (!start_date || !start_date.trim()) {
+                return res.status(400).json({
+                    message:
+                        'Start date is required.'
+                });
+            }
+
+            const [result] =
+                await db.promise().query(
+                    `INSERT INTO habits
+                     (
+                        user_id,
+                        name,
+                        description,
+                        frequency,
+                        start_date,
+                        status
+                     )
+                     VALUES (?, ?, ?, ?, ?, ?)`,
+                    [
+                        req.session.userId,
+                        name.trim(),
+                        description
+                            ? description.trim()
+                            : null,
+                        frequency
+                            ? frequency.trim()
+                            : 'Daily',
+                        start_date.trim(),
+                        'Active'
+                    ]
+                );
+
+            res.status(201).json({
+                message:
+                    'Habit created successfully.',
+                habitId:
+                    result.insertId
+            });
+
+        } catch (error) {
+            console.error(
+                'Create habit error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to create habit.'
+            });
+        }
+    }
+);
+
+
+/* =========================================================
+   UPDATE HABIT
+   ========================================================= */
+
+app.put(
+    '/api/habits/:id',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const {
+                name,
+                description,
+                frequency,
+                start_date,
+                status
+            } = req.body;
+
+            if (!name || !name.trim()) {
+                return res.status(400).json({
+                    message:
+                        'Habit name is required.'
+                });
+            }
+
+            if (
+                !frequency ||
+                !frequency.trim()
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Frequency is required.'
+                });
+            }
+
+            if (
+                !start_date ||
+                !start_date.trim()
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Start date is required.'
+                });
+            }
+
+            if (
+                !status ||
+                !status.trim()
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Status is required.'
+                });
+            }
+
+            const [result] =
+                await db.promise().query(
+                    `UPDATE habits
+                     SET
+                        name = ?,
+                        description = ?,
+                        frequency = ?,
+                        start_date = ?,
+                        status = ?
+                     WHERE id = ?
+                     AND user_id = ?`,
+                    [
+                        name.trim(),
+                        description
+                            ? description.trim()
+                            : null,
+                        frequency.trim(),
+                        start_date.trim(),
+                        status.trim(),
+                        req.params.id,
+                        req.session.userId
+                    ]
+                );
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message:
+                        'Habit not found.'
+                });
+            }
+
+            res.json({
+                message:
+                    'Habit updated successfully.'
+            });
+
+        } catch (error) {
+            console.error(
+                'Update habit error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to update habit.'
+            });
+        }
+    }
+);
+
+
+/* =========================================================
+   DELETE HABIT
+   ========================================================= */
+
+app.delete(
+    '/api/habits/:id',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const [result] =
+                await db.promise().query(
+                    `DELETE FROM habits
+                     WHERE id = ?
+                     AND user_id = ?`,
+                    [
+                        req.params.id,
+                        req.session.userId
+                    ]
+                );
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message:
+                        'Habit not found.'
+                });
+            }
+
+            res.json({
+                message:
+                    'Habit deleted successfully.'
+            });
+
+        } catch (error) {
+            console.error(
+                'Delete habit error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to delete habit.'
+            });
+        }
+    }
+);
 
 
 /* =========================================================
@@ -1081,61 +1458,74 @@ app.get(
    ERROR HANDLER
    ========================================================= */
 
-app.use((error, req, res, next) => {
-    console.error(
-        'Server error:',
-        error
-    );
+app.use(
+    (error, req, res, next) => {
+        console.error(
+            'Server error:',
+            error
+        );
 
-    if (error instanceof multer.MulterError) {
-        return res.status(400).json({
-            message: error.message
+        if (
+            error instanceof
+            multer.MulterError
+        ) {
+            return res.status(400).json({
+                message:
+                    error.message
+            });
+        }
+
+        if (
+            error &&
+            error.message
+        ) {
+            return res.status(400).json({
+                message:
+                    error.message
+            });
+        }
+
+        res.status(500).json({
+            message:
+                'An unexpected server error occurred.'
         });
     }
-
-    if (error && error.message) {
-        return res.status(400).json({
-            message: error.message
-        });
-    }
-
-    res.status(500).json({
-        message:
-            'An unexpected server error occurred.'
-    });
-});
+);
 
 
 /* =========================================================
    START SERVER
    ========================================================= */
 
-app.listen(PORT, () => {
-    console.log(
-        '=========================================='
-    );
+app.listen(
+    PORT,
+    () => {
+        console.log(
+            '=========================================='
+        );
 
-    console.log(
-        'STUDYTRACK SERVER'
-    );
+        console.log(
+            'STUDYTRACK SERVER'
+        );
 
-    console.log(
-        '=========================================='
-    );
+        console.log(
+            '=========================================='
+        );
 
-    console.log(
-        `Server running on http://localhost:${PORT}`
-    );
+        console.log(
+            `Server running on http://localhost:${PORT}`
+        );
 
-    console.log(
-        'Database: studytrack'
-    );
+        console.log(
+            'Database: studytrack'
+        );
 
-    console.log(
-        'Profile uploads: uploads/profile-pictures'
-    );
+        console.log(
+            'Profile uploads: uploads/profile-pictures'
+        );
 
-    console.log(
-        '=========================================='
-    );
-});
+        console.log(
+            '=========================================='
+        );
+    }
+);

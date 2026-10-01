@@ -2,33 +2,100 @@
    STUDYTRACK - HABITS PAGE
    ========================================================= */
 
+
 /* =========================================================
    PAGE ELEMENTS
    ========================================================= */
 
-const habitForm = document.getElementById('habitForm');
-const habitMessage = document.getElementById('habitMessage');
-const habitsContainer = document.getElementById('habitsContainer');
-const logoutButton = document.getElementById('logoutButton');
-const userName = document.getElementById('userName');
-const userEmail = document.getElementById('userEmail');
-const dayModeButton = document.getElementById('dayModeButton');
-const nightModeButton = document.getElementById('nightModeButton');
-const habitStartDate = document.getElementById('habitStartDate');
+const habitForm =
+    document.getElementById('habitForm');
+
+const habitMessage =
+    document.getElementById('habitMessage');
+
+const habitsContainer =
+    document.getElementById('habitsContainer');
+
+const logoutButton =
+    document.getElementById('logoutButton');
+
+const userName =
+    document.getElementById('userName');
+
+const userEmail =
+    document.getElementById('userEmail');
+
+const dayModeButton =
+    document.getElementById('dayModeButton');
+
+const nightModeButton =
+    document.getElementById('nightModeButton');
+
+const habitStartDate =
+    document.getElementById('habitStartDate');
+
 
 /* =========================================================
    NAVIGATION ELEMENTS
    ========================================================= */
 
-var mobileMenuButton = document.getElementById('mobileMenuButton');
-var studyTrackSidebar = document.getElementById('studyTrackSidebar');
-var mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+var mobileMenuButton =
+    document.getElementById('mobileMenuButton');
+
+var studyTrackSidebar =
+    document.getElementById('studyTrackSidebar');
+
+var mobileMenuOverlay =
+    document.getElementById('mobileMenuOverlay');
+
+
+/* =========================================================
+   SIDEBAR COLLAPSED TOOLTIP LABELS
+   ========================================================= */
+
+function setupSidebarTooltips() {
+
+    document
+        .querySelectorAll(
+            '.sidebar-nav-link, .logout-button'
+        )
+        .forEach(
+            function (item) {
+
+                const labelElement =
+                    item.querySelector(
+                        ':scope > span:not(.nav-icon)'
+                    );
+
+                if (!labelElement) {
+                    return;
+                }
+
+                const label =
+                    labelElement.textContent.trim();
+
+                if (label === '') {
+                    return;
+                }
+
+                item.setAttribute(
+                    'data-tooltip',
+                    label
+                );
+            }
+        );
+}
+
+setupSidebarTooltips();
+
 
 /* =========================================================
    DESKTOP SIDEBAR COLLAPSE
    ========================================================= */
 
-function setDesktopSidebarCollapsed(collapsed) {
+function setDesktopSidebarCollapsed(
+    collapsed
+) {
 
     if (!studyTrackSidebar) {
         return;
@@ -71,13 +138,17 @@ function setDesktopSidebarCollapsed(collapsed) {
     }
 }
 
+
 /* =========================================================
    MOBILE SIDEBAR MENU
    ========================================================= */
 
 function setMobileMenu(open) {
 
-    if (!mobileMenuButton || !studyTrackSidebar) {
+    if (
+        !mobileMenuButton ||
+        !studyTrackSidebar
+    ) {
         return;
     }
 
@@ -129,6 +200,7 @@ function setMobileMenu(open) {
     );
 }
 
+
 /* =========================================================
    HAMBURGER BUTTON
    ========================================================= */
@@ -163,6 +235,7 @@ if (mobileMenuButton) {
     );
 }
 
+
 /* =========================================================
    MOBILE OVERLAY
    ========================================================= */
@@ -172,10 +245,13 @@ if (mobileMenuOverlay) {
     mobileMenuOverlay.addEventListener(
         'click',
         function () {
+
             setMobileMenu(false);
+
         }
     );
 }
+
 
 /* =========================================================
    CLOSE MOBILE MENU WHEN NAVIGATING
@@ -190,13 +266,18 @@ document
                 'click',
                 function () {
 
-                    if (window.innerWidth <= 720) {
+                    if (
+                        window.innerWidth <= 720
+                    ) {
                         setMobileMenu(false);
                     }
+
                 }
             );
+
         }
     );
+
 
 /* =========================================================
    ESCAPE KEY
@@ -207,10 +288,14 @@ document.addEventListener(
     function (event) {
 
         if (event.key === 'Escape') {
+
             setMobileMenu(false);
+
         }
+
     }
 );
+
 
 /* =========================================================
    WINDOW RESIZE
@@ -221,10 +306,14 @@ window.addEventListener(
     function () {
 
         if (window.innerWidth > 720) {
+
             setMobileMenu(false);
+
         }
+
     }
 );
+
 
 /* =========================================================
    DEFAULT START DATE
@@ -236,7 +325,8 @@ function setDefaultStartDate() {
         return;
     }
 
-    const today = new Date();
+    const today =
+        new Date();
 
     const year =
         today.getFullYear();
@@ -244,16 +334,23 @@ function setDefaultStartDate() {
     const month =
         String(
             today.getMonth() + 1
-        ).padStart(2, '0');
+        ).padStart(
+            2,
+            '0'
+        );
 
     const day =
         String(
             today.getDate()
-        ).padStart(2, '0');
+        ).padStart(
+            2,
+            '0'
+        );
 
     habitStartDate.value =
         `${year}-${month}-${day}`;
 }
+
 
 /* =========================================================
    THEME MANAGEMENT
@@ -277,9 +374,13 @@ function applyTheme(theme) {
     updateThemeButtons();
 }
 
+
 function updateThemeButtons() {
 
-    if (!dayModeButton || !nightModeButton) {
+    if (
+        !dayModeButton ||
+        !nightModeButton
+    ) {
         return;
     }
 
@@ -309,6 +410,7 @@ function updateThemeButtons() {
     );
 }
 
+
 function setTheme(theme) {
 
     localStorage.setItem(
@@ -318,6 +420,7 @@ function setTheme(theme) {
 
     applyTheme(theme);
 }
+
 
 function loadSavedTheme() {
 
@@ -333,30 +436,39 @@ function loadSavedTheme() {
     } else {
 
         applyTheme('day');
+
     }
 }
+
 
 if (dayModeButton) {
 
     dayModeButton.addEventListener(
         'click',
         function () {
+
             setTheme('day');
+
         }
     );
 }
+
 
 if (nightModeButton) {
 
     nightModeButton.addEventListener(
         'click',
         function () {
+
             setTheme('night');
+
         }
     );
 }
 
+
 loadSavedTheme();
+
 
 /* =========================================================
    LOAD USER
@@ -385,21 +497,49 @@ async function loadUser() {
         const data =
             await response.json();
 
-        if (data.user) {
+
+        /*
+         * The API may return either:
+         *
+         * {
+         *     user: {...}
+         * }
+         *
+         * or:
+         *
+         * {
+         *     id: ...,
+         *     full_name: ...,
+         *     email: ...
+         * }
+         *
+         * Accept both formats.
+         */
+
+        const currentUser =
+            data && data.user
+                ? data.user
+                : data;
+
+
+        if (currentUser) {
 
             if (userName) {
 
                 userName.textContent =
-                    data.user.full_name ||
+                    currentUser.full_name ||
+                    currentUser.name ||
                     'User';
             }
+
 
             if (userEmail) {
 
                 userEmail.textContent =
-                    data.user.email ||
+                    currentUser.email ||
                     '';
             }
+
         }
 
     } catch (error) {
@@ -413,6 +553,7 @@ async function loadUser() {
             '/login.html';
     }
 }
+
 
 /* =========================================================
    FORM MESSAGE
@@ -438,6 +579,7 @@ function showHabitMessage(
         type;
 }
 
+
 /* =========================================================
    CREATE HABIT
    ========================================================= */
@@ -450,25 +592,40 @@ if (habitForm) {
 
             event.preventDefault();
 
+
             const name =
-                document.getElementById(
-                    'habitName'
-                ).value.trim();
+                document
+                    .getElementById(
+                        'habitName'
+                    )
+                    .value
+                    .trim();
+
 
             const description =
-                document.getElementById(
-                    'habitDescription'
-                ).value.trim();
+                document
+                    .getElementById(
+                        'habitDescription'
+                    )
+                    .value
+                    .trim();
+
 
             const frequency =
-                document.getElementById(
-                    'habitFrequency'
-                ).value;
+                document
+                    .getElementById(
+                        'habitFrequency'
+                    )
+                    .value;
+
 
             const startDate =
-                document.getElementById(
-                    'habitStartDate'
-                ).value;
+                document
+                    .getElementById(
+                        'habitStartDate'
+                    )
+                    .value;
+
 
             if (name === '') {
 
@@ -479,6 +636,7 @@ if (habitForm) {
                 return;
             }
 
+
             if (startDate === '') {
 
                 showHabitMessage(
@@ -488,18 +646,24 @@ if (habitForm) {
                 return;
             }
 
+
             showHabitMessage(
                 'Creating habit...'
             );
+
 
             const habitButton =
                 document.getElementById(
                     'habitButton'
                 );
 
+
             if (habitButton) {
-                habitButton.disabled = true;
+
+                habitButton.disabled =
+                    true;
             }
+
 
             try {
 
@@ -514,19 +678,30 @@ if (habitForm) {
                                     'application/json'
                             },
 
-                            credentials: 'include',
+                            credentials:
+                                'include',
 
-                            body: JSON.stringify({
-                                name: name,
-                                description: description,
-                                frequency: frequency,
-                                start_date: startDate
-                            })
+                            body:
+                                JSON.stringify({
+                                    name:
+                                        name,
+
+                                    description:
+                                        description,
+
+                                    frequency:
+                                        frequency,
+
+                                    start_date:
+                                        startDate
+                                })
                         }
                     );
 
+
                 const data =
                     await response.json();
+
 
                 if (response.ok) {
 
@@ -535,9 +710,12 @@ if (habitForm) {
                         'success'
                     );
 
+
                     habitForm.reset();
 
+
                     setDefaultStartDate();
+
 
                     await loadHabits();
 
@@ -557,6 +735,7 @@ if (habitForm) {
                     error
                 );
 
+
                 showHabitMessage(
                     'Could not connect to the server.',
                     'error'
@@ -565,12 +744,15 @@ if (habitForm) {
             } finally {
 
                 if (habitButton) {
-                    habitButton.disabled = false;
+
+                    habitButton.disabled =
+                        false;
                 }
             }
         }
     );
 }
+
 
 /* =========================================================
    LOAD HABITS
@@ -582,6 +764,7 @@ async function loadHabits() {
         return;
     }
 
+
     try {
 
         const response =
@@ -592,6 +775,7 @@ async function loadHabits() {
                 }
             );
 
+
         if (response.status === 401) {
 
             window.location.href =
@@ -600,32 +784,13 @@ async function loadHabits() {
             return;
         }
 
+
         if (!response.ok) {
 
             habitsContainer.innerHTML = `
                 <div class="empty-state">
-                    <p>Could not load your habits.</p>
-                </div>
-            `;
-
-            return;
-        }
-
-        const data =
-            await response.json();
-
-        if (
-            !data.habits ||
-            data.habits.length === 0
-        ) {
-
-            habitsContainer.innerHTML = `
-                <div class="empty-state">
-                    <h3>No habits yet</h3>
-
                     <p>
-                        Create your first habit above
-                        to start building consistency.
+                        Could not load your habits.
                     </p>
                 </div>
             `;
@@ -633,9 +798,63 @@ async function loadHabits() {
             return;
         }
 
-        habitsContainer.innerHTML = '';
 
-        data.habits.forEach(
+        const data =
+            await response.json();
+
+
+        /*
+         * The API may return either:
+         *
+         * [
+         *     {...},
+         *     {...}
+         * ]
+         *
+         * or:
+         *
+         * {
+         *     habits: [...]
+         * }
+         *
+         * Accept both formats.
+         */
+
+        const habits =
+            Array.isArray(data)
+                ? data
+                : data &&
+                    Array.isArray(data.habits)
+                    ? data.habits
+                    : [];
+
+
+        if (habits.length === 0) {
+
+            habitsContainer.innerHTML = `
+                <div class="empty-state">
+
+                    <h3>
+                        No habits yet
+                    </h3>
+
+                    <p>
+                        Create your first habit above
+                        to start building consistency.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        habitsContainer.innerHTML =
+            '';
+
+
+        habits.forEach(
             function (habit) {
 
                 const habitElement =
@@ -643,15 +862,21 @@ async function loadHabits() {
                         'article'
                     );
 
+
                 habitElement.className =
                     'goal-card';
+
 
                 const startDate =
                     habit.start_date
                         ? String(
                             habit.start_date
-                        ).substring(0, 10)
+                        ).substring(
+                            0,
+                            10
+                        )
                         : 'No start date';
+
 
                 const description =
                     habit.description &&
@@ -659,13 +884,16 @@ async function loadHabits() {
                         ? habit.description
                         : 'No description provided.';
 
+
                 const frequency =
                     habit.frequency ||
                     'Daily';
 
+
                 const status =
                     habit.status ||
                     'Active';
+
 
                 habitElement.innerHTML = `
                     <div class="goal-card-header">
@@ -688,11 +916,13 @@ async function loadHabits() {
 
                     </div>
 
+
                     <div class="goal-progress">
 
                         <div class="goal-progress-text">
 
                             Frequency:
+
                             <strong>
                                 ${escapeHtml(
                     frequency
@@ -702,6 +932,7 @@ async function loadHabits() {
                             &nbsp;&nbsp;•&nbsp;&nbsp;
 
                             Start Date:
+
                             <strong>
                                 ${escapeHtml(
                     startDate
@@ -711,6 +942,7 @@ async function loadHabits() {
                             &nbsp;&nbsp;•&nbsp;&nbsp;
 
                             Status:
+
                             <strong>
                                 ${escapeHtml(
                     status
@@ -721,6 +953,7 @@ async function loadHabits() {
 
                     </div>
 
+
                     <div class="form-actions">
 
                         <button
@@ -729,6 +962,7 @@ async function loadHabits() {
                             onclick="editHabit(${habit.id})">
                             Edit Habit
                         </button>
+
 
                         <button
                             type="button"
@@ -739,6 +973,7 @@ async function loadHabits() {
 
                     </div>
                 `;
+
 
                 habitsContainer.appendChild(
                     habitElement
@@ -753,13 +988,19 @@ async function loadHabits() {
             error
         );
 
+
         habitsContainer.innerHTML = `
             <div class="empty-state">
-                <p>Could not connect to the server.</p>
+
+                <p>
+                    Could not connect to the server.
+                </p>
+
             </div>
         `;
     }
 }
+
 
 /* =========================================================
    ESCAPE HTML
@@ -772,11 +1013,14 @@ function escapeHtml(value) {
             'div'
         );
 
+
     div.textContent =
         value ?? '';
 
+
     return div.innerHTML;
 }
+
 
 /* =========================================================
    EDIT HABIT
@@ -794,6 +1038,7 @@ async function editHabit(habitId) {
                 }
             );
 
+
         if (response.status === 401) {
 
             window.location.href =
@@ -801,6 +1046,7 @@ async function editHabit(habitId) {
 
             return;
         }
+
 
         if (!response.ok) {
 
@@ -811,15 +1057,29 @@ async function editHabit(habitId) {
             return;
         }
 
+
         const data =
             await response.json();
 
+
+        const habits =
+            Array.isArray(data)
+                ? data
+                : data &&
+                    Array.isArray(data.habits)
+                    ? data.habits
+                    : [];
+
+
         const habit =
-            data.habits.find(
+            habits.find(
                 function (item) {
+
                     return item.id === habitId;
+
                 }
             );
+
 
         if (!habit) {
 
@@ -830,15 +1090,18 @@ async function editHabit(habitId) {
             return;
         }
 
+
         const newName =
             prompt(
                 'Enter the habit name:',
                 habit.name
             );
 
+
         if (newName === null) {
             return;
         }
+
 
         if (newName.trim() === '') {
 
@@ -849,15 +1112,18 @@ async function editHabit(habitId) {
             return;
         }
 
+
         const newDescription =
             prompt(
                 'Enter the habit description:',
                 habit.description || ''
             );
 
+
         if (newDescription === null) {
             return;
         }
+
 
         const newFrequency =
             prompt(
@@ -865,9 +1131,11 @@ async function editHabit(habitId) {
                 habit.frequency || 'Daily'
             );
 
+
         if (newFrequency === null) {
             return;
         }
+
 
         if (newFrequency.trim() === '') {
 
@@ -878,12 +1146,17 @@ async function editHabit(habitId) {
             return;
         }
 
+
         const currentStartDate =
             habit.start_date
                 ? String(
                     habit.start_date
-                ).substring(0, 10)
+                ).substring(
+                    0,
+                    10
+                )
                 : '';
+
 
         const newStartDate =
             prompt(
@@ -891,9 +1164,11 @@ async function editHabit(habitId) {
                 currentStartDate
             );
 
+
         if (newStartDate === null) {
             return;
         }
+
 
         if (newStartDate.trim() === '') {
 
@@ -904,15 +1179,18 @@ async function editHabit(habitId) {
             return;
         }
 
+
         const newStatus =
             prompt(
                 'Enter the status (Active or Inactive):',
                 habit.status || 'Active'
             );
 
+
         if (newStatus === null) {
             return;
         }
+
 
         if (newStatus.trim() === '') {
 
@@ -922,6 +1200,7 @@ async function editHabit(habitId) {
 
             return;
         }
+
 
         const updateResponse =
             await fetch(
@@ -934,30 +1213,40 @@ async function editHabit(habitId) {
                             'application/json'
                     },
 
-                    credentials: 'include',
+                    credentials:
+                        'include',
 
-                    body: JSON.stringify({
-                        name: newName.trim(),
-                        description:
-                            newDescription.trim(),
-                        frequency:
-                            newFrequency.trim(),
-                        start_date:
-                            newStartDate.trim(),
-                        status:
-                            newStatus.trim()
-                    })
+                    body:
+                        JSON.stringify({
+                            name:
+                                newName.trim(),
+
+                            description:
+                                newDescription.trim(),
+
+                            frequency:
+                                newFrequency.trim(),
+
+                            start_date:
+                                newStartDate.trim(),
+
+                            status:
+                                newStatus.trim()
+                        })
                 }
             );
 
+
         const updateData =
             await updateResponse.json();
+
 
         if (updateResponse.ok) {
 
             alert(
                 'Habit updated successfully!'
             );
+
 
             await loadHabits();
 
@@ -976,11 +1265,13 @@ async function editHabit(habitId) {
             error
         );
 
+
         alert(
             'Could not connect to the server.'
         );
     }
 }
+
 
 /* =========================================================
    DELETE HABIT
@@ -993,9 +1284,11 @@ async function deleteHabit(habitId) {
             'Are you sure you want to delete this habit?'
         );
 
+
     if (!confirmed) {
         return;
     }
+
 
     try {
 
@@ -1008,6 +1301,7 @@ async function deleteHabit(habitId) {
                 }
             );
 
+
         if (response.status === 401) {
 
             window.location.href =
@@ -1016,8 +1310,10 @@ async function deleteHabit(habitId) {
             return;
         }
 
+
         const data =
             await response.json();
+
 
         if (response.ok) {
 
@@ -1038,11 +1334,13 @@ async function deleteHabit(habitId) {
             error
         );
 
+
         alert(
             'Could not connect to the server.'
         );
     }
 }
+
 
 /* =========================================================
    LOGOUT
@@ -1065,6 +1363,7 @@ if (logoutButton) {
                         }
                     );
 
+
                 if (response.ok) {
 
                     window.location.href =
@@ -1084,6 +1383,7 @@ if (logoutButton) {
                     error
                 );
 
+
                 alert(
                     'Could not connect to the server.'
                 );
@@ -1091,6 +1391,7 @@ if (logoutButton) {
         }
     );
 }
+
 
 /* =========================================================
    START PAGE
@@ -1102,11 +1403,14 @@ loadUser();
 
 loadHabits();
 
+
 /* =========================================================
    INITIAL DESKTOP SIDEBAR STATE
    ========================================================= */
 
 if (window.innerWidth > 720) {
 
-    setDesktopSidebarCollapsed(false);
+    setDesktopSidebarCollapsed(
+        false
+    );
 }
