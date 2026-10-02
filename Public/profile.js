@@ -1,4 +1,3 @@
-javascript
 /* =========================================================
    STUDYTRACK - PROFILE PAGE
    ========================================================= */
@@ -83,7 +82,7 @@ const accountDates =
 
 
 /* =========================================================
-   MOBILE MENU ELEMENTS
+   SIDEBAR ELEMENTS
 ========================================================= */
 
 const mobileMenuButton =
@@ -119,10 +118,11 @@ function showMessage(message, type) {
         return;
     }
 
-    profileMessage.textContent = message;
+    profileMessage.textContent =
+        message;
 
     profileMessage.className =
-        `form - message show ${ type }`;
+        "form-message show " + type;
 }
 
 
@@ -132,7 +132,8 @@ function clearMessage() {
         return;
     }
 
-    profileMessage.textContent = "";
+    profileMessage.textContent =
+        "";
 
     profileMessage.className =
         "form-message";
@@ -140,7 +141,7 @@ function clearMessage() {
 
 
 /* =========================================================
-   TEMPORARY PREVIEW URL
+   TEMPORARY IMAGE URL
 ========================================================= */
 
 function revokeTemporaryPreviewUrl() {
@@ -153,87 +154,42 @@ function revokeTemporaryPreviewUrl() {
         temporaryPreviewUrl
     );
 
-    temporaryPreviewUrl = null;
+    temporaryPreviewUrl =
+        null;
 }
 
 
 /* =========================================================
-   PROFILE PICTURE PREVIEW
+   PROFILE PICTURE DISPLAY
 ========================================================= */
 
 function showProfilePicture(url) {
 
     if (!url) {
+
         clearProfilePicturePreview();
+
         return;
     }
 
 
     if (profilePicturePreview) {
 
-        profilePicturePreview.src = url;
+        profilePicturePreview.src =
+            url;
 
-        profilePicturePreview.hidden = false;
+        profilePicturePreview.hidden =
+            false;
     }
 
 
     if (profilePictureInitials) {
 
-        profilePictureInitials.hidden = true;
+        profilePictureInitials.hidden =
+            true;
     }
 }
 
-
-/* =========================================================
-   PROFILE PICTURE LOAD SUCCESS
-========================================================= */
-
-function handleProfilePictureLoad() {
-
-    if (profilePicturePreview) {
-
-        profilePicturePreview.hidden = false;
-    }
-
-
-    if (profilePictureInitials) {
-
-        profilePictureInitials.hidden = true;
-    }
-}
-
-
-/* =========================================================
-   PROFILE PICTURE LOAD ERROR
-========================================================= */
-
-function handleProfilePictureError() {
-
-    if (profilePicturePreview) {
-
-        profilePicturePreview.hidden = true;
-
-        profilePicturePreview.removeAttribute(
-            "src"
-        );
-    }
-
-
-    if (profilePictureInitials) {
-
-        profilePictureInitials.hidden = false;
-    }
-
-
-    console.warn(
-        "StudyTrack could not load the profile picture."
-    );
-}
-
-
-/* =========================================================
-   CLEAR PROFILE PICTURE PREVIEW
-========================================================= */
 
 function clearProfilePicturePreview() {
 
@@ -242,7 +198,8 @@ function clearProfilePicturePreview() {
 
     if (profilePicturePreview) {
 
-        profilePicturePreview.hidden = true;
+        profilePicturePreview.hidden =
+            true;
 
         profilePicturePreview.removeAttribute(
             "src"
@@ -252,13 +209,60 @@ function clearProfilePicturePreview() {
 
     if (profilePictureInitials) {
 
-        profilePictureInitials.hidden = false;
+        profilePictureInitials.hidden =
+            false;
     }
 }
 
 
 /* =========================================================
-   UPDATE PROFILE INITIALS
+   PROFILE PICTURE LOAD EVENTS
+========================================================= */
+
+function handleProfilePictureLoad() {
+
+    if (profilePicturePreview) {
+
+        profilePicturePreview.hidden =
+            false;
+    }
+
+
+    if (profilePictureInitials) {
+
+        profilePictureInitials.hidden =
+            true;
+    }
+}
+
+
+function handleProfilePictureError() {
+
+    if (profilePicturePreview) {
+
+        profilePicturePreview.hidden =
+            true;
+
+        profilePicturePreview.removeAttribute(
+            "src"
+        );
+    }
+
+
+    if (profilePictureInitials) {
+
+        profilePictureInitials.hidden =
+            false;
+    }
+
+    console.warn(
+        "StudyTrack could not load the profile picture."
+    );
+}
+
+
+/* =========================================================
+   PROFILE INITIALS
 ========================================================= */
 
 function updateProfileInitials(name) {
@@ -288,28 +292,22 @@ function updateProfileInitials(name) {
             .filter(Boolean);
 
 
-    let initials = "";
-
-
     if (words.length === 1) {
 
-        initials =
+        profilePictureInitials.textContent =
             words[0]
                 .substring(0, 2)
                 .toUpperCase();
 
-    } else {
-
-        initials =
-            (
-                words[0][0] +
-                words[words.length - 1][0]
-            ).toUpperCase();
+        return;
     }
 
 
     profilePictureInitials.textContent =
-        initials;
+        (
+            words[0][0] +
+            words[words.length - 1][0]
+        ).toUpperCase();
 }
 
 
@@ -351,7 +349,7 @@ async function loadProfile() {
 
             throw new Error(
                 data.message ||
-                "Failed to load profile"
+                "Failed to load profile."
             );
         }
 
@@ -371,6 +369,7 @@ async function loadProfile() {
         displayProfile(
             data.profile
         );
+
 
     } catch (error) {
 
@@ -513,8 +512,10 @@ function updateAccountInformation(profile) {
     ) {
 
         accountDates.textContent =
-            `Profile created: ${ profile.created_at } | ` +
-            `Last updated: ${ profile.updated_at }`;
+            "Profile created: " +
+            profile.created_at +
+            " | Last updated: " +
+            profile.updated_at;
 
         return;
     }
@@ -523,7 +524,8 @@ function updateAccountInformation(profile) {
     if (profile.created_at) {
 
         accountDates.textContent =
-            `Profile created: ${ profile.created_at }`;
+            "Profile created: " +
+            profile.created_at;
 
         return;
     }
@@ -535,7 +537,7 @@ function updateAccountInformation(profile) {
 
 
 /* =========================================================
-   UPDATE REMOVE BUTTON
+   PROFILE PICTURE REMOVE BUTTON
 ========================================================= */
 
 function updateRemoveButton(hasPicture) {
@@ -578,7 +580,6 @@ function handleProfilePictureSelection() {
         selectedProfilePicture =
             null;
 
-
         if (selectedImageName) {
 
             selectedImageName.textContent =
@@ -592,7 +593,6 @@ function handleProfilePictureSelection() {
                 originalProfile.avatar_url
             )
         );
-
 
         return;
     }
@@ -623,7 +623,6 @@ function handleProfilePictureSelection() {
             "error"
         );
 
-
         return;
     }
 
@@ -646,7 +645,6 @@ function handleProfilePictureSelection() {
             "error"
         );
 
-
         return;
     }
 
@@ -661,7 +659,7 @@ function handleProfilePictureSelection() {
     if (selectedImageName) {
 
         selectedImageName.textContent =
-            `Selected: ${ file.name }`;
+            "Selected: " + file.name;
     }
 
 
@@ -677,7 +675,9 @@ function handleProfilePictureSelection() {
     );
 
 
-    updateRemoveButton(true);
+    updateRemoveButton(
+        true
+    );
 
 
     clearMessage();
@@ -811,8 +811,9 @@ function removeProfilePicture() {
         clearProfilePicturePreview();
 
 
-        updateRemoveButton(false);
-
+        updateRemoveButton(
+            false
+        );
 
         return;
     }
@@ -843,7 +844,9 @@ function removeProfilePicture() {
     clearProfilePicturePreview();
 
 
-    updateRemoveButton(false);
+    updateRemoveButton(
+        false
+    );
 
 
     showMessage(
@@ -945,7 +948,6 @@ async function saveProfile(event) {
 
                         course:
                             course
-
                     })
                 }
             );
@@ -1209,7 +1211,7 @@ function enableNightMode() {
 
 
 /* =========================================================
-   MOBILE MENU
+   SIDEBAR - MOBILE
 ========================================================= */
 
 function setMobileMenu(open) {
@@ -1280,7 +1282,177 @@ function setMobileMenu(open) {
 
 
 /* =========================================================
-   MOBILE MENU EVENTS
+   SIDEBAR - DESKTOP
+========================================================= */
+
+function isMobileScreen() {
+
+    return window.innerWidth <= 720;
+}
+
+
+function setDesktopSidebarCollapsed(
+    collapsed
+) {
+
+    if (
+        isMobileScreen()
+    ) {
+
+        return;
+    }
+
+
+    document.body.classList.toggle(
+        "desktop-sidebar-collapsed",
+        collapsed
+    );
+
+
+    localStorage.setItem(
+        "studytrack-sidebar-collapsed",
+        String(collapsed)
+    );
+
+
+    updateNavigationButton();
+}
+
+
+/* =========================================================
+   NAVIGATION BUTTON
+========================================================= */
+
+function updateNavigationButton() {
+
+    if (!mobileMenuButton) {
+        return;
+    }
+
+
+    if (isMobileScreen()) {
+
+        const menuIsOpen =
+            document.body.classList.contains(
+                "mobile-menu-active"
+            );
+
+
+        mobileMenuButton.classList.toggle(
+            "menu-open",
+            menuIsOpen
+        );
+
+
+        mobileMenuButton.setAttribute(
+            "aria-expanded",
+            String(menuIsOpen)
+        );
+
+
+        mobileMenuButton.setAttribute(
+            "aria-label",
+            menuIsOpen
+                ? "Close navigation menu"
+                : "Open navigation menu"
+        );
+
+
+        mobileMenuButton.setAttribute(
+            "title",
+            menuIsOpen
+                ? "Close navigation menu"
+                : "Open navigation menu"
+        );
+
+
+        return;
+    }
+
+
+    const sidebarIsCollapsed =
+        document.body.classList.contains(
+            "desktop-sidebar-collapsed"
+        );
+
+
+    mobileMenuButton.classList.toggle(
+        "menu-open",
+        !sidebarIsCollapsed
+    );
+
+
+    mobileMenuButton.setAttribute(
+        "aria-expanded",
+        String(!sidebarIsCollapsed)
+    );
+
+
+    mobileMenuButton.setAttribute(
+        "aria-label",
+        sidebarIsCollapsed
+            ? "Expand navigation sidebar"
+            : "Collapse navigation sidebar"
+    );
+
+
+    mobileMenuButton.setAttribute(
+        "title",
+        sidebarIsCollapsed
+            ? "Expand navigation sidebar"
+            : "Collapse navigation sidebar"
+    );
+}
+
+
+/* =========================================================
+   INITIALIZE NAVIGATION
+========================================================= */
+
+function initializeNavigation() {
+
+    if (
+        !mobileMenuButton ||
+        !studyTrackSidebar
+    ) {
+
+        return;
+    }
+
+
+    if (isMobileScreen()) {
+
+        document.body.classList.remove(
+            "desktop-sidebar-collapsed"
+        );
+
+        setMobileMenu(
+            false
+        );
+
+        return;
+    }
+
+
+    setMobileMenu(
+        false
+    );
+
+
+    const savedCollapsedState =
+        localStorage.getItem(
+            "studytrack-sidebar-collapsed"
+        );
+
+
+    setDesktopSidebarCollapsed(
+        savedCollapsedState === "true"
+    );
+}
+
+
+/* =========================================================
+   SIDEBAR BUTTON EVENT
 ========================================================= */
 
 if (mobileMenuButton) {
@@ -1289,19 +1461,39 @@ if (mobileMenuButton) {
         "click",
         function () {
 
-            const isOpen =
-                mobileMenuButton.classList.contains(
-                    "menu-open"
+            if (isMobileScreen()) {
+
+                const isOpen =
+                    document.body.classList.contains(
+                        "mobile-menu-active"
+                    );
+
+
+                setMobileMenu(
+                    !isOpen
+                );
+
+                return;
+            }
+
+
+            const sidebarIsCollapsed =
+                document.body.classList.contains(
+                    "desktop-sidebar-collapsed"
                 );
 
 
-            setMobileMenu(
-                !isOpen
+            setDesktopSidebarCollapsed(
+                !sidebarIsCollapsed
             );
         }
     );
 }
 
+
+/* =========================================================
+   SIDEBAR OVERLAY
+========================================================= */
 
 if (mobileMenuOverlay) {
 
@@ -1309,14 +1501,22 @@ if (mobileMenuOverlay) {
         "click",
         function () {
 
-            setMobileMenu(false);
+            setMobileMenu(
+                false
+            );
         }
     );
 }
 
 
+/* =========================================================
+   SIDEBAR LINKS
+========================================================= */
+
 document
-    .querySelectorAll(".sidebar-nav-link")
+    .querySelectorAll(
+        ".sidebar-nav-link"
+    )
     .forEach(
         function (link) {
 
@@ -1324,33 +1524,77 @@ document
                 "click",
                 function () {
 
-                    setMobileMenu(false);
+                    if (isMobileScreen()) {
+
+                        setMobileMenu(
+                            false
+                        );
+                    }
                 }
             );
         }
     );
 
 
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
 document.addEventListener(
     "keydown",
     function (event) {
 
-        if (event.key === "Escape") {
+        if (event.key !== "Escape") {
+            return;
+        }
 
-            setMobileMenu(false);
+
+        if (isMobileScreen()) {
+
+            setMobileMenu(
+                false
+            );
         }
     }
 );
 
 
+/* =========================================================
+   WINDOW RESIZE
+========================================================= */
+
 window.addEventListener(
     "resize",
     function () {
 
-        if (window.innerWidth > 720) {
+        if (isMobileScreen()) {
 
-            setMobileMenu(false);
+            document.body.classList.remove(
+                "desktop-sidebar-collapsed"
+            );
+
+            setMobileMenu(
+                false
+            );
+
+            return;
         }
+
+
+        setMobileMenu(
+            false
+        );
+
+
+        const savedCollapsedState =
+            localStorage.getItem(
+                "studytrack-sidebar-collapsed"
+            );
+
+
+        setDesktopSidebarCollapsed(
+            savedCollapsedState === "true"
+        );
     }
 );
 
@@ -1498,5 +1742,6 @@ if (profilePicturePreview) {
 
 applySavedTheme();
 
-loadProfile();
+initializeNavigation();
 
+loadProfile();

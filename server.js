@@ -278,7 +278,8 @@ app.post('/api/login', async (req, res) => {
         );
 
         res.status(500).json({
-            message: 'Login failed.'
+            message:
+                'Login failed.'
         });
     }
 });
@@ -347,6 +348,11 @@ app.post('/api/logout', (req, res) => {
    PROFILE
    ========================================================= */
 
+
+/* ---------------------------------------------------------
+   GET PROFILE
+   --------------------------------------------------------- */
+
 app.get(
     '/api/profile',
     requireLogin,
@@ -355,26 +361,49 @@ app.get(
             const [profiles] =
                 await db.promise().query(
                     `SELECT
-                        id,
-                        user_id,
-                        phone,
-                        bio,
-                        avatar_url,
-                        created_at,
-                        updated_at
-                     FROM profiles
-                     WHERE user_id = ?`,
+                        u.id,
+                        u.full_name,
+                        u.email,
+                        p.university,
+                        p.course,
+                        p.avatar_url,
+                        p.created_at,
+                        p.updated_at
+                     FROM users u
+                     LEFT JOIN profiles p
+                        ON p.id = u.id
+                     WHERE u.id = ?`,
                     [req.session.userId]
                 );
 
             if (profiles.length === 0) {
-                return res.json({
-                    profile: null
+                return res.status(404).json({
+                    message:
+                        'User profile not found.'
                 });
             }
 
+            const profile =
+                profiles[0];
+
             res.json({
-                profile: profiles[0]
+                profile: {
+                    id: profile.id,
+                    full_name:
+                        profile.full_name || '',
+                    email:
+                        profile.email || '',
+                    university:
+                        profile.university || '',
+                    course:
+                        profile.course || '',
+                    avatar_url:
+                        profile.avatar_url || null,
+                    created_at:
+                        profile.created_at || null,
+                    updated_at:
+                        profile.updated_at || null
+                }
             });
 
         } catch (error) {
@@ -392,54 +421,130 @@ app.get(
 );
 
 
-app.post(
+/* ---------------------------------------------------------
+   SAVE PROFILE
+   --------------------------------------------------------- */
+
+app.put(
     '/api/profile',
     requireLogin,
     async (req, res) => {
         try {
             const {
-                phone,
-                bio
+                full_name,
+                university,
+                course
             } = req.body;
+
+            if (
+                !full_name ||
+                !String(full_name).trim()
+            ) {
+                return res.status(400).json({
+                    message:
+                        'Full name is required.'
+                });
+            }
+
+            const cleanFullName =
+                String(full_name).trim();
+
+            const cleanUniversity =
+                university !== undefined &&
+                    university !== null &&
+                    String(university).trim()
+                    ? String(university).trim()
+                    : null;
+
+            const cleanCourse =
+                course !== undefined &&
+                    course !== null &&
+                    String(course).trim()
+                    ? String(course).trim()
+                    : null;
+
+            const userId =
+                req.session.userId;
+
+            await db.promise().query(
+                `UPDATE users
+                 SET full_name = ?
+                 WHERE id = ?`,
+                [
+                    cleanFullName,
+                    userId
+                ]
+            );
 
             const [existingProfiles] =
                 await db.promise().query(
                     `SELECT id
                      FROM profiles
-                     WHERE user_id = ?`,
-                    [req.session.userId]
+                     WHERE id = ?`,
+                    [userId]
                 );
 
             if (existingProfiles.length === 0) {
+
                 await db.promise().query(
                     `INSERT INTO profiles
-                     (user_id, phone, bio)
-                     VALUES (?, ?, ?)`,
+                     (
+                        id,
+                        full_name,
+                        university,
+                        course
+                     )
+                     VALUES (?, ?, ?, ?)`,
                     [
-                        req.session.userId,
-                        phone || null,
-                        bio || null
+                        userId,
+                        cleanFullName,
+                        cleanUniversity,
+                        cleanCourse
                     ]
                 );
 
             } else {
+
                 await db.promise().query(
                     `UPDATE profiles
-                     SET phone = ?,
-                         bio = ?
-                     WHERE user_id = ?`,
+                     SET
+                        full_name = ?,
+                        university = ?,
+                        course = ?
+                     WHERE id = ?`,
                     [
-                        phone || null,
-                        bio || null,
-                        req.session.userId
+                        cleanFullName,
+                        cleanUniversity,
+                        cleanCourse,
+                        userId
                     ]
                 );
             }
 
-            res.json({
-                message:
-                    'Profile saved successfully.'
-            });
+            req.session.userName =
+                cleanFullName;
+
+            req.session.save(
+                (sessionError) => {
+
+                    if (sessionError) {
+                        console.error(
+                            'Profile session save error:',
+                            sessionError
+                        );
+
+                        return res.status(500).json({
+                            message:
+                                'Profile was updated, but the session could not be refreshed.'
+                        });
+                    }
+
+                    res.json({
+                        message:
+                            'Profile saved successfully.'
+                    });
+                }
+            );
 
         } catch (error) {
             console.error(
@@ -455,6 +560,10 @@ app.post(
     }
 );
 
+
+/* ---------------------------------------------------------
+   UPLOAD PROFILE PICTURE
+   --------------------------------------------------------- */
 
 app.post(
     '/api/profile/picture',
@@ -474,38 +583,52 @@ app.post(
             const avatarUrl =
                 `/uploads/profile-pictures/${req.file.filename}`;
 
+            const userId =
+                req.session.userId;
+
             const [existingProfiles] =
                 await db.promise().query(
                     `SELECT
                         id,
                         avatar_url
                      FROM profiles
-                     WHERE user_id = ?`,
-                    [req.session.userId]
+                     WHERE id = ?`,
+                    [userId]
                 );
 
             if (existingProfiles.length === 0) {
+
                 await db.promise().query(
                     `INSERT INTO profiles
-                     (user_id, avatar_url)
-                     VALUES (?, ?)`,
+                     (
+                        id,
+                        full_name,
+                        avatar_url
+                     )
+                     SELECT
+                        id,
+                        full_name,
+                        ?
+                     FROM users
+                     WHERE id = ?`,
                     [
-                        req.session.userId,
-                        avatarUrl
+                        avatarUrl,
+                        userId
                     ]
                 );
 
             } else {
+
                 const oldAvatar =
                     existingProfiles[0].avatar_url;
 
                 await db.promise().query(
                     `UPDATE profiles
                      SET avatar_url = ?
-                     WHERE user_id = ?`,
+                     WHERE id = ?`,
                     [
                         avatarUrl,
-                        req.session.userId
+                        userId
                     ]
                 );
 
@@ -524,7 +647,11 @@ app.post(
                             oldFilename
                         );
 
-                    if (fs.existsSync(oldFilePath)) {
+                    if (
+                        fs.existsSync(
+                            oldFilePath
+                        )
+                    ) {
                         fs.unlinkSync(
                             oldFilePath
                         );
@@ -546,9 +673,109 @@ app.post(
                 error
             );
 
+            if (
+                req.file &&
+                req.file.path &&
+                fs.existsSync(req.file.path)
+            ) {
+                try {
+                    fs.unlinkSync(
+                        req.file.path
+                    );
+                } catch (fileError) {
+                    console.error(
+                        'Failed to remove uploaded file:',
+                        fileError
+                    );
+                }
+            }
+
             res.status(500).json({
                 message:
                     'Failed to upload profile picture.'
+            });
+        }
+    }
+);
+
+
+/* ---------------------------------------------------------
+   REMOVE PROFILE PICTURE
+   --------------------------------------------------------- */
+
+app.delete(
+    '/api/profile/avatar',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const userId =
+                req.session.userId;
+
+            const [profiles] =
+                await db.promise().query(
+                    `SELECT avatar_url
+                     FROM profiles
+                     WHERE id = ?`,
+                    [userId]
+                );
+
+            if (profiles.length === 0) {
+                return res.json({
+                    message:
+                        'Profile picture removed successfully.'
+                });
+            }
+
+            const oldAvatar =
+                profiles[0].avatar_url;
+
+            await db.promise().query(
+                `UPDATE profiles
+                 SET avatar_url = NULL
+                 WHERE id = ?`,
+                [userId]
+            );
+
+            if (
+                oldAvatar &&
+                oldAvatar.startsWith(
+                    '/uploads/profile-pictures/'
+                )
+            ) {
+                const oldFilename =
+                    path.basename(oldAvatar);
+
+                const oldFilePath =
+                    path.join(
+                        profilePicturesDirectory,
+                        oldFilename
+                    );
+
+                if (
+                    fs.existsSync(
+                        oldFilePath
+                    )
+                ) {
+                    fs.unlinkSync(
+                        oldFilePath
+                    );
+                }
+            }
+
+            res.json({
+                message:
+                    'Profile picture removed successfully.'
+            });
+
+        } catch (error) {
+            console.error(
+                'Remove profile picture error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to remove profile picture.'
             });
         }
     }
@@ -1576,6 +1803,7 @@ app.delete(
    REMINDERS
    ========================================================= */
 
+
 /* ---------------------------------------------------------
    GET REMINDERS
    --------------------------------------------------------- */
@@ -1734,10 +1962,6 @@ app.put(
             const reminderId =
                 req.params.id;
 
-            /*
-             * First confirm that this reminder belongs
-             * to the currently logged-in user.
-             */
             const [existingReminders] =
                 await db.promise().query(
                     `SELECT *
@@ -1762,13 +1986,6 @@ app.put(
 
             /*
              * STATUS-ONLY UPDATE
-             *
-             * The reminders.js file sends this format
-             * when the user changes Pending/Completed:
-             *
-             * {
-             *     status: "completed"
-             * }
              */
             if (
                 status !== undefined &&
@@ -1813,8 +2030,6 @@ app.put(
 
             /*
              * FULL REMINDER UPDATE
-             *
-             * Used by the Edit button.
              */
             if (
                 title === undefined ||
