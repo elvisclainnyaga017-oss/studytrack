@@ -1,3 +1,4 @@
+
 // ========================================
 // STUDYTRACK FOCUS PAGE
 // ========================================
@@ -54,7 +55,7 @@ const logoutButton =
 
 
 // ========================================
-// MOBILE HAMBURGER MENU
+// MOBILE / DESKTOP SIDEBAR ELEMENTS
 // ========================================
 
 const mobileMenuButton =
@@ -66,6 +67,120 @@ const studyTrackSidebar =
 const mobileMenuOverlay =
     document.getElementById("mobileMenuOverlay");
 
+
+// ========================================
+// SIDEBAR TOOLTIPS
+// ========================================
+
+function setupSidebarTooltips() {
+
+    const sidebarLinks =
+        document.querySelectorAll(
+            ".sidebar-nav-link"
+        );
+
+
+    sidebarLinks.forEach(
+        (link) => {
+
+            const label =
+                link.querySelector(
+                    ":scope > span:not(.nav-icon)"
+                );
+
+
+            if (label) {
+
+                const tooltipText =
+                    label.textContent.trim();
+
+
+                link.setAttribute(
+                    "data-tooltip",
+                    tooltipText
+                );
+
+
+                link.setAttribute(
+                    "title",
+                    tooltipText
+                );
+            }
+        }
+    );
+
+
+    if (logoutButton) {
+
+        logoutButton.setAttribute(
+            "data-tooltip",
+            "Logout"
+        );
+
+
+        logoutButton.setAttribute(
+            "title",
+            "Logout"
+        );
+    }
+}
+
+
+// ========================================
+// DESKTOP SIDEBAR COLLAPSE
+// ========================================
+
+function setDesktopSidebarCollapsed(
+    collapsed
+) {
+
+    if (window.innerWidth <= 720) {
+
+        return;
+    }
+
+
+    document.body.classList.toggle(
+        "desktop-sidebar-collapsed",
+        collapsed
+    );
+
+
+    localStorage.setItem(
+        "studytrack-sidebar-collapsed",
+        String(collapsed)
+    );
+
+
+    if (mobileMenuButton) {
+
+        mobileMenuButton.setAttribute(
+            "aria-expanded",
+            String(!collapsed)
+        );
+
+
+        mobileMenuButton.setAttribute(
+            "aria-label",
+            collapsed
+                ? "Expand navigation menu"
+                : "Collapse navigation menu"
+        );
+
+
+        mobileMenuButton.setAttribute(
+            "title",
+            collapsed
+                ? "Expand navigation menu"
+                : "Collapse navigation menu"
+        );
+    }
+}
+
+
+// ========================================
+// MOBILE SIDEBAR
+// ========================================
 
 function setMobileMenu(open) {
 
@@ -104,6 +219,14 @@ function setMobileMenu(open) {
     );
 
 
+    mobileMenuButton.setAttribute(
+        "title",
+        open
+            ? "Close navigation menu"
+            : "Open navigation menu"
+    );
+
+
     if (mobileMenuOverlay) {
 
         mobileMenuOverlay.classList.toggle(
@@ -126,23 +249,47 @@ function setMobileMenu(open) {
 }
 
 
+// ========================================
+// SIDEBAR TOGGLE
+// ========================================
+
 if (mobileMenuButton) {
 
     mobileMenuButton.addEventListener(
         "click",
         () => {
 
-            const isOpen =
-                mobileMenuButton.classList.contains(
-                    "menu-open"
+            if (window.innerWidth <= 720) {
+
+                const isOpen =
+                    mobileMenuButton.classList.contains(
+                        "menu-open"
+                    );
+
+
+                setMobileMenu(!isOpen);
+
+                return;
+            }
+
+
+            const isCollapsed =
+                document.body.classList.contains(
+                    "desktop-sidebar-collapsed"
                 );
 
 
-            setMobileMenu(!isOpen);
+            setDesktopSidebarCollapsed(
+                !isCollapsed
+            );
         }
     );
 }
 
+
+// ========================================
+// MOBILE OVERLAY
+// ========================================
 
 if (mobileMenuOverlay) {
 
@@ -155,6 +302,10 @@ if (mobileMenuOverlay) {
     );
 }
 
+
+// ========================================
+// CLOSE MOBILE MENU AFTER NAVIGATION
+// ========================================
 
 document
     .querySelectorAll(".sidebar-nav-link")
@@ -172,6 +323,10 @@ document
     );
 
 
+// ========================================
+// ESCAPE KEY
+// ========================================
+
 document.addEventListener(
     "keydown",
     (event) => {
@@ -184,16 +339,87 @@ document.addEventListener(
 );
 
 
+// ========================================
+// RESTORE SIDEBAR STATE ON RESIZE
+// ========================================
+
 window.addEventListener(
     "resize",
     () => {
 
-        if (window.innerWidth > 720) {
+        if (window.innerWidth <= 720) {
+
+            document.body.classList.remove(
+                "desktop-sidebar-collapsed"
+            );
+
 
             setMobileMenu(false);
+
+            return;
+        }
+
+
+        setMobileMenu(false);
+
+
+        const savedState =
+            localStorage.getItem(
+                "studytrack-sidebar-collapsed"
+            );
+
+
+        if (savedState === "true") {
+
+            document.body.classList.add(
+                "desktop-sidebar-collapsed"
+            );
+
+        } else {
+
+            document.body.classList.remove(
+                "desktop-sidebar-collapsed"
+            );
         }
     }
 );
+
+
+// ========================================
+// RESTORE DESKTOP SIDEBAR STATE
+// ========================================
+
+function restoreSidebarState() {
+
+    if (window.innerWidth <= 720) {
+
+        document.body.classList.remove(
+            "desktop-sidebar-collapsed"
+        );
+
+        return;
+    }
+
+
+    const savedState =
+        localStorage.getItem(
+            "studytrack-sidebar-collapsed"
+        );
+
+
+    if (savedState === "true") {
+
+        document.body.classList.add(
+            "desktop-sidebar-collapsed"
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            "desktop-sidebar-collapsed"
+        );
+    }
+}
 
 
 // ========================================
@@ -214,7 +440,9 @@ const nightModeButton =
 function applySavedTheme() {
 
     const savedTheme =
-        localStorage.getItem("studytrack-theme");
+        localStorage.getItem(
+            "studytrack-theme"
+        );
 
 
     if (savedTheme === "night") {
@@ -326,8 +554,16 @@ function enableNightMode() {
 
 function updateTimerDisplay() {
 
+    if (!timerDisplay) {
+
+        return;
+    }
+
+
     const minutes =
-        Math.floor(timerSeconds / 60);
+        Math.floor(
+            timerSeconds / 60
+        );
 
 
     const seconds =
@@ -430,7 +666,6 @@ async function startFocusSession() {
 
         updateTimerDisplay();
 
-
         startTimerInterval();
 
     } catch (error) {
@@ -453,7 +688,9 @@ async function startFocusSession() {
 
 function startTimerInterval() {
 
-    clearInterval(timerInterval);
+    clearInterval(
+        timerInterval
+    );
 
 
     timerInterval =
@@ -499,7 +736,9 @@ function runTimer() {
 
     if (timerSeconds <= 0) {
 
-        clearInterval(timerInterval);
+        clearInterval(
+            timerInterval
+        );
 
 
         timerInterval =
@@ -552,7 +791,9 @@ function pauseTimer() {
     }
 
 
-    clearInterval(timerInterval);
+    clearInterval(
+        timerInterval
+    );
 
 
     timerInterval =
@@ -642,96 +883,98 @@ async function completeFocusSession() {
         const response =
             await fetch(
                 `/api/focus/${sessionId}/complete`,
-                {
-                    method: "PUT",
+{
+    method: "PUT",
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+        headers: {
+        "Content-Type":
+        "application/json"
+    },
 
-                    credentials: "include"
-                }
+    credentials: "include"
+}
             );
 
 
-        const data =
-            await response.json();
+const data =
+    await response.json();
 
 
-        if (!response.ok) {
+if (!response.ok) {
 
-            focusMessage.textContent =
-                data.message ||
-                "Could not complete the session.";
+    focusMessage.textContent =
+        data.message ||
+        "Could not complete the session.";
 
-            return;
-        }
-
-
-        clearInterval(timerInterval);
+    return;
+}
 
 
-        timerInterval =
-            null;
+clearInterval(
+    timerInterval
+);
 
 
-        timerRunning =
-            false;
+timerInterval =
+    null;
 
 
-        timerEndTime =
-            null;
+timerRunning =
+    false;
 
 
-        focusSessionId =
-            null;
+timerEndTime =
+    null;
 
 
-        timerSeconds =
-            25 * 60;
+focusSessionId =
+    null;
 
 
-        updateTimerDisplay();
+timerSeconds =
+    25 * 60;
 
 
-        startButton.disabled =
-            false;
+updateTimerDisplay();
 
 
-        pauseButton.disabled =
-            true;
+startButton.disabled =
+    false;
 
 
-        pauseButton.textContent =
-            "Pause";
+pauseButton.disabled =
+    true;
 
 
-        completeButton.disabled =
-            true;
+pauseButton.textContent =
+    "Pause";
 
 
-        resetButton.disabled =
-            false;
+completeButton.disabled =
+    true;
 
 
-        focusMessage.textContent =
-            "Focus session completed successfully.";
+resetButton.disabled =
+    false;
 
 
-        loadFocusHistory();
+focusMessage.textContent =
+    "Focus session completed successfully.";
+
+
+loadFocusHistory();
 
     } catch (error) {
 
-        console.error(
-            "Complete Focus error:",
-            error
-        );
+    console.error(
+        "Complete Focus error:",
+        error
+    );
 
 
-        focusMessage.textContent =
-            "Could not connect to the server.";
-    }
+    focusMessage.textContent =
+        "Could not connect to the server.";
+}
 }
 
 
@@ -750,7 +993,9 @@ function resetTimer() {
     }
 
 
-    clearInterval(timerInterval);
+    clearInterval(
+        timerInterval
+    );
 
 
     timerInterval =
@@ -828,16 +1073,24 @@ async function loadUser() {
             await response.json();
 
 
-        if (data.user) {
+        // The /api/me endpoint returns the
+        // logged-in user object directly.
+        if (data) {
 
-            userName.textContent =
-                data.user.full_name ||
-                "User";
+            if (userName) {
+
+                userName.textContent =
+                    data.full_name ||
+                    "User";
+            }
 
 
-            userEmail.textContent =
-                data.user.email ||
-                "";
+            if (userEmail) {
+
+                userEmail.textContent =
+                    data.email ||
+                    "";
+            }
         }
 
     } catch (error) {
@@ -855,6 +1108,12 @@ async function loadUser() {
 // ========================================
 
 async function loadFocusHistory() {
+
+    if (!focusHistory) {
+
+        return;
+    }
+
 
     try {
 
@@ -901,7 +1160,7 @@ async function loadFocusHistory() {
         if (sessions.length === 0) {
 
             focusHistory.innerHTML =
-                "<p>No focus sessions yet.";
+                "<p>No focus sessions yet.</p>";
 
             return;
         }
@@ -940,9 +1199,44 @@ async function loadFocusHistory() {
                         : "";
 
 
+                const rawDuration =
+                    session.duration_minutes;
+
+
                 const duration =
-                    session.duration_minutes ||
-                    25;
+                    rawDuration === null ||
+                        rawDuration === undefined ||
+                        rawDuration === ""
+                        ? null
+                        : Number(
+                            rawDuration
+                        );
+
+
+                let durationDisplay =
+                    "Not available";
+
+
+                if (
+                    Number.isFinite(
+                        duration
+                    )
+                ) {
+
+                    if (duration === 0) {
+
+                        durationDisplay =
+                            "Less than 1 minute";
+
+                    } else {
+
+                        durationDisplay =
+                            `${duration} minute${duration === 1
+                                ? ""
+                                : "s"
+                            }`;
+                    }
+                }
 
 
                 const status =
@@ -958,8 +1252,7 @@ async function loadFocusHistory() {
 
                     <p>
                         Duration:
-                        ${duration}
-                        minutes
+                        ${durationDisplay}
                     </p>
 
                     <p>
@@ -1043,46 +1336,60 @@ async function logout() {
 // BUTTON EVENTS
 // ========================================
 
-startButton.addEventListener(
-    "click",
-    startFocusSession
-);
+if (startButton) {
+
+    startButton.addEventListener(
+        "click",
+        startFocusSession
+    );
+}
 
 
-pauseButton.addEventListener(
-    "click",
-    () => {
+if (pauseButton) {
 
-        if (timerRunning) {
+    pauseButton.addEventListener(
+        "click",
+        () => {
 
-            pauseTimer();
+            if (timerRunning) {
 
-        } else {
+                pauseTimer();
 
-            resumeTimer();
+            } else {
+
+                resumeTimer();
+            }
 
         }
-
-    }
-);
-
-
-completeButton.addEventListener(
-    "click",
-    completeFocusSession
-);
+    );
+}
 
 
-resetButton.addEventListener(
-    "click",
-    resetTimer
-);
+if (completeButton) {
+
+    completeButton.addEventListener(
+        "click",
+        completeFocusSession
+    );
+}
 
 
-logoutButton.addEventListener(
-    "click",
-    logout
-);
+if (resetButton) {
+
+    resetButton.addEventListener(
+        "click",
+        resetTimer
+    );
+}
+
+
+if (logoutButton) {
+
+    logoutButton.addEventListener(
+        "click",
+        logout
+    );
+}
 
 
 // ========================================
@@ -1111,6 +1418,10 @@ if (nightModeButton) {
 // INITIAL PAGE LOAD
 // ========================================
 
+setupSidebarTooltips();
+
+restoreSidebarState();
+
 applySavedTheme();
 
 updateTimerDisplay();
@@ -1118,3 +1429,4 @@ updateTimerDisplay();
 loadUser();
 
 loadFocusHistory();
+

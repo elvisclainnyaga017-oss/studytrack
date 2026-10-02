@@ -11,6 +11,9 @@
 const userName = document.getElementById("userName");
 const userEmail = document.getElementById("userEmail");
 
+const reminderForm =
+    document.getElementById("reminderForm");
+
 const reminderTitle =
     document.getElementById("reminderTitle");
 
@@ -43,7 +46,7 @@ const logoutButton =
 
 
 // ------------------------------------------------------------
-// MOBILE MENU ELEMENTS
+// NAVIGATION ELEMENTS
 // ------------------------------------------------------------
 
 const mobileMenuButton =
@@ -57,12 +60,151 @@ const mobileMenuOverlay =
 
 
 // ------------------------------------------------------------
-// MOBILE MENU MANAGEMENT
+// SIDEBAR COLLAPSED TOOLTIP LABELS
+// ------------------------------------------------------------
+
+function setupSidebarTooltips() {
+
+    const sidebarItems =
+        document.querySelectorAll(
+            ".sidebar-nav-link"
+        );
+
+    sidebarItems.forEach(
+        function (item) {
+
+            const labelElement =
+                item.querySelector(
+                    ":scope > span:not(.nav-icon)"
+                );
+
+            if (!labelElement) {
+                return;
+            }
+
+            const label =
+                labelElement.textContent.trim();
+
+            if (!label) {
+                return;
+            }
+
+            /*
+             * The CSS uses:
+             *
+             * content: attr(data-tooltip);
+             *
+             * Therefore every sidebar item needs
+             * a data-tooltip attribute.
+             */
+
+            item.setAttribute(
+                "data-tooltip",
+                label
+            );
+
+            /*
+             * The title attribute also provides a
+             * native browser tooltip as a fallback.
+             */
+
+            item.setAttribute(
+                "title",
+                label
+            );
+        }
+    );
+
+
+    /*
+     * Logout does not use the same navigation
+     * structure, so give it its tooltip separately.
+     */
+
+    if (logoutButton) {
+
+        logoutButton.setAttribute(
+            "data-tooltip",
+            "Logout"
+        );
+
+        logoutButton.setAttribute(
+            "title",
+            "Logout"
+        );
+    }
+}
+
+
+// Run tooltip setup after the page has loaded.
+setupSidebarTooltips();
+
+
+// ------------------------------------------------------------
+// DESKTOP SIDEBAR COLLAPSE
+// ------------------------------------------------------------
+
+function setDesktopSidebarCollapsed(
+    collapsed
+) {
+
+    if (!studyTrackSidebar) {
+        return;
+    }
+
+    if (window.innerWidth <= 720) {
+        return;
+    }
+
+    document.body.classList.toggle(
+        "desktop-sidebar-collapsed",
+        collapsed
+    );
+
+    if (mobileMenuButton) {
+
+        mobileMenuButton.classList.toggle(
+            "menu-open",
+            !collapsed
+        );
+
+        mobileMenuButton.setAttribute(
+            "aria-expanded",
+            String(!collapsed)
+        );
+
+        mobileMenuButton.setAttribute(
+            "aria-label",
+            collapsed
+                ? "Expand navigation menu"
+                : "Collapse navigation menu"
+        );
+
+        mobileMenuButton.setAttribute(
+            "title",
+            collapsed
+                ? "Expand navigation menu"
+                : "Collapse navigation menu"
+        );
+    }
+
+    localStorage.setItem(
+        "studytrack-sidebar-collapsed",
+        String(collapsed)
+    );
+}
+
+
+// ------------------------------------------------------------
+// MOBILE SIDEBAR MENU
 // ------------------------------------------------------------
 
 function setMobileMenu(open) {
 
-    if (!mobileMenuButton || !studyTrackSidebar) {
+    if (
+        !mobileMenuButton ||
+        !studyTrackSidebar
+    ) {
         return;
     }
 
@@ -88,6 +230,13 @@ function setMobileMenu(open) {
             : "Open navigation menu"
     );
 
+    mobileMenuButton.setAttribute(
+        "title",
+        open
+            ? "Close navigation menu"
+            : "Open navigation menu"
+    );
+
     if (mobileMenuOverlay) {
 
         mobileMenuOverlay.classList.toggle(
@@ -108,22 +257,58 @@ function setMobileMenu(open) {
 }
 
 
+// ------------------------------------------------------------
+// SIDEBAR / HAMBURGER BUTTON
+// ------------------------------------------------------------
+
 if (mobileMenuButton) {
 
     mobileMenuButton.addEventListener(
         "click",
         function () {
 
-            const isOpen =
-                mobileMenuButton.classList.contains(
-                    "menu-open"
+            /*
+             * MOBILE:
+             * The button opens/closes the mobile drawer.
+             */
+
+            if (window.innerWidth <= 720) {
+
+                const isOpen =
+                    mobileMenuButton.classList.contains(
+                        "menu-open"
+                    );
+
+                setMobileMenu(
+                    !isOpen
                 );
 
-            setMobileMenu(!isOpen);
+                return;
+            }
+
+
+            /*
+             * DESKTOP:
+             * The same button collapses/expands
+             * the sidebar.
+             */
+
+            const isCollapsed =
+                document.body.classList.contains(
+                    "desktop-sidebar-collapsed"
+                );
+
+            setDesktopSidebarCollapsed(
+                !isCollapsed
+            );
         }
     );
 }
 
+
+// ------------------------------------------------------------
+// MOBILE SIDEBAR OVERLAY
+// ------------------------------------------------------------
 
 if (mobileMenuOverlay) {
 
@@ -132,24 +317,46 @@ if (mobileMenuOverlay) {
         function () {
 
             setMobileMenu(false);
+
         }
     );
 }
 
 
-document
-    .querySelectorAll(".sidebar-nav-link")
-    .forEach(function (link) {
+// ------------------------------------------------------------
+// CLOSE MOBILE MENU WHEN NAVIGATING
+// ------------------------------------------------------------
 
-        link.addEventListener(
-            "click",
-            function () {
+if (studyTrackSidebar) {
 
-                setMobileMenu(false);
-            }
+    const sidebarLinks =
+        studyTrackSidebar.querySelectorAll(
+            ".sidebar-nav-link"
         );
-    });
 
+    sidebarLinks.forEach(
+        function (link) {
+
+            link.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        window.innerWidth <= 720
+                    ) {
+
+                        setMobileMenu(false);
+                    }
+                }
+            );
+        }
+    );
+}
+
+
+// ------------------------------------------------------------
+// ESCAPE KEY
+// ------------------------------------------------------------
 
 document.addEventListener(
     "keydown",
@@ -157,22 +364,92 @@ document.addEventListener(
 
         if (event.key === "Escape") {
 
-            setMobileMenu(false);
+            if (
+                window.innerWidth <= 720
+            ) {
+
+                setMobileMenu(false);
+            }
         }
     }
 );
 
+
+// ------------------------------------------------------------
+// WINDOW RESIZE
+// ------------------------------------------------------------
 
 window.addEventListener(
     "resize",
     function () {
 
-        if (window.innerWidth > 720) {
+        if (window.innerWidth <= 720) {
+
+            document.body.classList.remove(
+                "desktop-sidebar-collapsed"
+            );
 
             setMobileMenu(false);
+
+            return;
         }
+
+        /*
+         * When returning to desktop,
+         * restore the saved desktop sidebar state.
+         */
+
+        setMobileMenu(false);
+
+        const savedCollapsedState =
+            localStorage.getItem(
+                "studytrack-sidebar-collapsed"
+            );
+
+        setDesktopSidebarCollapsed(
+            savedCollapsedState === "true"
+        );
     }
 );
+
+
+// ------------------------------------------------------------
+// INITIAL SIDEBAR STATE
+// ------------------------------------------------------------
+
+function initializeSidebar() {
+
+    if (
+        !mobileMenuButton ||
+        !studyTrackSidebar
+    ) {
+        return;
+    }
+
+    if (window.innerWidth <= 720) {
+
+        document.body.classList.remove(
+            "desktop-sidebar-collapsed"
+        );
+
+        setMobileMenu(false);
+
+        return;
+    }
+
+    setMobileMenu(false);
+
+    const savedCollapsedState =
+        localStorage.getItem(
+            "studytrack-sidebar-collapsed"
+        );
+
+    setDesktopSidebarCollapsed(
+        savedCollapsedState === "true"
+    );
+}
+
+initializeSidebar();
 
 
 // ------------------------------------------------------------
@@ -317,7 +594,32 @@ async function loadUser() {
         const data =
             await response.json();
 
-        if (!data || !data.user) {
+        /*
+         * IMPORTANT:
+         *
+         * /api/me currently returns the user object
+         * directly from server.js.
+         *
+         * Example:
+         *
+         * {
+         *     id: 1,
+         *     full_name: "Test User",
+         *     email: "example@email.com"
+         * }
+         *
+         * It does NOT currently return:
+         *
+         * {
+         *     user: {
+         *         ...
+         *     }
+         * }
+         *
+         * Therefore we use data directly.
+         */
+
+        if (!data || !data.id) {
 
             console.error(
                 "No authenticated user returned from /api/me."
@@ -330,7 +632,7 @@ async function loadUser() {
         }
 
         const currentUser =
-            data.user;
+            data;
 
         if (userName) {
 
@@ -452,7 +754,7 @@ function formatDateForDisplay(
         return cleanDate;
     }
 
-    return `${parts[2]} /${parts[1]}/${parts[0]}`;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
 
 
@@ -507,6 +809,75 @@ function formatTimeForDisplay(
     }
 
     return `${hour}:${minute} ${period}`;
+}
+
+
+// ------------------------------------------------------------
+// DATE PARTS FOR THE DATE BLOCK ON EACH CARD
+// ------------------------------------------------------------
+
+const MONTH_NAMES_SHORT = [
+    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+];
+
+const WEEKDAY_NAMES = [
+    "Sunday", "Monday", "Tuesday", "Wednesday",
+    "Thursday", "Friday", "Saturday"
+];
+
+
+function getDateParts(dateValue) {
+
+    const cleanDate =
+        getDateValue(dateValue);
+
+    if (!cleanDate) {
+
+        return null;
+    }
+
+    const parts =
+        cleanDate.split("-");
+
+    if (parts.length !== 3) {
+
+        return null;
+    }
+
+    const year =
+        parseInt(parts[0], 10);
+
+    const month =
+        parseInt(parts[1], 10);
+
+    const day =
+        parseInt(parts[2], 10);
+
+    if (
+        Number.isNaN(year) ||
+        Number.isNaN(month) ||
+        Number.isNaN(day) ||
+        month < 1 ||
+        month > 12
+    ) {
+
+        return null;
+    }
+
+    const weekdayIndex =
+        new Date(
+            year,
+            month - 1,
+            day
+        ).getDay();
+
+    return {
+        year: String(year),
+        month: MONTH_NAMES_SHORT[month - 1],
+        day: String(day),
+        weekday: WEEKDAY_NAMES[weekdayIndex]
+    };
 }
 
 
@@ -833,11 +1204,23 @@ async function createReminder() {
 }
 
 
-if (createReminderButton) {
+/*
+ * The Create button is a "submit" button inside a <form>.
+ * We listen for the form's submit event and call
+ * preventDefault() so the browser does not reload the page.
+ * This also lets the Enter key submit the form.
+ */
 
-    createReminderButton.addEventListener(
-        "click",
-        createReminder
+if (reminderForm) {
+
+    reminderForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            createReminder();
+        }
     );
 }
 
@@ -1131,32 +1514,55 @@ async function updateReminderStatus(
 
 
 // ------------------------------------------------------------
-// REMINDER ICON
+// ICONS
 // ------------------------------------------------------------
 
-function getReminderIcon() {
+const ICON_PATHS = {
 
-    return `
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-        >
+    bell: [
+        '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>',
+        '<path d="M10 21h4"></path>'
+    ],
 
-            <path
-                d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
-            ></path>
+    clock: [
+        '<circle cx="12" cy="12" r="9"></circle>',
+        '<path d="M12 7v5l3 2"></path>'
+    ],
 
-            <path
-                d="M10 21h4"
-            ></path>
+    calendar: [
+        '<rect x="3" y="5" width="18" height="16" rx="2"></rect>',
+        '<path d="M16 3v4"></path>',
+        '<path d="M8 3v4"></path>',
+        '<path d="M3 10h18"></path>'
+    ],
 
-        </svg>
-    `;
+    edit: [
+        '<path d="M12 20h9"></path>',
+        '<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>'
+    ],
+
+    trash: [
+        '<path d="M3 6h18"></path>',
+        '<path d="M8 6V4h8v2"></path>',
+        '<path d="M19 6l-1 14H6L5 6"></path>',
+        '<path d="M10 11v6"></path>',
+        '<path d="M14 11v6"></path>'
+    ],
+
+    check: [
+        '<circle cx="12" cy="12" r="9"></circle>',
+        '<path d="M8 12.5l3 3 5-6"></path>'
+    ]
+};
+
+
+function getIcon(name) {
+
+    const paths =
+        ICON_PATHS[name] ||
+        [];
+
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths.join("")}</svg>`;
 }
 
 
@@ -1177,10 +1583,17 @@ function createReminderCard(
             "Untitled Reminder"
         );
 
+    const hasDescription =
+        Boolean(
+            reminder.description &&
+            String(reminder.description).trim()
+        );
+
     const description =
         escapeHtml(
-            reminder.description ||
-            "No description provided."
+            hasDescription
+                ? reminder.description
+                : "No description provided."
         );
 
     const dateValue =
@@ -1209,6 +1622,11 @@ function createReminderCard(
             timeValue
         );
 
+    const dateParts =
+        getDateParts(
+            dateValue
+        );
+
     const normalizedStatus =
         normalizeStatus(
             reminder.status
@@ -1221,161 +1639,160 @@ function createReminderCard(
             normalizedStatus
         );
 
+    let cardState =
+        "upcoming";
+
     let displayStatus =
         "Pending";
+
+    let badgeClass =
+        "pending";
 
     if (
         normalizedStatus ===
         "completed"
     ) {
 
+        cardState =
+            "completed";
+
         displayStatus =
             "Completed";
 
+        badgeClass =
+            "completed";
+
     } else if (overdue) {
+
+        cardState =
+            "overdue";
 
         displayStatus =
             "Overdue";
+
+        badgeClass =
+            "overdue";
     }
 
-    const statusClass =
-        normalizedStatus ===
-            "completed"
-            ? "completed"
-            : "pending";
+    const dateBlock =
+        dateParts
+            ? `
+                <span class="reminder-date-month">${escapeHtml(dateParts.month)}</span>
+                <span class="reminder-date-day">${escapeHtml(dateParts.day)}</span>
+                <span class="reminder-date-year">${escapeHtml(dateParts.year)}</span>
+            `
+            : `
+                <span class="reminder-date-none">No date</span>
+            `;
+
+    const weekdayItem =
+        dateParts
+            ? `
+                <span class="reminder-meta-item">
+                    ${getIcon("calendar")}
+                    <span>${escapeHtml(dateParts.weekday)}</span>
+                </span>
+            `
+            : "";
 
     return `
         <article
-            class="reminder-card"
+            class="reminder-card reminder-card--${cardState}"
             data-reminder-id="${escapeHtml(id)}"
         >
 
-            <div class="reminder-icon">
-
-                ${getReminderIcon()}
-
+            <div
+                class="reminder-date-block"
+                title="${escapeHtml(displayDate)}"
+            >
+                ${dateBlock}
             </div>
 
-            <div class="reminder-content">
+            <div class="reminder-body">
 
-                <h3>
-                    ${title}
-                </h3>
+                <div class="reminder-card-top">
 
-                <p>
-                    ${description}
-                </p>
+                    <h4 class="reminder-card-title">
+                        ${title}
+                    </h4>
 
-                <div class="reminder-date">
-
-                    Date:
-                    ${escapeHtml(displayDate)}
-
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-
-                    Time:
-                    ${escapeHtml(displayTime)}
-
-                </div>
-
-                <div
-                    style="
-                        display:flex;
-                        align-items:center;
-                        flex-wrap:wrap;
-                        gap:10px;
-                        margin-top:14px;
-                    "
-                >
-
-                    <span
-                        class="reminder-status ${statusClass}"
-                    >
+                    <span class="status-badge ${badgeClass}">
                         ${escapeHtml(displayStatus)}
                     </span>
 
-                    <label
-                        style="
-                            color:var(--text-secondary);
-                            font-size:10px;
-                            font-weight:800;
-                        "
-                    >
-                        Status
-                    </label>
+                </div>
 
-                    <select
-                        class="reminder-status-select"
-                        data-action="status"
-                        data-id="${escapeHtml(id)}"
-                        aria-label="Change reminder status"
-                        style="
-                            min-width:140px;
-                            height:34px;
-                            padding:0 10px;
-                            border:1px solid var(--border);
-                            border-radius:8px;
-                            outline:none;
-                            background:var(--surface);
-                            color:var(--text-primary);
-                            font-size:10px;
-                            font-weight:600;
-                        "
-                    >
+                <p class="reminder-card-description${hasDescription ? "" : " is-empty"}">
+                    ${description}
+                </p>
 
-                        <option
-                            value="pending"
-                            ${normalizedStatus ===
-            "pending"
-            ? "selected"
-            : ""
-        }
-                        >
-                            Pending
-                        </option>
+                <div class="reminder-card-meta">
 
-                        <option
-                            value="completed"
-                            ${normalizedStatus ===
-            "completed"
-            ? "selected"
-            : ""
-        }
-                        >
-                            Completed
-                        </option>
+                    <span class="reminder-meta-item">
+                        ${getIcon("clock")}
+                        <span>${escapeHtml(displayTime)}</span>
+                    </span>
 
-                    </select>
+                    ${weekdayItem}
 
                 </div>
 
-                <div
-                    style="
-                        display:flex;
-                        align-items:center;
-                        flex-wrap:wrap;
-                        gap:10px;
-                        margin-top:14px;
-                    "
-                >
+                <div class="reminder-card-footer">
 
-                    <button
-                        type="button"
-                        class="goal-action-button"
-                        data-action="edit"
-                        data-id="${escapeHtml(id)}"
-                    >
-                        Edit
-                    </button>
+                    <div class="reminder-status-control">
 
-                    <button
-                        type="button"
-                        class="goal-action-button danger"
-                        data-action="delete"
-                        data-id="${escapeHtml(id)}"
-                    >
-                        Delete
-                    </button>
+                        <label for="reminderStatus-${escapeHtml(id)}">
+                            Status
+                        </label>
+
+                        <select
+                            id="reminderStatus-${escapeHtml(id)}"
+                            class="reminder-status-select"
+                            data-action="status"
+                            data-id="${escapeHtml(id)}"
+                        >
+
+                            <option
+                                value="pending"
+                                ${normalizedStatus === "pending" ? "selected" : ""}
+                            >
+                                Pending
+                            </option>
+
+                            <option
+                                value="completed"
+                                ${normalizedStatus === "completed" ? "selected" : ""}
+                            >
+                                Completed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="reminder-card-actions">
+
+                        <button
+                            type="button"
+                            class="reminder-action-button edit"
+                            data-action="edit"
+                            data-id="${escapeHtml(id)}"
+                        >
+                            ${getIcon("edit")}
+                            <span>Edit</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="reminder-action-button danger"
+                            data-action="delete"
+                            data-id="${escapeHtml(id)}"
+                        >
+                            ${getIcon("trash")}
+                            <span>Delete</span>
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -1388,60 +1805,121 @@ function createReminderCard(
 
 // ------------------------------------------------------------
 // CREATE REMINDER GROUP
+// (always shown, with its own empty state when it has no items)
 // ------------------------------------------------------------
 
 function createReminderGroup(
+    groupKey,
     eyebrow,
     title,
     description,
-    reminders
+    reminders,
+    emptyIcon,
+    emptyTitle,
+    emptyText
 ) {
 
-    if (!reminders.length) {
-        return "";
-    }
+    const count =
+        reminders.length;
+
+    const content =
+        count > 0
+            ? `
+                <div class="reminder-list">
+                    ${reminders.map(createReminderCard).join("")}
+                </div>
+            `
+            : `
+                <div class="reminder-empty">
+
+                    <span class="reminder-empty-icon">
+                        ${getIcon(emptyIcon)}
+                    </span>
+
+                    <div>
+
+                        <p class="reminder-empty-title">
+                            ${escapeHtml(emptyTitle)}
+                        </p>
+
+                        <p class="reminder-empty-text">
+                            ${escapeHtml(emptyText)}
+                        </p>
+
+                    </div>
+
+                </div>
+            `;
 
     return `
         <section
-            class="reminder-group"
-            style="margin-bottom:30px;"
+            class="reminder-group reminder-group--${groupKey}"
+            aria-labelledby="reminderGroup-${groupKey}"
         >
 
-            <div
-                class="panel-heading"
-                style="
-                    padding:0 24px;
-                    margin-bottom:16px;
-                "
-            >
+            <header class="reminder-group-header">
 
-                <div>
+                <div class="reminder-group-heading">
 
                     <p class="section-eyebrow">
                         ${escapeHtml(eyebrow)}
                     </p>
 
-                    <h3>
+                    <h3
+                        id="reminderGroup-${groupKey}"
+                        class="reminder-group-title"
+                    >
                         ${escapeHtml(title)}
                     </h3>
 
-                    <p>
+                    <p class="reminder-group-description">
                         ${escapeHtml(description)}
                     </p>
 
                 </div>
 
-            </div>
+                <span
+                    class="reminder-count"
+                    aria-label="${count} reminders"
+                >
+                    ${count}
+                </span>
 
-            <div class="reminder-list">
+            </header>
 
-                ${reminders
-            .map(createReminderCard)
-            .join("")}
-
-            </div>
+            ${content}
 
         </section>
+    `;
+}
+
+
+// ------------------------------------------------------------
+// PAGE-LEVEL EMPTY / LOADING / ERROR STATES
+// ------------------------------------------------------------
+
+function createPageState(
+    iconName,
+    title,
+    text
+) {
+
+    return `
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                ${getIcon(iconName)}
+            </div>
+
+            <h3 class="empty-state-title">
+                ${escapeHtml(title)}
+            </h3>
+
+            <p class="empty-state-text">
+                ${escapeHtml(text)}
+            </p>
+
+        </div>
     `;
 }
 
@@ -1456,15 +1934,12 @@ async function loadReminders() {
         return;
     }
 
-    remindersContainer.innerHTML = `
-        <div class="empty-state">
-
-            <p>
-                Loading reminders...
-            </p>
-
-        </div>
-    `;
+    remindersContainer.innerHTML =
+        createPageState(
+            "bell",
+            "Loading reminders...",
+            "Please wait while your reminders are being loaded."
+        );
 
     try {
 
@@ -1507,15 +1982,12 @@ async function loadReminders() {
 
         if (reminders.length === 0) {
 
-            remindersContainer.innerHTML = `
-                <div class="empty-state">
-
-                    <p>
-                        You do not have any reminders yet.
-                    </p>
-
-                </div>
-            `;
+            remindersContainer.innerHTML =
+                createPageState(
+                    "bell",
+                    "No reminders yet",
+                    "Use the form above to create your first reminder."
+                );
 
             return;
         }
@@ -1599,24 +2071,36 @@ async function loadReminders() {
         let html = "";
 
         html += createReminderGroup(
+            "overdue",
             "NEEDS ATTENTION",
             "Overdue",
             "These reminders have passed their scheduled date or time.",
-            overdueReminders
+            overdueReminders,
+            "check",
+            "Nothing is overdue",
+            "You are all caught up. Great work!"
         );
 
         html += createReminderGroup(
+            "upcoming",
             "COMING UP",
             "Upcoming",
             "Your next scheduled reminders, starting with the earliest.",
-            upcomingReminders
+            upcomingReminders,
+            "calendar",
+            "No upcoming reminders",
+            "Create a reminder above to plan something ahead."
         );
 
         html += createReminderGroup(
+            "completed",
             "FINISHED",
             "Completed",
             "Reminders that you have already completed.",
-            completedReminders
+            completedReminders,
+            "check",
+            "Nothing completed yet",
+            "Reminders you mark as completed will appear here."
         );
 
         remindersContainer.innerHTML =
@@ -1629,18 +2113,13 @@ async function loadReminders() {
             error
         );
 
-        remindersContainer.innerHTML = `
-            <div class="empty-state">
-
-                <p>
-                    ${escapeHtml(
-            error.message ||
-            "Failed to load reminders."
-        )}
-                </p>
-
-            </div>
-        `;
+        remindersContainer.innerHTML =
+            createPageState(
+                "bell",
+                "Could not load reminders",
+                error.message ||
+                "Failed to load reminders."
+            );
     }
 }
 
@@ -1759,8 +2238,25 @@ if (logoutButton) {
 // STARTUP
 // ------------------------------------------------------------
 
-loadSavedTheme();
+async function initializeRemindersPage() {
 
-loadUser();
+    loadSavedTheme();
 
-loadReminders();
+    /*
+     * First confirm that the user is authenticated.
+     * Only after authentication succeeds do we
+     * request the user's reminders.
+     */
+
+    const currentUser =
+        await loadUser();
+
+    if (!currentUser) {
+        return;
+    }
+
+    await loadReminders();
+}
+
+
+initializeRemindersPage();

@@ -238,30 +238,36 @@ img {
     font-size: 11px;
 }
 
+
+/* =========================================================
+   DAY / NIGHT SELECTOR - VISUAL CORRECTION
+   ========================================================= */
+
 .theme-switcher {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 9px;
-    background: rgba(255, 255, 255, 0.08);
+    gap: 3px;
+    padding: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 11px;
+    background: rgba(0, 0, 0, 0.16);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 3px 10px rgba(0, 0, 0, 0.10);
 }
 
 .theme-button {
-    min-width: 34px;
+    min-width: 38px;
     height: 32px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0 8px;
-    border: 0;
-    border-radius: 7px;
+    padding: 0 9px;
+    border: 1px solid transparent;
+    border-radius: 8px;
     background: transparent;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.68);
     font-size: 11px;
-    font-weight: 700;
-    transition: background 0.18s ease, color 0.18s ease;
+    font-weight: 750;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
     .theme-button:hover {
@@ -271,7 +277,9 @@ img {
 
     .theme-button.active {
         background: #ffffff;
+        border-color: rgba(255, 255, 255, 0.70);
         color: var(--chrome-green);
+        box-shadow: 0 2px 7px rgba(0, 0, 0, 0.16);
     }
 
 
@@ -395,7 +403,8 @@ img {
         display: block;
     }
 
-    .dashboard-sidebar.collapsed .sidebar-link:hover .sidebar-tooltip {
+    .dashboard-sidebar.collapsed .sidebar-link:hover .sidebar-tooltip,
+    .dashboard-sidebar.collapsed .sidebar-link:focus-visible .sidebar-tooltip {
         opacity: 1;
         visibility: visible;
         transform: translateY(-50%) translateX(0);
@@ -722,9 +731,6 @@ img {
     border-top: 1px solid var(--border-soft);
 }
 
-
-    /* ---------- Shared Habits button appearance ---------- */
-
     #habitsContainer .form-actions .button,
     #habitForm .form-actions .button {
         min-width: 118px;
@@ -763,8 +769,11 @@ img {
             outline-offset: 2px;
         }
 
-
-    /* ---------- Primary Habits buttons ---------- */
+        #habitsContainer .form-actions .button svg,
+        #habitForm .form-actions .button svg {
+            width: 14px;
+            height: 14px;
+        }
 
     #habitsContainer .form-actions .button-primary,
     #habitForm .form-actions .button-primary {
@@ -780,9 +789,6 @@ img {
             color: var(--chrome-text);
             box-shadow: 0 5px 14px rgba(0, 66, 37, 0.20);
         }
-
-
-    /* ---------- Danger Habits buttons ---------- */
 
     #habitsContainer .form-actions .button-danger {
         border-color: #e4c4c4;
@@ -1229,6 +1235,487 @@ img {
     font-size: 11px;
 }
 
+.reminder-form-panel,
+.reminders-panel {
+    width: 100%;
+}
+
+.reminder-form-panel {
+    margin-top: 22px;
+}
+
+.reminders-panel {
+    margin-top: 22px;
+}
+
+.reminder-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+    .reminder-form .form-group {
+        min-width: 0;
+    }
+
+        .reminder-form .form-group:first-child,
+        .reminder-form .form-group:nth-child(4) {
+            grid-column: 1 / -1;
+        }
+
+.reminder-form-footer {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 2px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-soft);
+}
+
+    .reminder-form-footer .primary-button {
+        flex: 0 0 auto;
+    }
+
+#reminderMessage {
+    min-height: 20px;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.reminders-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.reminder-group {
+    min-width: 0;
+}
+
+.reminder-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.reminder-group-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.reminder-group-title {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.reminder-group-description {
+    margin: 3px 0 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.reminder-count {
+    flex: 0 0 auto;
+    min-width: 28px;
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface-soft);
+    color: var(--text-secondary);
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.reminder-group--overdue .reminder-group-title {
+    color: var(--danger);
+}
+
+.reminder-group--overdue .reminder-count {
+    border-color: #e4c4c4;
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+.reminder-group--upcoming .reminder-group-title {
+    color: var(--accent-hover);
+}
+
+.reminder-group--upcoming .reminder-count {
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+}
+
+.reminder-group--completed .reminder-group-title {
+    color: var(--text-secondary);
+}
+
+.reminder-group--completed .reminder-count {
+    border-color: var(--border);
+    background: var(--surface-soft);
+    color: var(--text-secondary);
+}
+
+.reminder-group .reminder-card + .reminder-card {
+    margin-top: 12px;
+}
+
+.reminder-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 18px;
+    min-width: 0;
+    padding: 18px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease, background 0.18s ease;
+}
+
+    .reminder-card:hover {
+        border-color: var(--accent-border);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-1px);
+    }
+
+    .reminder-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 3px;
+        background: var(--accent);
+    }
+
+.reminder-card--overdue::before {
+    background: var(--danger);
+}
+
+.reminder-card--upcoming::before {
+    background: var(--accent);
+}
+
+.reminder-card--completed::before {
+    background: var(--text-muted);
+}
+
+.reminder-date-block {
+    min-width: 0;
+    min-height: 78px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+    border: 1px solid var(--accent-border);
+    border-radius: 11px;
+    background: var(--accent-soft);
+    text-align: center;
+}
+
+.reminder-card--overdue .reminder-date-block {
+    border-color: #e4c4c4;
+    background: var(--danger-soft);
+}
+
+.reminder-card--completed .reminder-date-block {
+    border-color: var(--border);
+    background: var(--surface-soft);
+}
+
+.reminder-date-month {
+    color: var(--accent-hover);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.reminder-card--overdue .reminder-date-month {
+    color: var(--danger);
+}
+
+.reminder-card--completed .reminder-date-month {
+    color: var(--text-muted);
+}
+
+.reminder-date-day {
+    margin-top: 2px;
+    color: var(--text-primary);
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+
+.reminder-date-weekday {
+    margin-top: 5px;
+    color: var(--text-secondary);
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.reminder-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.reminder-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    min-width: 0;
+}
+
+.reminder-card-title {
+    min-width: 0;
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.reminder-card--completed .reminder-card-title {
+    color: var(--text-secondary);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+}
+
+.reminder-card-description {
+    margin: 8px 0 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+    .reminder-card-description.is-empty {
+        color: var(--text-subtle);
+        font-style: italic;
+    }
+
+.reminder-card-top .status-badge {
+    flex: 0 0 auto;
+}
+
+.reminder-card--upcoming .status-badge,
+.reminder-card--completed .status-badge {
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+}
+
+.reminder-card-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px 18px;
+    margin-top: 14px;
+    padding-top: 13px;
+    border-top: 1px solid var(--border-soft);
+}
+
+.reminder-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+    .reminder-meta-item svg {
+        flex: 0 0 auto;
+        width: 14px;
+        height: 14px;
+        color: var(--accent);
+    }
+
+.reminder-card--overdue .reminder-meta-item svg {
+    color: var(--danger);
+}
+
+.reminder-meta-item strong {
+    color: var(--text-primary);
+    font-weight: 750;
+}
+
+.reminder-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 13px;
+    border-top: 1px solid var(--border-soft);
+}
+
+.reminder-status-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .reminder-status-control label {
+        color: var(--text-muted);
+        font-size: 10px;
+        font-weight: 750;
+        white-space: nowrap;
+    }
+
+.reminder-status-select {
+    min-width: 118px;
+    min-height: 34px;
+    padding: 7px 28px 7px 9px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+    .reminder-status-select:hover {
+        border-color: #cbd5d9;
+    }
+
+    .reminder-status-select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+
+.reminder-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-left: auto;
+}
+
+.reminder-action-button {
+    min-width: 34px;
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
+}
+
+    .reminder-action-button svg {
+        width: 14px;
+        height: 14px;
+        max-width: 14px;
+        max-height: 14px;
+    }
+
+    .reminder-action-button:hover {
+        transform: translateY(-1px);
+        border-color: var(--accent-border);
+        background: var(--accent-soft);
+        color: var(--accent-hover);
+        box-shadow: 0 4px 12px rgba(23, 35, 43, 0.07);
+    }
+
+    .reminder-action-button:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+    .reminder-action-button.danger {
+        border-color: #e4c4c4;
+        background: var(--danger-soft);
+        color: var(--danger);
+    }
+
+        .reminder-action-button.danger:hover {
+            border-color: #d39a9a;
+            background: #f6e2e2;
+            color: #8f3d3d;
+            box-shadow: 0 4px 12px rgba(163, 77, 77, 0.10);
+        }
+
+.reminder-empty {
+    padding: 26px 20px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-soft);
+    text-align: center;
+}
+
+.reminder-empty-icon {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    border-radius: 11px;
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+    .reminder-empty-icon svg {
+        width: 19px;
+        height: 19px;
+    }
+
+.reminder-empty-title {
+    margin: 0 0 4px;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.reminder-empty-text {
+    max-width: 460px;
+    margin: 0 auto;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.reminders-container > .empty-state {
+    margin-top: 2px;
+}
+
 
 /* =========================================================
    22. UTILITY CLASSES
@@ -1476,6 +1963,96 @@ body.night-mode {
             }
 
 
+    /* ---------- Reminder night mode ---------- */
+
+    body.night-mode .reminder-card {
+        background: var(--surface);
+        border-color: var(--border);
+    }
+
+        body.night-mode .reminder-card:hover {
+            border-color: var(--accent-border);
+            background: var(--surface);
+        }
+
+    body.night-mode .reminder-date-block {
+        background: var(--accent-soft);
+        border-color: var(--accent-border);
+    }
+
+    body.night-mode .reminder-card--overdue .reminder-date-block {
+        background: var(--danger-soft);
+        border-color: #6e4444;
+    }
+
+    body.night-mode .reminder-card--completed .reminder-date-block {
+        background: var(--surface-soft);
+        border-color: var(--border);
+    }
+
+    body.night-mode .reminder-card-meta,
+    body.night-mode .reminder-card-footer,
+    body.night-mode .reminder-form-footer {
+        border-color: var(--border-soft);
+    }
+
+    body.night-mode .reminder-status-select {
+        background: var(--surface);
+        color: var(--text-primary);
+        border-color: var(--border);
+    }
+
+        body.night-mode .reminder-status-select:hover {
+            border-color: #46585e;
+        }
+
+    body.night-mode .reminder-action-button {
+        background: var(--surface);
+        border-color: var(--border);
+        color: var(--text-secondary);
+    }
+
+        body.night-mode .reminder-action-button:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent-border);
+            color: var(--accent-hover);
+        }
+
+        body.night-mode .reminder-action-button.danger {
+            background: var(--danger-soft);
+            border-color: #6e4444;
+            color: var(--danger);
+        }
+
+            body.night-mode .reminder-action-button.danger:hover {
+                background: #452b2d;
+                border-color: #8c5555;
+                color: #f0aaaa;
+            }
+
+    body.night-mode .reminder-empty {
+        background: var(--surface-soft);
+        border-color: var(--border);
+    }
+
+    body.night-mode .reminder-count {
+        background: var(--surface-soft);
+        border-color: var(--border);
+    }
+
+    body.night-mode .reminder-group--overdue .reminder-count {
+        background: var(--danger-soft);
+        border-color: #6e4444;
+        color: var(--danger);
+    }
+
+    body.night-mode .reminder-group--upcoming .reminder-count {
+        background: var(--accent-soft);
+        border-color: var(--accent-border);
+        color: var(--accent);
+    }
+
+
 /* =========================================================
    25. RESPONSIVE - TABLET
    ========================================================= */
@@ -1638,6 +2215,42 @@ body.night-mode {
         .goal-actions button {
             padding: 9px 12px;
         }
+
+    .reminder-form {
+        grid-template-columns: 1fr;
+    }
+
+        .reminder-form .form-group:first-child,
+        .reminder-form .form-group:nth-child(4) {
+            grid-column: auto;
+        }
+
+    .reminder-form-footer {
+        grid-column: auto;
+    }
+
+    .reminder-card {
+        grid-template-columns: 64px minmax(0, 1fr);
+        gap: 14px;
+        padding: 16px;
+    }
+
+    .reminder-date-block {
+        min-height: 70px;
+    }
+
+    .reminder-date-day {
+        font-size: 23px;
+    }
+
+    .reminder-card-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .reminder-card-actions {
+        margin-left: 0;
+    }
 }
 
 
@@ -1666,7 +2279,7 @@ body.night-mode {
     }
 
     .theme-switcher {
-        padding: 2px;
+        padding: 3px;
     }
 
     .theme-button {
@@ -1742,18 +2355,102 @@ body.night-mode {
         align-items: flex-start;
         flex-direction: column;
     }
+
+    .reminder-form-panel,
+    .reminders-panel {
+        padding: 16px;
+    }
+
+    .reminder-form {
+        gap: 15px;
+    }
+
+    .reminder-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 9px;
+    }
+
+        .reminder-form-footer .primary-button {
+            width: 100%;
+        }
+
+    .reminder-group-header {
+        align-items: flex-start;
+    }
+
+    .reminder-card {
+        grid-template-columns: 1fr;
+        gap: 13px;
+        padding: 15px;
+    }
+
+    .reminder-date-block {
+        width: 100%;
+        min-height: 62px;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 8px;
+        padding: 10px 13px;
+        text-align: left;
+    }
+
+    .reminder-date-month {
+        font-size: 10px;
+    }
+
+    .reminder-date-day {
+        font-size: 22px;
+    }
+
+    .reminder-date-weekday {
+        margin-top: 0;
+        margin-left: 2px;
+        font-size: 9px;
+    }
+
+    .reminder-card-top {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .reminder-card-title {
+        font-size: 14px;
+    }
+
+    .reminder-card-meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .reminder-status-control {
+        width: 100%;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .reminder-status-select {
+        width: 100%;
+    }
+
+    .reminder-card-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .reminder-action-button {
+        width: 100%;
+    }
 }
 
 
 /* =========================================================
    29. DASHBOARD.HTML SHELL
-   ---------------------------------------------------------
-   dashboard.html and dashboard.js use these class names for
-   the header, sidebar and layout.
    ========================================================= */
-
-
-/* ---------- 29.1 Header branding ---------- */
 
 .brand-icon {
     flex: 0 0 auto;
@@ -1796,9 +2493,6 @@ body.night-mode {
         white-space: nowrap;
     }
 
-
-/* ---------- 29.2 Hamburger button ---------- */
-
 .mobile-menu-button {
     flex: 0 0 auto;
     width: 38px;
@@ -1833,9 +2527,6 @@ body.night-mode {
     border-radius: 2px;
     background: currentColor;
 }
-
-
-/* ---------- 29.3 Header user and theme switch ---------- */
 
 .header-user span {
     display: block;
@@ -1872,28 +2563,29 @@ body.night-mode {
 .theme-switch {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 9px;
-    background: rgba(255, 255, 255, 0.08);
+    gap: 3px;
+    padding: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 11px;
+    background: rgba(0, 0, 0, 0.16);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 3px 10px rgba(0, 0, 0, 0.10);
 }
 
 .theme-switch-button {
-    min-width: 34px;
+    min-width: 38px;
     height: 32px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
     padding: 0 10px;
-    border: 0;
-    border-radius: 7px;
+    border: 1px solid transparent;
+    border-radius: 8px;
     background: transparent;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.68);
     font-size: 11px;
-    font-weight: 700;
-    transition: background 0.18s ease, color 0.18s ease;
+    font-weight: 750;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
     .theme-switch-button:hover {
@@ -1903,7 +2595,9 @@ body.night-mode {
 
     .theme-switch-button.active {
         background: #ffffff;
+        border-color: rgba(255, 255, 255, 0.70);
         color: var(--chrome-green);
+        box-shadow: 0 2px 7px rgba(0, 0, 0, 0.16);
     }
 
 .theme-switch-icon {
@@ -1912,7 +2606,9 @@ body.night-mode {
 }
 
 
-/* ---------- 29.4 Sidebar ---------- */
+/* =========================================================
+   29.4 SIDEBAR
+   ========================================================= */
 
 .side-navigation {
     position: fixed;
@@ -1996,30 +2692,58 @@ body.night-mode {
     }
 
 
-/* ---------- 29.5 Collapsed sidebar ---------- */
+/* =========================================================
+   29.5 SIDEBAR COLLAPSE COMPATIBILITY
+   ========================================================= */
 
-body.desktop-sidebar-collapsed .side-navigation {
-    width: var(--sidebar-collapsed-width);
-    overflow: visible;
-}
+/*
+   StudyTrack currently contains two sidebar systems.
 
-body.desktop-sidebar-collapsed .dashboard-main,
-body.desktop-sidebar-collapsed .dashboard-footer {
-    margin-left: var(--sidebar-collapsed-width);
-}
+   Newer pages:
+       .side-navigation
 
-body.desktop-sidebar-collapsed .sidebar-nav-link,
-body.desktop-sidebar-collapsed .logout-button {
-    justify-content: center;
-    gap: 0;
-    padding-left: 0;
-    padding-right: 0;
-}
+   Older pages:
+       .dashboard-sidebar
 
-    body.desktop-sidebar-collapsed .sidebar-nav-link > span:not(.nav-icon),
-    body.desktop-sidebar-collapsed .logout-button > span:not(.nav-icon) {
-        display: none;
+   The existing desktop collapse state is:
+       body.desktop-sidebar-collapsed
+
+   Both systems are connected to that same state here.
+
+   These rules are intentionally desktop-only.
+   Mobile navigation remains controlled by the mobile
+   drawer rules below.
+*/
+
+@media (min-width: 721px) {
+
+    /* ---------- New sidebar ---------- */
+
+    body.desktop-sidebar-collapsed .side-navigation {
+        width: var(--sidebar-collapsed-width);
+        overflow-x: visible;
     }
+
+    body.desktop-sidebar-collapsed .sidebar-nav-link,
+    body.desktop-sidebar-collapsed .logout-button {
+        justify-content: center;
+        gap: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+        body.desktop-sidebar-collapsed .sidebar-nav-link > span:not(.nav-icon),
+        body.desktop-sidebar-collapsed .logout-button > span:not(.nav-icon) {
+            display: none;
+        }
+
+    body.desktop-sidebar-collapsed .nav-icon {
+        flex: 0 0 20px;
+        width: 20px;
+        height: 20px;
+    }
+
+    /* New-shell tooltips */
 
     body.desktop-sidebar-collapsed .sidebar-nav-link::after,
     body.desktop-sidebar-collapsed .logout-button::after {
@@ -2042,7 +2766,6 @@ body.desktop-sidebar-collapsed .logout-button {
         pointer-events: none;
         transform: translateY(-50%) translateX(-4px);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
-        transition: none;
     }
 
     body.desktop-sidebar-collapsed .sidebar-nav-link:hover::after,
@@ -2055,7 +2778,48 @@ body.desktop-sidebar-collapsed .logout-button {
     }
 
 
-/* ---------- 29.6 Page container, overlay, footer ---------- */
+    /* ---------- Legacy sidebar compatibility ---------- */
+
+    body.desktop-sidebar-collapsed .dashboard-sidebar {
+        width: var(--sidebar-collapsed-width);
+        overflow-x: visible;
+    }
+
+        body.desktop-sidebar-collapsed .dashboard-sidebar .sidebar-link {
+            justify-content: center;
+            gap: 0;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+            body.desktop-sidebar-collapsed .dashboard-sidebar .sidebar-link span {
+                display: none;
+            }
+
+        body.desktop-sidebar-collapsed .dashboard-sidebar .sidebar-tooltip {
+            display: block;
+        }
+
+        body.desktop-sidebar-collapsed .dashboard-sidebar .sidebar-link:hover .sidebar-tooltip,
+        body.desktop-sidebar-collapsed .dashboard-sidebar .sidebar-link:focus-visible .sidebar-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(0);
+        }
+
+
+    /* ---------- Main content ---------- */
+
+    body.desktop-sidebar-collapsed .dashboard-main,
+    body.desktop-sidebar-collapsed .dashboard-footer {
+        margin-left: var(--sidebar-collapsed-width);
+    }
+}
+
+
+/* =========================================================
+   29.6 PAGE CONTAINER, OVERLAY, FOOTER
+   ========================================================= */
 
 .dashboard-container {
     width: 100%;
@@ -2127,14 +2891,7 @@ body.night-mode .side-navigation {
 
 /* =========================================================
    30. DASHBOARD PAGE CONTENT
-   ---------------------------------------------------------
-   These styles match the actual classes used in dashboard.html.
-   This section restores the Productivity Summary cards and
-   dashboard panels without changing the sidebar/header system.
    ========================================================= */
-
-
-/* ---------- 30.1 Dashboard introduction ---------- */
 
 .dashboard-intro {
     margin-bottom: 34px;
@@ -2161,9 +2918,6 @@ body.night-mode .side-navigation {
         line-height: 1.65;
     }
 
-
-/* ---------- 30.2 Section eyebrow ---------- */
-
 .section-eyebrow {
     margin: 0;
     color: var(--accent);
@@ -2173,9 +2927,6 @@ body.night-mode .side-navigation {
     letter-spacing: 0.12em;
     text-transform: uppercase;
 }
-
-
-/* ---------- 30.3 Panel headings ---------- */
 
 .panel-heading {
     display: flex;
@@ -2229,9 +2980,6 @@ body.night-mode .side-navigation {
         transform: translateY(-1px);
     }
 
-
-/* ---------- 30.4 Dashboard panels ---------- */
-
 .dashboard-panel {
     margin-top: 22px;
     padding: 22px;
@@ -2241,9 +2989,6 @@ body.night-mode .side-navigation {
     box-shadow: var(--shadow-sm);
 }
 
-
-/* ---------- 30.5 Summary section ---------- */
-
 .summary-section {
     margin-bottom: 22px;
 }
@@ -2252,18 +2997,12 @@ body.night-mode .side-navigation {
         margin-bottom: 16px;
     }
 
-
-/* ---------- 30.6 Productivity Summary grid ---------- */
-
 .summary-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
     width: 100%;
 }
-
-
-/* ---------- 30.7 Productivity Summary card ---------- */
 
 .summary-card {
     min-width: 0;
@@ -2283,9 +3022,6 @@ body.night-mode .side-navigation {
         box-shadow: var(--shadow-md);
         transform: translateY(-2px);
     }
-
-
-/* ---------- 30.8 Summary card icon ---------- */
 
 .summary-card-icon {
     width: 40px;
@@ -2309,9 +3045,6 @@ body.night-mode .side-navigation {
         line-height: 1;
     }
 
-
-/* ---------- 30.9 Summary card title ---------- */
-
 .summary-card h3 {
     margin: 0 0 12px;
     color: var(--text-primary);
@@ -2319,9 +3052,6 @@ body.night-mode .side-navigation {
     font-weight: 800;
     line-height: 1.3;
 }
-
-
-/* ---------- 30.10 Summary card content ---------- */
 
 .summary-card-content {
     display: flex;
@@ -2347,9 +3077,6 @@ body.night-mode .side-navigation {
         line-height: 1.4;
     }
 
-
-/* ---------- 30.11 Summary card details ---------- */
-
 .summary-card-details {
     display: flex;
     flex-direction: column;
@@ -2373,9 +3100,6 @@ body.night-mode .side-navigation {
             font-size: 11px;
             font-weight: 800;
         }
-
-
-/* ---------- 30.12 Dashboard goal form ---------- */
 
 .goal-form {
     display: grid;
@@ -2402,9 +3126,6 @@ body.night-mode .side-navigation {
     line-height: 1.5;
 }
 
-
-/* ---------- 30.13 Goals and reminders panels ---------- */
-
 .reminders-panel,
 .goals-panel,
 .goal-form-panel {
@@ -2419,23 +3140,13 @@ body.night-mode .side-navigation {
 
 /* =========================================================
    31. TASK PAGE VISUAL STYLES
-   ---------------------------------------------------------
-   These styles only provide the existing Tasks page with
-   the same visual treatment used by the StudyTrack cards,
-   badges, forms and action buttons.
    ========================================================= */
-
-
-/* ---------- 31.1 Task list ---------- */
 
 .goals-container {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
 }
-
-
-/* ---------- 31.2 Task card header ---------- */
 
 .goal-card-header {
     display: flex;
@@ -2457,9 +3168,6 @@ body.night-mode .side-navigation {
     line-height: 1.35;
     overflow-wrap: anywhere;
 }
-
-
-/* ---------- 31.3 Task status ---------- */
 
 .goal-status {
     display: inline-flex;
@@ -2496,9 +3204,6 @@ body.night-mode .side-navigation {
         color: var(--accent-hover);
     }
 
-
-/* ---------- 31.4 Task description ---------- */
-
 .task-card-description {
     margin-top: 16px;
 }
@@ -2510,9 +3215,6 @@ body.night-mode .side-navigation {
         line-height: 1.6;
         overflow-wrap: anywhere;
     }
-
-
-/* ---------- 31.5 Task metadata ---------- */
 
 .goal-meta {
     display: flex;
@@ -2546,9 +3248,6 @@ body.night-mode .side-navigation {
 .task-priority.low {
     color: var(--accent-hover);
 }
-
-
-/* ---------- 31.6 Task status control ---------- */
 
 .task-status-control {
     display: flex;
@@ -2587,9 +3286,6 @@ body.night-mode .side-navigation {
         box-shadow: 0 0 0 3px var(--focus-ring);
     }
 
-
-/* ---------- 31.7 Task action buttons ---------- */
-
 .task-card .goal-actions {
     margin-top: 18px;
 }
@@ -2615,11 +3311,8 @@ body.night-mode .side-navigation {
     .task-card .goal-action-button.delete:hover {
         border-color: #d39a9a;
         background: #f6e2e2;
-        color: #8f3d3d;
+        color: var(--danger);
     }
-
-
-/* ---------- 31.8 Task page night mode ---------- */
 
 body.night-mode .task-status-select {
     background: var(--surface);
@@ -2820,6 +3513,55 @@ body.night-mode .goal-form .form-actions {
     .task-status-select {
         width: 100%;
     }
+
+    .reminder-card {
+        grid-template-columns: 64px minmax(0, 1fr);
+    }
+
+    .reminder-form {
+        grid-template-columns: 1fr;
+    }
+
+        .reminder-form .form-group:first-child,
+        .reminder-form .form-group:nth-child(4) {
+            grid-column: auto;
+        }
+
+    .reminder-form-footer {
+        grid-column: auto;
+    }
+
+    /*
+       Desktop collapse is intentionally overridden on mobile.
+       Mobile remains a full navigation drawer.
+    */
+
+    body.desktop-sidebar-collapsed .side-navigation {
+        width: 270px;
+    }
+
+    body.desktop-sidebar-collapsed .dashboard-main,
+    body.desktop-sidebar-collapsed .dashboard-footer {
+        margin-left: 0;
+    }
+
+    body.desktop-sidebar-collapsed .sidebar-nav-link,
+    body.desktop-sidebar-collapsed .logout-button {
+        justify-content: flex-start;
+        gap: 12px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+        body.desktop-sidebar-collapsed .sidebar-nav-link > span:not(.nav-icon),
+        body.desktop-sidebar-collapsed .logout-button > span:not(.nav-icon) {
+            display: inline;
+        }
+
+        body.desktop-sidebar-collapsed .sidebar-nav-link::after,
+        body.desktop-sidebar-collapsed .logout-button::after {
+            display: none;
+        }
 }
 
 
@@ -2836,7 +3578,7 @@ body.night-mode .goal-form .form-actions {
     }
 
     .theme-switch {
-        padding: 2px;
+        padding: 3px;
     }
 
     .theme-switch-button {
@@ -2897,5 +3639,268 @@ body.night-mode .goal-form .form-actions {
         align-items: flex-start;
         flex-direction: column;
         gap: 6px;
+    }
+
+    .reminder-card {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .reminder-date-block {
+        width: 100%;
+        min-height: 62px;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 8px;
+        padding: 10px 13px;
+        text-align: left;
+    }
+
+    .reminder-date-weekday {
+        margin-top: 0;
+    }
+
+    .reminder-card-top {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .reminder-card-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .reminder-status-control {
+        width: 100%;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .reminder-status-select {
+        width: 100%;
+    }
+
+    .reminder-card-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-left: 0;
+    }
+
+    .reminder-action-button {
+        width: 100%;
+    }
+
+    .reminder-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+        .reminder-form-footer .primary-button {
+            width: 100%;
+        }
+}
+/* =========================================================
+   STUDYTRACK - FOCUS PAGE VISUAL CONSISTENCY
+   Visual styling only.
+   Focus functionality is controlled by focus.js.
+   ========================================================= */
+
+.focus-timer-card {
+    text-align: center;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+    .focus-timer-card .panel-heading {
+        text-align: left;
+    }
+
+.focus-timer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 8px;
+}
+
+.focus-timer-display {
+    width: 100%;
+    margin: 6px 0 0;
+    color: var(--text-primary);
+    font-size: clamp(52px, 8vw, 78px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    font-variant-numeric: tabular-nums;
+}
+
+.focus-message {
+    min-height: 24px;
+    margin: 14px 0 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.focus-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    margin-top: 22px;
+}
+
+    .focus-controls .primary-button,
+    .focus-controls .secondary-button {
+        min-width: 110px;
+    }
+
+.focus-history-panel {
+    margin-top: 22px;
+}
+
+.focus-history {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    .focus-history > .empty-state {
+        margin-top: 0;
+    }
+
+.focus-history-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(120px, 0.7fr));
+    gap: 16px;
+    align-items: center;
+    padding: 15px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+    .focus-history-item:hover {
+        border-color: var(--accent-border);
+        background: var(--surface-soft);
+    }
+
+    .focus-history-item strong {
+        color: var(--text-primary);
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .focus-history-item p {
+        margin: 3px 0 0;
+        color: var(--text-secondary);
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .focus-history-item .status-badge {
+        justify-self: start;
+    }
+
+    .focus-history-item .focus-history-meta {
+        min-width: 0;
+        color: var(--text-secondary);
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+        .focus-history-item .focus-history-meta strong {
+            display: block;
+            margin-bottom: 2px;
+            color: var(--text-muted);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+body.night-mode .focus-timer-card,
+body.night-mode .focus-history-item {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+    body.night-mode .focus-history-item:hover {
+        background: var(--surface-soft);
+        border-color: var(--accent-border);
+    }
+
+
+/* =========================================================
+   FOCUS PAGE - RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 720px) {
+
+    .focus-timer-card {
+        padding: 20px;
+    }
+
+    .focus-timer-display {
+        font-size: clamp(48px, 15vw, 68px);
+    }
+
+    .focus-controls {
+        align-items: stretch;
+    }
+
+        .focus-controls .primary-button,
+        .focus-controls .secondary-button {
+            flex: 1 1 calc(50% - 5px);
+            min-width: 0;
+        }
+
+    .focus-history-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+        .focus-history-item .status-badge {
+            justify-self: start;
+        }
+}
+
+@media (max-width: 520px) {
+
+    .focus-timer-card {
+        padding: 16px;
+    }
+
+    .focus-timer-content {
+        padding-top: 4px;
+    }
+
+    .focus-timer-display {
+        font-size: clamp(44px, 17vw, 60px);
+    }
+
+    .focus-message {
+        font-size: 12px;
+    }
+
+    .focus-controls {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-top: 18px;
+    }
+
+        .focus-controls .primary-button,
+        .focus-controls .secondary-button {
+            width: 100%;
+        }
+
+    .focus-history-item {
+        padding: 14px;
     }
 }

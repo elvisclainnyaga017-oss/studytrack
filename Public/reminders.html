@@ -535,7 +535,7 @@
                      CREATE REMINDER
                      ================================================= -->
 
-                <section class="dashboard-panel goal-form-panel">
+                <section class="dashboard-panel reminder-form-panel">
 
                     <div class="panel-heading">
 
@@ -560,12 +560,12 @@
 
 
                     <form id="reminderForm"
-                          class="goal-form">
+                          class="reminder-form">
 
 
                         <!-- TITLE -->
 
-                        <div class="form-group">
+                        <div class="form-group full-width">
 
                             <label for="reminderTitle">
                                 Reminder Title
@@ -595,22 +595,9 @@
                                    name="date"
                                    required>
 
-                        </div>
-
-
-                        <!-- DESCRIPTION -->
-
-                        <div class="form-group full-width">
-
-                            <label for="reminderDescription">
-                                Description
-                            </label>
-
-                            <textarea id="reminderDescription"
-                                      name="description"
-                                      rows="4"
-                                      maxlength="500"
-                                      placeholder="Describe what you need to remember"></textarea>
+                            <span class="form-help">
+                                Choose the day it is due.
+                            </span>
 
                         </div>
 
@@ -635,9 +622,26 @@
                         </div>
 
 
-                        <!-- FORM ACTIONS -->
+                        <!-- DESCRIPTION -->
 
-                        <div class="form-actions">
+                        <div class="form-group full-width">
+
+                            <label for="reminderDescription">
+                                Description
+                            </label>
+
+                            <textarea id="reminderDescription"
+                                      name="description"
+                                      rows="4"
+                                      maxlength="500"
+                                      placeholder="Describe what you need to remember"></textarea>
+
+                        </div>
+
+
+                        <!-- FORM ACTIONS + MESSAGE -->
+
+                        <div class="form-actions reminder-form-footer">
 
                             <button type="submit"
                                     id="createReminderButton"
@@ -647,16 +651,13 @@
 
                             </button>
 
+                            <p id="reminderMessage"
+                               class="form-message"
+                               role="status"
+                               aria-live="polite">
+                            </p>
+
                         </div>
-
-
-                        <!-- FORM MESSAGE -->
-
-                        <p id="reminderMessage"
-                           class="form-message"
-                           role="status"
-                           aria-live="polite">
-                        </p>
 
                     </form>
 
@@ -668,7 +669,7 @@
                      REMINDERS LIST
                      ================================================= -->
 
-                <section class="dashboard-panel goals-panel">
+                <section class="dashboard-panel reminders-panel">
 
                     <div class="panel-heading">
 
@@ -683,8 +684,8 @@
                             </h2>
 
                             <p>
-                                Review and manage your upcoming
-                                reminders.
+                                Review and manage your overdue,
+                                upcoming, and completed reminders.
                             </p>
 
                         </div>
@@ -697,11 +698,11 @@
 
                         <div class="empty-state">
 
-                            <h3>
+                            <h3 class="empty-state-title">
                                 Loading reminders...
                             </h3>
 
-                            <p>
+                            <p class="empty-state-text">
                                 Please wait while your reminders
                                 are being loaded.
                             </p>
