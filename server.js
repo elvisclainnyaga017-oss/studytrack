@@ -2453,6 +2453,56 @@ app.put(
 );
 
 
+/* ---------------------------------------------------------
+   DELETE FOCUS SESSION
+   --------------------------------------------------------- */
+
+app.delete(
+    '/api/focus/:id',
+    requireLogin,
+    async (req, res) => {
+        try {
+            const sessionId =
+                req.params.id;
+
+            const [result] =
+                await db.promise().query(
+                    `DELETE FROM focus_sessions
+                     WHERE id = ?
+                     AND user_id = ?`,
+                    [
+                        sessionId,
+                        req.session.userId
+                    ]
+                );
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message:
+                        'Focus session not found.'
+                });
+            }
+
+            res.json({
+                message:
+                    'Focus session deleted successfully.'
+            });
+
+        } catch (error) {
+            console.error(
+                'Delete focus session error:',
+                error
+            );
+
+            res.status(500).json({
+                message:
+                    'Failed to delete focus session.'
+            });
+        }
+    }
+);
+
+
 /* =========================================================
    ERROR HANDLER
    ========================================================= */

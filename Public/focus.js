@@ -1,4 +1,3 @@
-
 // ========================================
 // STUDYTRACK FOCUS PAGE
 // ========================================
@@ -883,98 +882,98 @@ async function completeFocusSession() {
         const response =
             await fetch(
                 `/api/focus/${sessionId}/complete`,
-{
-    method: "PUT",
+                {
+                    method: "PUT",
 
-        headers: {
-        "Content-Type":
-        "application/json"
-    },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-    credentials: "include"
-}
+                    credentials: "include"
+                }
             );
 
 
-const data =
-    await response.json();
+        const data =
+            await response.json();
 
 
-if (!response.ok) {
+        if (!response.ok) {
 
-    focusMessage.textContent =
-        data.message ||
-        "Could not complete the session.";
+            focusMessage.textContent =
+                data.message ||
+                "Could not complete the session.";
 
-    return;
-}
-
-
-clearInterval(
-    timerInterval
-);
+            return;
+        }
 
 
-timerInterval =
-    null;
+        clearInterval(
+            timerInterval
+        );
 
 
-timerRunning =
-    false;
+        timerInterval =
+            null;
 
 
-timerEndTime =
-    null;
+        timerRunning =
+            false;
 
 
-focusSessionId =
-    null;
+        timerEndTime =
+            null;
 
 
-timerSeconds =
-    25 * 60;
+        focusSessionId =
+            null;
 
 
-updateTimerDisplay();
+        timerSeconds =
+            25 * 60;
 
 
-startButton.disabled =
-    false;
+        updateTimerDisplay();
 
 
-pauseButton.disabled =
-    true;
+        startButton.disabled =
+            false;
 
 
-pauseButton.textContent =
-    "Pause";
+        pauseButton.disabled =
+            true;
 
 
-completeButton.disabled =
-    true;
+        pauseButton.textContent =
+            "Pause";
 
 
-resetButton.disabled =
-    false;
+        completeButton.disabled =
+            true;
 
 
-focusMessage.textContent =
-    "Focus session completed successfully.";
+        resetButton.disabled =
+            false;
 
 
-loadFocusHistory();
+        focusMessage.textContent =
+            "Focus session completed successfully.";
+
+
+        loadFocusHistory();
 
     } catch (error) {
 
-    console.error(
-        "Complete Focus error:",
-        error
-    );
+        console.error(
+            "Complete Focus error:",
+            error
+        );
 
 
-    focusMessage.textContent =
-        "Could not connect to the server.";
-}
+        focusMessage.textContent =
+            "Could not connect to the server.";
+    }
 }
 
 
@@ -1099,6 +1098,79 @@ async function loadUser() {
             "Load user error:",
             error
         );
+    }
+}
+
+
+// ========================================
+// DELETE FOCUS SESSION
+// ========================================
+
+async function deleteFocusSession(
+    sessionId
+) {
+
+    if (!sessionId) {
+
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            "Are you sure you want to delete this focus session?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/focus/${sessionId}`,
+                {
+                    method: "DELETE",
+
+                    credentials: "include"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            focusMessage.textContent =
+                data.message ||
+                "Could not delete the focus session.";
+
+            return;
+        }
+
+
+        focusMessage.textContent =
+            "Focus session deleted successfully.";
+
+
+        loadFocusHistory();
+
+    } catch (error) {
+
+        console.error(
+            "Delete Focus session error:",
+            error
+        );
+
+
+        focusMessage.textContent =
+            "Could not connect to the server.";
     }
 }
 
@@ -1278,6 +1350,50 @@ async function loadFocusHistory() {
                 `;
 
 
+                // ========================================
+                // DELETE BUTTON
+                // ========================================
+
+                const deleteButton =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                deleteButton.type =
+                    "button";
+
+
+                deleteButton.className =
+                    "delete-focus-button";
+
+
+                deleteButton.textContent =
+                    "Delete";
+
+
+                deleteButton.setAttribute(
+                    "aria-label",
+                    "Delete focus session"
+                );
+
+
+                deleteButton.addEventListener(
+                    "click",
+                    () => {
+
+                        deleteFocusSession(
+                            session.id
+                        );
+                    }
+                );
+
+
+                item.appendChild(
+                    deleteButton
+                );
+
+
                 focusHistory.appendChild(
                     item
                 );
@@ -1429,4 +1545,3 @@ updateTimerDisplay();
 loadUser();
 
 loadFocusHistory();
-

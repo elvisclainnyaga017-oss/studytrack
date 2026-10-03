@@ -1118,21 +1118,107 @@ img {
     box-shadow: var(--shadow-sm);
 }
 
+
+/* ---------------------------------------------------------
+   PROFILE PICTURE
+--------------------------------------------------------- */
+
 .profile-avatar {
-    width: 92px;
-    height: 92px;
-    margin-bottom: 14px;
+    width: 56px;
+    height: 56px;
+    margin: 0 0 16px 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
-    border: 1px solid var(--border);
+    /* Outer circular frame */
+    border: 3px solid var(--accent);
+    /* Perfect circle */
     border-radius: 50%;
-    background: var(--surface-muted);
+    /* Clean separation between photo and frame */
+    background: var(--surface);
+    /* Subtle outer ring and shadow */
+    box-shadow: 0 0 0 4px var(--accent-soft), 0 5px 14px rgba(23, 35, 43, 0.10);
+    box-sizing: border-box;
 }
 
     .profile-avatar img {
+        display: block;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        /* Forces the actual photo itself to be circular */
+        border-radius: 50%;
     }
+
+
+/* ---------------------------------------------------------
+   PROFILE PICTURE - NIGHT MODE
+--------------------------------------------------------- */
+
+body.night-mode .profile-avatar {
+    background: var(--surface);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft), 0 5px 14px rgba(0, 0, 0, 0.28);
+}
+
+
+/* ---------------------------------------------------------
+   PROFILE PICTURE UPLOAD (profile.html)
+   Change the two 96px values below to resize the circle.
+--------------------------------------------------------- */
+
+.profile-picture-upload {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.profile-picture-preview {
+    flex: 0 0 auto;
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid var(--accent);
+    border-radius: 50%;
+    background: var(--accent-soft);
+}
+
+.profile-picture-initials {
+    color: var(--accent);
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    user-select: none;
+}
+
+.profile-picture-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-picture-controls {
+    flex: 1 1 220px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* Lets the HTML "hidden" attribute work again inside the upload area */
+.profile-picture-upload [hidden] {
+    display: none !important;
+}
+
 
 .profile-name {
     margin: 0;
@@ -1147,7 +1233,6 @@ img {
     font-size: 12px;
 }
 
-
 /* =========================================================
    20. FOCUS TIMER
    ========================================================= */
@@ -1158,12 +1243,7 @@ img {
 }
 
 .focus-timer-card {
-    padding: 36px 28px;
-    text-align: center;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    box-shadow: var(--shadow-md);
+    text-align: left;
 }
 
 .timer-label {
@@ -1714,6 +1794,184 @@ img {
 
 .reminders-container > .empty-state {
     margin-top: 2px;
+}
+
+
+/* =========================================================
+   21.5 FOCUS PAGE (focus.html)
+   Matches the Reminders panels and cards.
+   ========================================================= */
+
+.focus-timer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius-md);
+    background: var(--accent-soft);
+    text-align: center;
+}
+
+.focus-timer-display {
+    color: var(--text-primary);
+    font-size: clamp(48px, 10vw, 84px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+}
+
+.focus-message {
+    min-height: 20px;
+    margin: 14px 0 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.focus-controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+    .focus-controls button {
+        min-width: 120px;
+    }
+
+        .focus-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+
+/* ---------- Focus history ---------- */
+
+.focus-history {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+    .focus-history > p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+.focus-history-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 0;
+    padding: 18px 18px 18px 21px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+    .focus-history-item:hover {
+        border-color: var(--accent-border);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-1px);
+    }
+
+    .focus-history-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 3px;
+        background: var(--accent);
+    }
+
+    .focus-history-item strong {
+        color: var(--text-primary);
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.35;
+    }
+
+    .focus-history-item p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+.delete-focus-button {
+    min-height: 34px;
+    margin-top: 12px;
+    padding: 7px 12px;
+    border: 1px solid #e4c4c4;
+    border-radius: 8px;
+    background: var(--danger-soft);
+    color: var(--danger);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
+}
+
+    .delete-focus-button:hover {
+        transform: translateY(-1px);
+        border-color: #d39a9a;
+        background: #f6e2e2;
+        color: #8f3d3d;
+        box-shadow: 0 4px 12px rgba(163, 77, 77, 0.10);
+    }
+
+    .delete-focus-button:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+body.night-mode .delete-focus-button {
+    border-color: #6e4444;
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+    body.night-mode .delete-focus-button:hover {
+        border-color: #8c5555;
+        background: #452b2d;
+        color: #f0aaaa;
+    }
+
+
+@media (max-width: 520px) {
+
+    .focus-timer-content {
+        padding: 24px 14px;
+    }
+
+    .focus-controls {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+        .focus-controls button {
+            width: 100%;
+        }
+
+    .focus-history-item {
+        padding: 15px 15px 15px 18px;
+    }
+
+    .delete-focus-button {
+        width: 100%;
+    }
 }
 
 
@@ -3700,207 +3958,4 @@ body.night-mode .goal-form .form-actions {
         .reminder-form-footer .primary-button {
             width: 100%;
         }
-}
-/* =========================================================
-   STUDYTRACK - FOCUS PAGE VISUAL CONSISTENCY
-   Visual styling only.
-   Focus functionality is controlled by focus.js.
-   ========================================================= */
-
-.focus-timer-card {
-    text-align: center;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-}
-
-    .focus-timer-card .panel-heading {
-        text-align: left;
-    }
-
-.focus-timer-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding-top: 8px;
-}
-
-.focus-timer-display {
-    width: 100%;
-    margin: 6px 0 0;
-    color: var(--text-primary);
-    font-size: clamp(52px, 8vw, 78px);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.045em;
-    font-variant-numeric: tabular-nums;
-}
-
-.focus-message {
-    min-height: 24px;
-    margin: 14px 0 0;
-    color: var(--text-secondary);
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.focus-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    width: 100%;
-    margin-top: 22px;
-}
-
-    .focus-controls .primary-button,
-    .focus-controls .secondary-button {
-        min-width: 110px;
-    }
-
-.focus-history-panel {
-    margin-top: 22px;
-}
-
-.focus-history {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-    .focus-history > .empty-state {
-        margin-top: 0;
-    }
-
-.focus-history-item {
-    display: grid;
-    grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(120px, 0.7fr));
-    gap: 16px;
-    align-items: center;
-    padding: 15px 16px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background: var(--surface);
-    transition: border-color 0.18s ease, background 0.18s ease;
-}
-
-    .focus-history-item:hover {
-        border-color: var(--accent-border);
-        background: var(--surface-soft);
-    }
-
-    .focus-history-item strong {
-        color: var(--text-primary);
-        font-size: 13px;
-        font-weight: 800;
-    }
-
-    .focus-history-item p {
-        margin: 3px 0 0;
-        color: var(--text-secondary);
-        font-size: 11px;
-        line-height: 1.5;
-    }
-
-    .focus-history-item .status-badge {
-        justify-self: start;
-    }
-
-    .focus-history-item .focus-history-meta {
-        min-width: 0;
-        color: var(--text-secondary);
-        font-size: 11px;
-        line-height: 1.5;
-    }
-
-        .focus-history-item .focus-history-meta strong {
-            display: block;
-            margin-bottom: 2px;
-            color: var(--text-muted);
-            font-size: 9px;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-body.night-mode .focus-timer-card,
-body.night-mode .focus-history-item {
-    background: var(--surface);
-    border-color: var(--border);
-}
-
-    body.night-mode .focus-history-item:hover {
-        background: var(--surface-soft);
-        border-color: var(--accent-border);
-    }
-
-
-/* =========================================================
-   FOCUS PAGE - RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 720px) {
-
-    .focus-timer-card {
-        padding: 20px;
-    }
-
-    .focus-timer-display {
-        font-size: clamp(48px, 15vw, 68px);
-    }
-
-    .focus-controls {
-        align-items: stretch;
-    }
-
-        .focus-controls .primary-button,
-        .focus-controls .secondary-button {
-            flex: 1 1 calc(50% - 5px);
-            min-width: 0;
-        }
-
-    .focus-history-item {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-        .focus-history-item .status-badge {
-            justify-self: start;
-        }
-}
-
-@media (max-width: 520px) {
-
-    .focus-timer-card {
-        padding: 16px;
-    }
-
-    .focus-timer-content {
-        padding-top: 4px;
-    }
-
-    .focus-timer-display {
-        font-size: clamp(44px, 17vw, 60px);
-    }
-
-    .focus-message {
-        font-size: 12px;
-    }
-
-    .focus-controls {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 8px;
-        margin-top: 18px;
-    }
-
-        .focus-controls .primary-button,
-        .focus-controls .secondary-button {
-            width: 100%;
-        }
-
-    .focus-history-item {
-        padding: 14px;
-    }
 }
