@@ -254,10 +254,6 @@ function handleProfilePictureError() {
         profilePictureInitials.hidden =
             false;
     }
-
-    console.warn(
-        "StudyTrack could not load the profile picture."
-    );
 }
 
 

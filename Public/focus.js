@@ -19,6 +19,14 @@ let timerEndTime = null;
 
 
 // ========================================
+// PERSISTENT TIMER STORAGE
+// ========================================
+
+const focusTimerStorageKey =
+    "studytrack-focus-timer";
+
+
+// ========================================
 // GET HTML ELEMENTS
 // ========================================
 
@@ -548,6 +556,270 @@ function enableNightMode() {
 
 
 // ========================================
+// SAVE ACTIVE TIMER STATE
+// ========================================
+
+function saveTimerState() {
+
+    if (!focusSessionId) {
+
+        return;
+    }
+
+
+    const timerState = {
+
+        sessionId:
+            focusSessionId,
+
+        timerSeconds:
+            timerSeconds,
+
+        timerRunning:
+            timerRunning,
+
+        timerEndTime:
+            timerEndTime
+
+    };
+
+
+    localStorage.setItem(
+        focusTimerStorageKey,
+        JSON.stringify(timerState)
+    );
+}
+
+
+// ========================================
+// CLEAR SAVED TIMER STATE
+// ========================================
+
+function clearSavedTimerState() {
+
+    localStorage.removeItem(
+        focusTimerStorageKey
+    );
+}
+
+
+// ========================================
+// RESTORE TIMER STATE
+// ========================================
+
+function restoreTimerState() {
+
+    const savedState =
+        localStorage.getItem(
+            focusTimerStorageKey
+        );
+
+
+    if (!savedState) {
+
+        return;
+    }
+
+
+    try {
+
+        const timerState =
+            JSON.parse(
+                savedState
+            );
+
+
+        if (
+            !timerState ||
+            !timerState.sessionId
+        ) {
+
+            clearSavedTimerState();
+
+            return;
+        }
+
+
+        focusSessionId =
+            timerState.sessionId;
+
+
+        timerSeconds =
+            Number(
+                timerState.timerSeconds
+            );
+
+
+        if (
+            !Number.isFinite(
+                timerSeconds
+            ) ||
+            timerSeconds < 0
+        ) {
+
+            timerSeconds =
+                25 * 60;
+        }
+
+
+        timerRunning =
+            timerState.timerRunning === true;
+
+
+        timerEndTime =
+            timerState.timerEndTime
+                ? Number(
+                    timerState.timerEndTime
+                )
+                : null;
+
+
+        // ========================================
+        // TIMER WAS RUNNING
+        // ========================================
+
+        if (
+            timerRunning &&
+            timerEndTime
+        ) {
+
+            const remainingMilliseconds =
+                timerEndTime -
+                Date.now();
+
+
+            timerSeconds =
+                Math.max(
+                    0,
+                    Math.ceil(
+                        remainingMilliseconds /
+                        1000
+                    )
+                );
+
+
+            updateTimerDisplay();
+
+
+            // The timer reached zero while
+            // the user was on another page.
+            if (timerSeconds <= 0) {
+
+                timerSeconds = 0;
+
+                timerRunning = false;
+
+                timerEndTime = null;
+
+                saveTimerState();
+
+                completeFocusSession();
+
+                return;
+            }
+
+
+            startButton.disabled =
+                true;
+
+
+            pauseButton.disabled =
+                false;
+
+
+            pauseButton.textContent =
+                "Pause";
+
+
+            completeButton.disabled =
+                false;
+
+
+            resetButton.disabled =
+                true;
+
+
+            focusMessage.textContent =
+                "Focus session resumed.";
+
+
+            startTimerInterval();
+
+            return;
+        }
+
+
+        // ========================================
+        // TIMER WAS PAUSED
+        // ========================================
+
+        timerRunning =
+            false;
+
+
+        timerEndTime =
+            null;
+
+
+        updateTimerDisplay();
+
+
+        startButton.disabled =
+            true;
+
+
+        pauseButton.disabled =
+            false;
+
+
+        pauseButton.textContent =
+            "Resume";
+
+
+        completeButton.disabled =
+            false;
+
+
+        resetButton.disabled =
+            true;
+
+
+        focusMessage.textContent =
+            "Focus session paused.";
+
+    } catch (error) {
+
+        console.error(
+            "Restore Focus timer error:",
+            error
+        );
+
+
+        clearSavedTimerState();
+
+
+        focusSessionId =
+            null;
+
+
+        timerSeconds =
+            25 * 60;
+
+
+        timerRunning =
+            false;
+
+
+        timerEndTime =
+            null;
+
+
+        updateTimerDisplay();
+    }
+}
+
+
+// ========================================
 // FORMAT TIMER
 // ========================================
 
@@ -637,6 +909,9 @@ async function startFocusSession() {
 
         timerRunning =
             true;
+
+
+        saveTimerState();
 
 
         startButton.disabled =
@@ -733,6 +1008,9 @@ function runTimer() {
     updateTimerDisplay();
 
 
+    saveTimerState();
+
+
     if (timerSeconds <= 0) {
 
         clearInterval(
@@ -750,6 +1028,9 @@ function runTimer() {
 
         timerEndTime =
             null;
+
+
+        saveTimerState();
 
 
         completeFocusSession();
@@ -807,6 +1088,9 @@ function pauseTimer() {
         null;
 
 
+    saveTimerState();
+
+
     updateTimerDisplay();
 
 
@@ -847,6 +1131,9 @@ function resumeTimer() {
 
     timerRunning =
         true;
+
+
+    saveTimerState();
 
 
     pauseButton.textContent =
@@ -934,6 +1221,9 @@ async function completeFocusSession() {
             25 * 60;
 
 
+        clearSavedTimerState();
+
+
         updateTimerDisplay();
 
 
@@ -1011,6 +1301,9 @@ function resetTimer() {
 
     timerSeconds =
         25 * 60;
+
+
+    clearSavedTimerState();
 
 
     updateTimerDisplay();
@@ -1152,6 +1445,66 @@ async function deleteFocusSession(
                 "Could not delete the focus session.";
 
             return;
+        }
+
+
+        // If the deleted session is the
+        // currently saved active session,
+        // clear the saved timer state too.
+        if (
+            String(focusSessionId) ===
+            String(sessionId)
+        ) {
+
+            clearInterval(
+                timerInterval
+            );
+
+
+            timerInterval =
+                null;
+
+
+            focusSessionId =
+                null;
+
+
+            timerRunning =
+                false;
+
+
+            timerEndTime =
+                null;
+
+
+            timerSeconds =
+                25 * 60;
+
+
+            clearSavedTimerState();
+
+
+            updateTimerDisplay();
+
+
+            startButton.disabled =
+                false;
+
+
+            pauseButton.disabled =
+                true;
+
+
+            pauseButton.textContent =
+                "Pause";
+
+
+            completeButton.disabled =
+                true;
+
+
+            resetButton.disabled =
+                false;
         }
 
 
@@ -1442,6 +1795,11 @@ async function logout() {
 
     } finally {
 
+        // Clear any active local timer state
+        // when the user logs out.
+        clearSavedTimerState();
+
+
         window.location.href =
             "/login.html";
     }
@@ -1545,3 +1903,5 @@ updateTimerDisplay();
 loadUser();
 
 loadFocusHistory();
+
+restoreTimerState();
