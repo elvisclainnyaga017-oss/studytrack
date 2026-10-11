@@ -711,14 +711,14 @@ async function uploadProfilePicture() {
 
 
     formData.append(
-        "avatar",
+        "profile_picture",
         selectedProfilePicture
     );
 
 
     const response =
         await fetch(
-            "/api/profile/avatar",
+            "/api/profile/picture",
             {
                 method: "POST",
                 body: formData,
