@@ -10,11 +10,11 @@ const app = express();
 const PORT = 3000;
 
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: '',
     database: 'studytrack',
-    port: 3306,
+    port: 3307,
     dateStrings: true
 });
 
